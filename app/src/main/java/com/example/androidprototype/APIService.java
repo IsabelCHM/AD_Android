@@ -12,9 +12,9 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface APIService {
-    @GET("/api/recipe/{id}")
+    @GET("/api/test/{id}")
     Call<Recipe> getRecipe(@Path("id") int recipeId);
 
-    @POST("/api/recipe")
+    @POST("api/test/")
     Call<Recipe> saveRecipe(@Body Recipe recipe);
 }
