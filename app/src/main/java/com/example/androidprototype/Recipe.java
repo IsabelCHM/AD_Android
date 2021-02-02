@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class Recipe {
 
-    @SerializedName("name")
+    @SerializedName("title")
     @Expose
     private String name;
 
-    @SerializedName("ingredient")
+    @SerializedName("description")
     @Expose
     private String ingredient;
 
