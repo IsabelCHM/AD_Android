@@ -17,9 +17,11 @@ public class MainActivity extends AppCompatActivity
 
         Button btn1 = findViewById(R.id.createRecipe);
         Button btn2 = findViewById(R.id.reviewRecipe);
+        Button btn3 = findViewById(R.id.btnDeleteRecipe);
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
+        btn3.setOnClickListener(this);
     }
 
     @Override
@@ -33,6 +35,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.reviewRecipe) {
             Intent intent = new Intent(this, ViewRecipe.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.btnDeleteRecipe) {
+            Intent intent = new Intent(this, DeleteRecipe.class);
             startActivity(intent);
         }
     }
