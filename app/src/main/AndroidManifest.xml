@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidPrototype">
-        <activity android:name=".SuccessPage"></activity>
+        <activity android:name=".DeleteRecipe"></activity>
+        <activity android:name=".SuccessPage" />
         <activity android:name=".ViewRecipe" />
         <activity android:name=".CreateRecipe" />
         <activity android:name=".MainActivity">

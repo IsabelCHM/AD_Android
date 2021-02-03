@@ -39,6 +39,7 @@ public class ViewRecipe extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
+                System.out.println(t.getMessage());
                 Toast.makeText(ViewRecipe.this, "Unable to load recipe", Toast.LENGTH_SHORT).show();
             }
         });
