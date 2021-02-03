@@ -1,6 +1,7 @@
 package com.example.androidprototype;
 
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.model.booleanJson;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -23,5 +24,5 @@ public interface APIService {
     Call<Recipe> saveRecipe(@Body Recipe recipe);
 
     @DELETE("api/mRecipe/deleterecipe/{id}")
-    Call<Boolean> deleteRecipe(@Path("id") int recipeId);
+    Call<booleanJson> deleteRecipe(@Path("id") int recipeId);
 }

@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.androidprototype.model.booleanJson;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,11 +31,11 @@ public class DeleteRecipe extends AppCompatActivity {
                 int id = Integer.parseInt(etRecipieId.getText().toString());
 
                 APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
-                Call<Boolean> call = service.deleteRecipe(id);
+                Call<booleanJson> call = service.deleteRecipe(id);
 
-                call.enqueue(new Callback<Boolean>() {
+                call.enqueue(new Callback<booleanJson>() {
                     @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                    public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
                         boolean status = response.isSuccessful();
                         System.out.println(status);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -41,7 +43,7 @@ public class DeleteRecipe extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
+                    public void onFailure(Call<booleanJson> call, Throwable t) {
                         System.out.println("Fail to delete");
                     }
                 });
