@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androidprototype.model.Recipe;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class ViewRecipe extends AppCompatActivity {
 
@@ -25,10 +26,10 @@ public class ViewRecipe extends AppCompatActivity {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 Recipe recipe = response.body();
-                TextView name = findViewById(R.id.recipeName);
-                TextView ingredient = findViewById(R.id.recipeIngredient);
-                name.setText(recipe.getName());
-                ingredient.setText(recipe.getIngredient());
+                TextView name = findViewById(R.id.recipeTitle);
+                TextView ingredient = findViewById(R.id.recipeDescription);
+                name.setText(recipe.getTitle());
+                ingredient.setText(recipe.getDescription());
             }
 
             @Override

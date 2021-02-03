@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/recipeName"
+                android:id="@+id/recipeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
@@ -41,7 +41,7 @@
                 android:id="@+id/calories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description"
+                android:hint="calories"
                 android:layout_marginTop="20dp"/>
 
             <EditText
