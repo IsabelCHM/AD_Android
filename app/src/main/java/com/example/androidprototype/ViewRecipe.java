@@ -28,8 +28,13 @@ public class ViewRecipe extends AppCompatActivity {
                 Recipe recipe = response.body();
                 TextView name = findViewById(R.id.recipeTitle);
                 TextView ingredient = findViewById(R.id.recipeDescription);
+                TextView calories = findViewById(R.id.recipeCalories);
+                TextView datecreated = findViewById(R.id.recipeDateCreated);
+
                 name.setText(recipe.getTitle());
                 ingredient.setText(recipe.getDescription());
+                calories.setText(Integer.toString(recipe.getCalories()));
+                datecreated.setText(recipe.getDateCreated().toString());
             }
 
             @Override

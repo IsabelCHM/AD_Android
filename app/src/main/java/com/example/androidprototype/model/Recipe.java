@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Recipe {
 
@@ -18,8 +19,8 @@ public class Recipe {
     @Expose
     private String description;
 
-    /*@SerializedName("dateCreated")
-    private LocalDateTime dateCreated;*/
+    @SerializedName("dateCreated")
+    private Date dateCreated;
 
     @SerializedName("durationInMins")
     @Expose
@@ -33,12 +34,14 @@ public class Recipe {
         super();
     }
 
-    public Recipe(String title, String description, int durationInMins, int calories) {
+    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories) {
         this.title = title;
         this.description = description;
+        this.dateCreated = dateCreated;
         this.durationInMins = durationInMins;
         this.calories = calories;
     }
+
 
     public String getTitle() {
         return title;
@@ -56,13 +59,13 @@ public class Recipe {
         this.description = description;
     }
 
-    /*public LocalDateTime getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDateTime dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
-    }*/
+    }
 
     public int getDurationInMins() {
         return durationInMins;
