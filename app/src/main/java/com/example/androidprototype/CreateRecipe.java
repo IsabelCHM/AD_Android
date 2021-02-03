@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +49,7 @@ public class CreateRecipe extends AppCompatActivity {
     }
 
     public void sendRecipe(String name, String description, int duration, int calories) {
-        Recipe recipe = new Recipe(name, description, duration, calories);
+        Recipe recipe = new Recipe(name, description, new Date(), duration, calories);
         Call<Recipe> call = service.saveRecipe(recipe);
         call.enqueue(new Callback<Recipe>() {
             @Override
