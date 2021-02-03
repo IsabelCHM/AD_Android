@@ -21,5 +21,5 @@ public interface APIService {
     Call<Recipe> saveRecipe(@Body Recipe recipe);
 
     @DELETE("api/mRecipe/deleterecipe/{id}")
-    Call<ResponseBody> deleteRecipe(@Path("id") int recipeId);
+    Call<Boolean> deleteRecipe(@Path("id") int recipeId);
 }

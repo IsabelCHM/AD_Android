@@ -29,11 +29,11 @@ public class DeleteRecipe extends AppCompatActivity {
                 int id = Integer.parseInt(etRecipieId.getText().toString());
 
                 APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
-                Call<ResponseBody> call = service.deleteRecipe(id);
+                Call<Boolean> call = service.deleteRecipe(id);
 
-                call.enqueue(new Callback<ResponseBody>() {
+                call.enqueue(new Callback<Boolean>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         boolean status = response.isSuccessful();
                         System.out.println(status);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -41,7 +41,7 @@ public class DeleteRecipe extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<Boolean> call, Throwable t) {
                         System.out.println("Fail to delete");
                     }
                 });
