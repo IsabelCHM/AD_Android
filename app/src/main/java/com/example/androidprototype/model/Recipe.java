@@ -34,6 +34,15 @@ public class Recipe {
     @Expose
     private User user;
 
+    @SerializedName("comments")
+    @Expose
+    private CommentList comment;
+
+    @SerializedName("likesDislikes")
+    @Expose
+    private LikesDislikesList likesDislikes;
+
+
     public Recipe() {
         super();
     }
@@ -93,5 +102,21 @@ public class Recipe {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public CommentList getComment() {
+        return comment;
+    }
+
+    public void setComment(CommentList comment) {
+        this.comment = comment;
+    }
+
+    public LikesDislikesList getLikesDislikes() {
+        return likesDislikes;
+    }
+
+    public void setLikesDislikes(LikesDislikesList likesDislikes) {
+        this.likesDislikes = likesDislikes;
     }
 }

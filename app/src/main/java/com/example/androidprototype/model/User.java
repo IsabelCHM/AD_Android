@@ -3,6 +3,9 @@ package com.example.androidprototype.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User<T> {
     @SerializedName("firstName")
     @Expose
@@ -30,15 +33,15 @@ public class User<T> {
 
     @SerializedName("comments")
     @Expose
-    private T comment;
+    private CommentList comment;
 
     @SerializedName("likesDislikes")
     @Expose
-    private T likesDislies;
+    private LikesDislikesList likesDislikes;
 
     @SerializedName("recipes")
     @Expose
-    private T recipe;
+    private RecipeList recipes;
 
     public User() {
         super();
@@ -101,5 +104,27 @@ public class User<T> {
         isAdmin = admin;
     }
 
+    public RecipeList getRecipes() {
+        return recipes;
+    }
 
+    public void setRecipes(RecipeList recipes) {
+        this.recipes = recipes;
+    }
+
+    public CommentList getComment() {
+        return comment;
+    }
+
+    public void setComment(CommentList comment) {
+        this.comment = comment;
+    }
+
+    public LikesDislikesList getLikesDislikes() {
+        return likesDislikes;
+    }
+
+    public void setLikesDislikes(LikesDislikesList likesDislikes) {
+        this.likesDislikes = likesDislikes;
+    }
 }
