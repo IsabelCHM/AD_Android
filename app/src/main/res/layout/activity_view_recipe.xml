@@ -24,6 +24,24 @@
             android:layout_height="wrap_content"
             android:hint="Ingredient" />
 
+        <TextView
+            android:id="@+id/recipeCalories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Calories" />
+
+        <TextView
+            android:id="@+id/recipeDateCreated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date Created" />
+
+        <TextView
+            android:id="@+id/recipeUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="User" />
+
         <Button
             android:id="@+id/back"
             android:layout_width="wrap_content"
