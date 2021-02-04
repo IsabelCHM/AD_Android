@@ -27,14 +27,16 @@ public class ViewRecipe extends AppCompatActivity {
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 Recipe recipe = response.body();
                 TextView name = findViewById(R.id.recipeTitle);
-                TextView ingredient = findViewById(R.id.recipeDescription);
+                TextView description = findViewById(R.id.recipeDescription);
                 TextView calories = findViewById(R.id.recipeCalories);
                 TextView datecreated = findViewById(R.id.recipeDateCreated);
+                TextView user = findViewById(R.id.recipeUser);
 
                 name.setText(recipe.getTitle());
-                ingredient.setText(recipe.getDescription());
+                description.setText(recipe.getDescription());
                 calories.setText(Integer.toString(recipe.getCalories()));
                 datecreated.setText(recipe.getDateCreated().toString());
+                user.setText(recipe.getUser().getFirstName());
             }
 
             @Override

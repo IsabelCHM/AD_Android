@@ -30,6 +30,10 @@ public class Recipe {
     @Expose
     private int calories;
 
+    @SerializedName("user")
+    @Expose
+    private User user;
+
     public Recipe() {
         super();
     }
@@ -81,5 +85,13 @@ public class Recipe {
 
     public void setCalories(int calories) {
         this.calories = calories;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

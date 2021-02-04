@@ -26,6 +26,7 @@ public class RetrofitClient {
         if (retrofit == null) {
             Gson gson = new GsonBuilder()
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .registerTypeAdapterFactory(new TypeAdapterFactory())
                     .create();
 
             retrofit = new retrofit2.Retrofit.Builder()
