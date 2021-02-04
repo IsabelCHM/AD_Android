@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
-import com.example.androidprototype.service.APIService;
+import com.example.androidprototype.APIService;
 
 import java.util.Date;
 

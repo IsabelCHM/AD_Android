@@ -10,7 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
-import com.example.androidprototype.service.APIService;
+import com.example.androidprototype.APIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;

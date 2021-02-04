@@ -3,11 +3,12 @@ package com.example.androidprototype.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
 import java.util.Date;
 
 import retrofit2.http.HEAD;
 
-public class Recipe<T> {
+public class Recipe {
 
     //@SerializedName("recipeId")
     //private int id;
@@ -51,11 +52,18 @@ public class Recipe<T> {
     @Expose
     private RecipeTagList recipeTags;
 
+    @SerializedName("comments")
+    @Expose
+    private CommentList comment;
+
+    @SerializedName("likesDislikes")
+    @Expose
+    private LikesDislikesList likesDislikes;
+
     public Recipe() {
         super();
     }
 
-    //Original Controller in use in CreateRecipe Line 52
     public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories, int servingSize) {
         this.title = title;
         this.description = description;
@@ -164,5 +172,21 @@ public class Recipe<T> {
 
     public void setRecipeTags(RecipeTagList recipeTags) {
         this.recipeTags = recipeTags;
+    }
+
+    public CommentList getComment() {
+        return comment;
+    }
+
+    public void setComment(CommentList comment) {
+        this.comment = comment;
+    }
+
+    public LikesDislikesList getLikesDislikes() {
+        return likesDislikes;
+    }
+
+    public void setLikesDislikes(LikesDislikesList likesDislikes) {
+        this.likesDislikes = likesDislikes;
     }
 }
