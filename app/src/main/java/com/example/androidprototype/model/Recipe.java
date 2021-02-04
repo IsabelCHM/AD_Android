@@ -100,11 +100,11 @@ public class Recipe {
         this.calories = calories;
     }
 
-//    public RecipeIngredient getRecipeIngredients() {
-//        return recipeIngredients;
-//    }
-//
-//    public void setRecipieIngredients(RecipeIngredient recipeIngredients) {
-//        this.recipeIngredients = recipeIngredients;
-//    }
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
