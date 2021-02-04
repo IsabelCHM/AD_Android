@@ -3,10 +3,9 @@ package com.example.androidprototype.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
-public class Recipe {
+public class Recipe<T> {
 
     //@SerializedName("recipeId")
     //private int id;
@@ -36,12 +35,21 @@ public class Recipe {
 
     @SerializedName("recipeIngredients")
     @Expose
-    private RecipeIngredient recipeIngredients;
+    private RecipeIngredientsList recipeIngredients;
+
+    @SerializedName("recipeSteps")
+    @Expose
+    private RecipeStepsList recipeSteps;
+
+    @SerializedName("recipeTags")
+    @Expose
+    private RecipeTagList recipeTags;
 
     public Recipe() {
         super();
     }
 
+    //Original Controller in use in CreateRecipe Line 52
     public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories) {
         this.title = title;
         this.description = description;
@@ -50,14 +58,16 @@ public class Recipe {
         this.calories = calories;
     }
 
-//    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories, RecipeIngredient recipeIngredients) {
-//        this.title = title;
-//        this.description = description;
-//        this.dateCreated = dateCreated;
-//        this.durationInMins = durationInMins;
-//        this.calories = calories;
-//        this.recipeIngredients = recipeIngredients;
-//    }
+    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories, RecipeIngredientsList recipeIngredients, RecipeStepsList recipeSteps, RecipeTagList recipeTags) {
+        this.title = title;
+        this.description = description;
+        this.dateCreated = dateCreated;
+        this.durationInMins = durationInMins;
+        this.calories = calories;
+        this.recipeIngredients = recipeIngredients;
+        this.recipeSteps = recipeSteps;
+        this.recipeTags = recipeTags;
+    }
 
 
     public String getTitle() {
@@ -106,5 +116,29 @@ public class Recipe {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setRecipeSteps(RecipeStepsList recipeSteps) {
+        this.recipeSteps = recipeSteps;
+    }
+
+    public void setRecipeIngredients(RecipeIngredientsList recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
+    }
+
+    public RecipeIngredientsList getRecipeIngredients() {
+        return recipeIngredients;
+    }
+
+    public RecipeStepsList getRecipeSteps() {
+        return recipeSteps;
+    }
+
+    public RecipeTagList getRecipeTags() {
+        return recipeTags;
+    }
+
+    public void setRecipeTags(RecipeTagList recipeTags) {
+        this.recipeTags = recipeTags;
     }
 }
