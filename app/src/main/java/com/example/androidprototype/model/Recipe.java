@@ -30,6 +30,10 @@ public class Recipe {
     @Expose
     private int calories;
 
+    @SerializedName("servingSize")
+    @Expose
+    private int servingSize;
+
     @SerializedName("user")
     @Expose
     private User user;
@@ -38,12 +42,22 @@ public class Recipe {
         super();
     }
 
-    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories) {
+    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories, int servingSize) {
         this.title = title;
         this.description = description;
         this.dateCreated = dateCreated;
         this.durationInMins = durationInMins;
         this.calories = calories;
+        this.servingSize = servingSize;
+    }
+
+    public Recipe(String title, String description, int durationInMins, int calories, int servingSize) {
+        this.title = title;
+        this.description = description;
+        this.dateCreated = dateCreated;
+        this.durationInMins = durationInMins;
+        this.calories = calories;
+        this.servingSize = servingSize;
     }
 
 
@@ -93,5 +107,13 @@ public class Recipe {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getServingSize() {
+        return servingSize;
+    }
+
+    public void setServingSize(int servingSize) {
+        this.servingSize = servingSize;
     }
 }

@@ -2,17 +2,22 @@ package com.example.androidprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.service.APIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ViewRecipe extends AppCompatActivity {
+public class ViewRecipe extends AppCompatActivity
+    implements View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +26,13 @@ public class ViewRecipe extends AppCompatActivity {
 
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<Recipe> call = service.getRecipe(1);
+
+        Button back = findViewById(R.id.back);
+        Button edit = findViewById(R.id.edit);
+
+        back.setOnClickListener(this);
+        edit.setOnClickListener(this);
+
 
         call.enqueue(new Callback<Recipe>() {
             @Override
@@ -45,5 +57,19 @@ public class ViewRecipe extends AppCompatActivity {
                 Toast.makeText(ViewRecipe.this, "Unable to load recipe", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.back) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.edit) {
+            Intent intent = new Intent(this, EditRecipe.class);
+            startActivity(intent);
+        }
     }
 }
