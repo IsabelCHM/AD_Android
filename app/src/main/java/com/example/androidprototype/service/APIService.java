@@ -19,6 +19,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface APIService {
@@ -36,4 +37,7 @@ public interface APIService {
 
     @GET("/api/mUserGroup/UserId/{id}")
     Call<UserGroupList> getUserGroupList(@Path("id") int userId);
+
+    @POST("api/mRecipe/update/{id}")
+    Call<booleanJson> updateRecipe(@Body Recipe recipe, @Path("id") int recipeId);
 }

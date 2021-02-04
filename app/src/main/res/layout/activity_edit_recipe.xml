@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateRecipe">
+    tools:context=".EditRecipe">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -35,7 +35,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Duration in Mins"
-                android:inputType="number"
                 android:layout_marginTop="20dp"/>
 
             <EditText
@@ -43,7 +42,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="calories"
-                android:inputType="number"
                 android:layout_marginTop="20dp"/>
 
             <EditText
@@ -54,43 +52,24 @@
                 android:inputType="number"
                 android:layout_marginTop="20dp"/>
 
-            <EditText
-                android:id="@+id/instruction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Instruction"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/recipeIngredient"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ingredient"
-                android:layout_marginTop="20dp" />
-
-            <EditText
-                android:id="@+id/quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Quantity"
-                android:inputType="number"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/unitOfMeasurement"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Unit of Measurement"
-                android:layout_marginTop="20dp"/>
-
             <Button
-                android:id="@+id/submit"
+                android:id="@+id/update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Submit"
+                android:text="Update"
                 android:textAllCaps="false"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp" />
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:textAllCaps="false"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"/>
+
 
         </LinearLayout>
 

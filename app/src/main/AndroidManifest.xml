@@ -15,6 +15,7 @@
         android:theme="@style/Theme.AndroidPrototype">
         <activity android:name=".ViewUserGroup"></activity>
         <activity android:name=".DeleteRecipe" />
+        <activity android:name=".EditRecipe"></activity>
         <activity android:name=".SuccessPage" />
         <activity android:name=".ViewUser" />
         <activity android:name=".CreateRecipe" />

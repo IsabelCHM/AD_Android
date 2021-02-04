@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User<T> {
+    @SerializedName("$id")
+    @Expose
+    private String id;
+
     @SerializedName("firstName")
     @Expose
     private String firstName;
