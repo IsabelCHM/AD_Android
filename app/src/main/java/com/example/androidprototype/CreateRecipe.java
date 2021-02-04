@@ -54,9 +54,10 @@ public class CreateRecipe extends AppCompatActivity {
         call.enqueue(new Callback<Recipe>() {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-
+                if (response.isSuccessful()){
                     Intent intent = new Intent(getApplicationContext(), SuccessPage.class);
                     startActivity(intent);
+                }
             }
 
             @Override

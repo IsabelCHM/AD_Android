@@ -23,6 +23,6 @@ public interface APIService {
     @POST("api/mRecipe/")
     Call<Recipe> saveRecipe(@Body Recipe recipe);
 
-    @DELETE("api/mRecipe/deleterecipe/{id}")
+    @DELETE("api/mRecipe/delete/{id}")
     Call<booleanJson> deleteRecipe(@Path("id") int recipeId);
 }
