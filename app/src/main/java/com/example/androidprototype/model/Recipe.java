@@ -30,6 +30,14 @@ public class Recipe {
     @Expose
     private int calories;
 
+    @SerializedName("user")
+    @Expose
+    private User user;
+
+    @SerializedName("recipeIngredients")
+    @Expose
+    private RecipeIngredient recipeIngredients;
+
     public Recipe() {
         super();
     }
@@ -41,6 +49,15 @@ public class Recipe {
         this.durationInMins = durationInMins;
         this.calories = calories;
     }
+
+//    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories, RecipeIngredient recipeIngredients) {
+//        this.title = title;
+//        this.description = description;
+//        this.dateCreated = dateCreated;
+//        this.durationInMins = durationInMins;
+//        this.calories = calories;
+//        this.recipeIngredients = recipeIngredients;
+//    }
 
 
     public String getTitle() {
@@ -82,4 +99,12 @@ public class Recipe {
     public void setCalories(int calories) {
         this.calories = calories;
     }
+
+//    public RecipeIngredient getRecipeIngredients() {
+//        return recipeIngredients;
+//    }
+//
+//    public void setRecipieIngredients(RecipeIngredient recipeIngredients) {
+//        this.recipeIngredients = recipeIngredients;
+//    }
 }
