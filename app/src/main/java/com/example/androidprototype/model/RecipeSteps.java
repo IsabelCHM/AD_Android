@@ -21,7 +21,7 @@ public class RecipeSteps {
     @Expose
     private String textInstructions;
 
-    @SerializedName("MediaFileUrl")
+    @SerializedName("mediaFileUrl")
     @Expose
     private String mediaFileUrl;
 
