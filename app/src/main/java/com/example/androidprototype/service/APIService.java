@@ -2,6 +2,7 @@ package com.example.androidprototype;
 
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.User;
+import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.model.UserGroupList;
 import com.example.androidprototype.model.booleanJson;
@@ -40,4 +41,7 @@ public interface APIService {
 
     @POST("api/mRecipe/update/{id}")
     Call<booleanJson> updateRecipe(@Body Recipe recipe, @Path("id") int recipeId);
+
+    @GET("/api/mUser/userallergen/{id}")
+    Call<UserAllergenList> getUserAllergenList(@Path("id") int userId);
 }

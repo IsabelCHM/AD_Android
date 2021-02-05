@@ -19,11 +19,13 @@ public class MainActivity extends AppCompatActivity
         Button btn2 = findViewById(R.id.reviewRecipe);
         Button btn3 = findViewById(R.id.btnDeleteRecipe);
         Button btn4 = findViewById(R.id.getUser);
+        Button btn5 = findViewById(R.id.btnGetUserAllergen);
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this);
         btn4.setOnClickListener(this);
+        btn5.setOnClickListener(this);
     }
 
     @Override
@@ -47,6 +49,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.getUser) {
             Intent intent = new Intent(this, ViewUserGroup.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.btnGetUserAllergen) {
+            Intent intent = new Intent(this, UserAllergenAct.class);
             startActivity(intent);
         }
     }
