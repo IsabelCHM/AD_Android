@@ -8,34 +8,25 @@ import java.util.List;
 public class RecipeTagList {
     @SerializedName("$id")
     @Expose
-    private String id;
+    private int id;
 
     @SerializedName("$values")
     @Expose
-    private List<RecipeTag> recipeIngredientsList;
+    private List<RecipeTag> recipeTags;
 
-    public RecipeTagList() {
-        super();
-    }
-
-    public RecipeTagList(String id, List<RecipeTag> recipeIngredientsList){
-        this.id = id;
-        this.recipeIngredientsList = recipeIngredientsList;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public List<RecipeTag> getRecipeIngredientsList() {
-        return recipeIngredientsList;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setRecipeIngredientsList(List<RecipeTag> recipeIngredientsList) {
-        this.recipeIngredientsList = recipeIngredientsList;
+    public List<RecipeTag> getRecipeTags() {
+        return recipeTags;
+    }
+
+    public void setRecipeTags(List<RecipeTag> recipeTags) {
+        this.recipeTags = recipeTags;
     }
 }
