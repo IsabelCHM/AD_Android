@@ -12,5 +12,21 @@ public class RecipeTagList {
 
     @SerializedName("$values")
     @Expose
-    private List<RecipeTag> recipeIngredients;
+    private List<RecipeTag> recipeTags;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<RecipeTag> getRecipeTags() {
+        return recipeTags;
+    }
+
+    public void setRecipeTags(List<RecipeTag> recipeTags) {
+        this.recipeTags = recipeTags;
+    }
 }
