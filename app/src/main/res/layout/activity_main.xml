@@ -10,12 +10,13 @@
         android:id="@+id/createRecipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="Create Recipe"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/reviewRecipe"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="Create Recipe"
-        android:textAllCaps="false"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/reviewRecipe"
@@ -53,7 +54,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.81" />
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/btnGetUserAllergen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get User Allergen"
+        app:layout_constraintBottom_toTopOf="@+id/createRecipe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getUser" />
+        
+
 
     <Button
         android:id="@+id/createRecipeX"

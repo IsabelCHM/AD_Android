@@ -21,7 +21,7 @@ public class ViewUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user);
 
-        APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
+        com.example.androidprototype.APIService service = RetrofitClient.getRetrofitInstance().create(com.example.androidprototype.APIService.class);
         Call<User> call = service.getUser(1);
 
         call.enqueue(new Callback<User>() {

@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidPrototype">
-        <activity android:name=".CreateRecipeX"></activity>
+        <activity android:name=".UserAllergenAct"></activity>
         <activity android:name=".ViewUserGroup" />
         <activity android:name=".DeleteRecipe" />
         <activity android:name=".EditRecipe" />
@@ -21,7 +21,9 @@
         <activity android:name=".ViewUser" />
         <activity android:name=".CreateRecipe" />
         <activity android:name=".ViewRecipe" />
+        <activity android:name=".CreateRecipeX" />
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
