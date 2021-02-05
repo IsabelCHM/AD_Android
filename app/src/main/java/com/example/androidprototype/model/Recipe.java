@@ -21,6 +21,10 @@ public class Recipe {
     @Expose
     private String description;
 
+    @SerializedName("mainMediaUrl")
+    @Expose
+    private String mainMediaUrl;
+
     @SerializedName("dateCreated")
     private Date dateCreated;
 
@@ -188,5 +192,13 @@ public class Recipe {
 
     public void setLikesDislikes(LikesDislikesList likesDislikes) {
         this.likesDislikes = likesDislikes;
+    }
+
+    public String getMainMediaUrl() {
+        return mainMediaUrl;
+    }
+
+    public void setMainMediaUrl(String mainMediaUrl) {
+        this.mainMediaUrl = mainMediaUrl;
     }
 }
