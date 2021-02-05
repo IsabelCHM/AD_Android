@@ -13,7 +13,7 @@ public class Tag {
 
     @SerializedName("tagId")
     @Expose
-    private String tagId;
+    private int tagId;
 
     @SerializedName("tagName")
     @Expose
@@ -23,7 +23,9 @@ public class Tag {
     @Expose
     private String warning;
 
-    @SerializedName("recipeTags")
+    //JsonIgnore
+    //RK
+    @SerializedName("RecipeTags")// Danger
     @Expose
     private RecipeTagList recipeTagList;
 
@@ -31,7 +33,7 @@ public class Tag {
         super();
     }
 
-    public Tag(String id, String tagId, String tagName, String warning, RecipeTagList recipeTagList) {
+    public Tag(String id, int tagId, String tagName, String warning, RecipeTagList recipeTagList) {
         this.id = id;
         this.tagId = tagId;
         this.tagName = tagName;
@@ -39,11 +41,11 @@ public class Tag {
         this.recipeTagList = recipeTagList;
     }
 
-    public void setTagId(String tagId) {
+    public void setTagId(int tagId) {
         this.tagId = tagId;
     }
 
-    public String getTagId() {
+    public int getTagId() {
         return tagId;
     }
 
