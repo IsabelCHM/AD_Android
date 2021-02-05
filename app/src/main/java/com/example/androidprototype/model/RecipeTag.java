@@ -2,7 +2,7 @@ package com.example.androidprototype.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+    //Need to update the fields to match the returning json object
 public class RecipeTag {
     @SerializedName("RecipeTagId")
     @Expose

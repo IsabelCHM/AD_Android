@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserGroupList;
+import com.example.androidprototype.APIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,7 +27,7 @@ public class ViewUserGroup extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserGroupList> call, Response<UserGroupList> response) {
                 UserGroupList user = response.body();
-                System.out.println(user.getUsergrouplist().get(0).getUser().getFirstName());
+                //System.out.println(user.getUsergrouplist().get(0).getUser().getFirstName());
 
             }
 

@@ -7,22 +7,75 @@ import java.util.List;
 
 public class Tag {
 
-// oh no
-    @SerializedName("TagId")
+    @SerializedName("$id")
     @Expose
-    private int tagId;
+    private String id;
 
-    @SerializedName("TagName")
+    @SerializedName("tagId")
+    @Expose
+    private String tagId;
+
+    @SerializedName("tagName")
     @Expose
     private String tagName;
 
-    @SerializedName("Warning")
+    @SerializedName("warning")
     @Expose
     private String warning;
 
-    //JsonIgnore
-    //RK
-    @SerializedName("RecipeTags")// Danger
+    @SerializedName("recipeTags")
     @Expose
-    private List<RecipeTag> recipeTags;
+    private RecipeTagList recipeTagList;
+
+    public Tag() {
+        super();
+    }
+
+    public Tag(String id, String tagId, String tagName, String warning, RecipeTagList recipeTagList) {
+        this.id = id;
+        this.tagId = tagId;
+        this.tagName = tagName;
+        this.warning = warning;
+        this.recipeTagList = recipeTagList;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
+    }
+
+    public String getTagId() {
+        return tagId;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setRecipeTags(RecipeTagList recipeTagList) {
+        this.recipeTagList = recipeTagList;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public RecipeTagList getRecipeTagList() {
+        return recipeTagList;
+    }
+
+    public String getWarning() {
+        return warning;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public void setWarning(String warning) {
+        this.warning = warning;
+    }
 }
