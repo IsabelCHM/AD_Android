@@ -13,4 +13,25 @@ public class RecipeStepsList {
     @SerializedName("$values")
     @Expose
     private List<RecipeSteps> recipeIngredients;
+
+    public RecipeStepsList(int id, List<RecipeSteps> recipeIngredients) {
+        this.id = id;
+        this.recipeIngredients = recipeIngredients;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<RecipeSteps> getRecipeIngredients() {
+        return recipeIngredients;
+    }
+
+    public void setRecipeIngredients(List<RecipeSteps> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
+    }
 }

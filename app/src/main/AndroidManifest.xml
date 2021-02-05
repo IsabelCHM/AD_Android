@@ -13,20 +13,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidPrototype">
-        <activity android:name=".ViewUserGroup"></activity>
+        <activity android:name=".UserAllergenAct"></activity>
+        <activity android:name=".ViewUserGroup" />
         <activity android:name=".DeleteRecipe" />
-        <activity android:name=".EditRecipe"></activity>
+        <activity android:name=".EditRecipe" />
         <activity android:name=".SuccessPage" />
         <activity android:name=".ViewUser" />
         <activity android:name=".CreateRecipe" />
         <activity android:name=".ViewRecipe" />
+        <activity android:name=".CreateRecipeX" />
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
