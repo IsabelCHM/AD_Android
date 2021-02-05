@@ -2,6 +2,7 @@ package com.example.androidprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,8 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.APIService;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -31,6 +32,7 @@ public class CreateRecipe extends AppCompatActivity {
         final EditText desET = (EditText) findViewById(R.id.description);
         final EditText durationET = (EditText) findViewById(R.id.duration);
         final EditText caloriesET = (EditText) findViewById(R.id.calories);
+        final EditText servingSizeET = (EditText) findViewById(R.id.servingSize);
         Button submit = (Button) findViewById(R.id.submit);
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
@@ -41,15 +43,16 @@ public class CreateRecipe extends AppCompatActivity {
                 String description = desET.getText().toString().trim();
                 int duration = Integer.parseInt(durationET.getText().toString());
                 int calories = Integer.parseInt(caloriesET.getText().toString());
+                int servingSize = Integer.parseInt(servingSizeET.getText().toString());
 
                 if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description))
-                    sendRecipe(title, description, duration, calories);
+                    sendRecipe(title, description, duration, calories, servingSize);
             }
         });
     }
 
-    public void sendRecipe(String name, String description, int duration, int calories) {
-        Recipe recipe = new Recipe(name, description, new Date(), duration, calories);
+    public void sendRecipe(String title, String description, int duration, int calories, int servingSize) {
+        Recipe recipe = new Recipe(title, description, new Date(), duration, calories, servingSize);
         Call<Recipe> call = service.saveRecipe(recipe);
         call.enqueue(new Callback<Recipe>() {
             @Override
