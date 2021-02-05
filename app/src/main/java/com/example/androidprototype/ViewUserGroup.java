@@ -20,7 +20,7 @@ public class ViewUserGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_group);
 
-        com.example.androidprototype.APIService service = RetrofitClient.getRetrofitInstance().create(com.example.androidprototype.APIService.class);
+        APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<UserGroupList> call = service.getUserGroupList(1);
 
         call.enqueue(new Callback<UserGroupList>() {
