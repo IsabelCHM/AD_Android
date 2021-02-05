@@ -27,7 +27,7 @@ public class ViewUserGroup extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserGroupList> call, Response<UserGroupList> response) {
                 UserGroupList user = response.body();
-                System.out.println(user.getUsergrouplist().get(0).getUser().getFirstName());
+                //System.out.println(user.getUsergrouplist().get(0).getUser().getFirstName());
 
             }
 
