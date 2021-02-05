@@ -19,8 +19,50 @@
             android:layout_height="183dp"
             android:src="@drawable/placeholder"/>
 
+        <EditText
+            android:id="@+id/recipeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add title of the recipe..."
+            android:layout_marginTop="20dp"
+            android:textSize="20dp"/>
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ingredients"
+            android:textSize="20dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvRecipe"
+            android:id="@+id/rvIngredient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/addIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Ingredient"
+            android:textAllCaps="false"
+            android:layout_gravity="center"/>
+
+        <!--<Button
+            android:id="@+id/deleteIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Ingredient"
+            android:textAllCaps="false"
+            android:layout_gravity="center"/>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecipeStep"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
