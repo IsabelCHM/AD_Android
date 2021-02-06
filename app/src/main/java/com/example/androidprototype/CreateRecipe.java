@@ -1,74 +1,95 @@
 package com.example.androidprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.androidprototype.model.Recipe;
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.adpater.RecipeIngredientAdapter;
+import com.example.androidprototype.adpater.RecipeStepAdapter;
+import com.example.androidprototype.model.RecipeIngredients;
+import com.example.androidprototype.model.RecipeSteps;
 
-import java.util.Date;
+import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class CreateRecipe extends AppCompatActivity {
-    private APIService service;
+public class CreateRecipe extends AppCompatActivity
+    implements View.OnClickListener {
+    private Button addStepBtn;
+    private Button addIngredientBtn;
+    //private Button deleteIngredientBtn;
+    private ArrayList<RecipeSteps> recipeStepsList;
+    private ArrayList<RecipeIngredients> recipeIngredientsList;
+    private RecyclerView rvRecipeStep;
+    private RecyclerView rvRecipeIngredient;
+    private RecipeStepAdapter rsAdapter;
+    private RecipeIngredientAdapter riAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
 
-        final EditText titleET = (EditText) findViewById(R.id.recipeTitle);
-        final EditText desET = (EditText) findViewById(R.id.description);
-        final EditText durationET = (EditText) findViewById(R.id.duration);
-        final EditText caloriesET = (EditText) findViewById(R.id.calories);
-        final EditText servingSizeET = (EditText) findViewById(R.id.servingSize);
-        Button submit = (Button) findViewById(R.id.submit);
-        service = RetrofitClient.getRetrofitInstance().create(APIService.class);
+        // Initiate a new list for recipe steps
+        RecipeSteps recipeSteps = new RecipeSteps();
+        recipeSteps.setStepNumber(1);
+        recipeStepsList= new ArrayList<>();
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = titleET.getText().toString().trim();
-                String description = desET.getText().toString().trim();
-                int duration = Integer.parseInt(durationET.getText().toString());
-                int calories = Integer.parseInt(caloriesET.getText().toString());
-                int servingSize = Integer.parseInt(servingSizeET.getText().toString());
+        recipeStepsList.add(recipeSteps);
 
-                if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description))
-                    sendRecipe(title, description, duration, calories, servingSize);
-            }
-        });
+        // Initiate a new list for recipe ingredients
+        RecipeIngredients recipeIngredients = new RecipeIngredients();
+        recipeIngredients.setRecipeIngredientsId(1);
+        recipeIngredientsList = new ArrayList<>();
+
+        recipeIngredientsList.add(recipeIngredients);
+
+        // binding adpater and layout manager with steps recyclerview
+        rvRecipeStep = (RecyclerView) findViewById(R.id.rvRecipeStep);
+        rsAdapter = new RecipeStepAdapter(recipeStepsList);
+
+        rvRecipeStep.setAdapter(rsAdapter);
+        LinearLayoutManager lym_rs = new LinearLayoutManager(this);
+        lym_rs.setStackFromEnd(true);
+        rvRecipeStep.setLayoutManager(lym_rs);
+
+        // binding adapter and layout manager with ingredients recyclerview
+        rvRecipeIngredient = (RecyclerView) findViewById(R.id.rvIngredient);
+        riAdapter = new RecipeIngredientAdapter(recipeIngredientsList);
+
+        rvRecipeIngredient.setAdapter(riAdapter);
+        LinearLayoutManager lym_ri = new LinearLayoutManager(this);
+        lym_ri.setStackFromEnd(true);
+        rvRecipeIngredient.setLayoutManager(lym_ri);
+
+        addStepBtn = findViewById(R.id.addStep);
+        addIngredientBtn = findViewById(R.id.addIngredient);
+        //deleteIngredientBtn = findViewById(R.id.deleteIngredient);
+
+        addStepBtn.setOnClickListener(this);
+        addIngredientBtn.setOnClickListener(this);
+        //deleteIngredientBtn.setOnClickListener(this);
     }
 
-    public void sendRecipe(String title, String description, int duration, int calories, int servingSize) {
-        Recipe recipe = new Recipe(title, description, new Date(), duration, calories, servingSize);
-        Call<Recipe> call = service.saveRecipe(recipe);
-        call.enqueue(new Callback<Recipe>() {
-            @Override
-            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-                if (response.isSuccessful()){
-                    Intent intent = new Intent(getApplicationContext(), SuccessPage.class);
-                    startActivity(intent);
-                }
-            }
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
 
-            @Override
-            public void onFailure(Call<Recipe> call, Throwable t) {
-                Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (id == R.id.addStep) {
+            RecipeSteps newRecipeStep = new RecipeSteps();
+            newRecipeStep.setStepNumber(recipeStepsList.size()+1);
+            rsAdapter.addStep(newRecipeStep);
+            rvRecipeStep.scrollToPosition(recipeStepsList.size()-1);
+        }
+
+        if (id == R.id.addIngredient) {
+            RecipeIngredients newRecipeIngredient = new RecipeIngredients();
+            newRecipeIngredient.setRecipeIngredientsId(recipeIngredientsList.size()+1);
+            riAdapter.addStep(newRecipeIngredient);
+            rvRecipeIngredient.scrollToPosition(recipeStepsList.size()-1);
+        }
+
     }
-
-
 }
