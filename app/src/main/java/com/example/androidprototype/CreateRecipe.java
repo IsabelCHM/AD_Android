@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.androidprototype.adpater.RecipeIngredientAdapter;
 import com.example.androidprototype.adpater.RecipeStepAdapter;
@@ -27,10 +29,22 @@ public class CreateRecipe extends AppCompatActivity
     private RecipeStepAdapter rsAdapter;
     private RecipeIngredientAdapter riAdapter;
 
+    private ImageView imgView;
+    private EditText titleET;
+    private EditText desET;
+    private EditText servingSizeET;
+    private EditText durationET;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
+
+        imgView = (ImageView) findViewById(R.id.recipeCover);
+        titleET = (EditText) findViewById(R.id.recipeTitle);
+        desET = (EditText) findViewById(R.id.description);
+        servingSizeET = (EditText) findViewById(R.id.servingSize);
+        durationET = (EditText) findViewById(R.id.duration);
 
         // Initiate a new list for recipe steps
         RecipeSteps recipeSteps = new RecipeSteps();
