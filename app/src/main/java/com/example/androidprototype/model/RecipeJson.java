@@ -9,7 +9,7 @@ import java.util.List;
 
 import retrofit2.http.HEAD;
 
-public class Recipe {
+public class RecipeJson {
 
     //@SerializedName("recipeId")
     //private int id;
@@ -46,22 +46,12 @@ public class Recipe {
     private User user;
 
     @SerializedName("recipeIngredients")
-    private RecipeIngredientsList recipeIngredients;
-
     @Expose
-    private List<RecipeIngredients> recipeIngredientsList;
-
-    public List<RecipeIngredients> getRecipeIngredientsList() {
-        return recipeIngredientsList;
-    }
-
-    public void setRecipeIngredientsList(List<RecipeIngredients> recipeIngredientsList) {
-        this.recipeIngredientsList = recipeIngredientsList;
-    }
+    private List<RecipeIngredientsJson> recipeIngredientsList;
 
     @SerializedName("recipeSteps")
     @Expose
-    private RecipeStepsList recipeSteps;
+    private List<RecipeStepsJson> recipeStepsList;
 
     @SerializedName("recipeTags")
     @Expose
@@ -75,39 +65,9 @@ public class Recipe {
     @Expose
     private LikesDislikesList likesDislikes;
 
-    public Recipe() {
+    public RecipeJson() {
         super();
     }
-
-    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories, int servingSize) {
-        this.title = title;
-        this.description = description;
-        this.dateCreated = dateCreated;
-        this.durationInMins = durationInMins;
-        this.calories = calories;
-        this.servingSize = servingSize;
-    }
-
-    public Recipe(String title, String description, int durationInMins, int calories, int servingSize) {
-        this.title = title;
-        this.description = description;
-        this.dateCreated = dateCreated;
-        this.durationInMins = durationInMins;
-        this.calories = calories;
-        this.servingSize = servingSize;
-    }
-
-    public Recipe(String title, String description, Date dateCreated, int durationInMins, int calories, RecipeIngredientsList recipeIngredients, RecipeStepsList recipeSteps, RecipeTagList recipeTags) {
-        this.title = title;
-        this.description = description;
-        this.dateCreated = dateCreated;
-        this.durationInMins = durationInMins;
-        this.calories = calories;
-        this.recipeIngredients = recipeIngredients;
-        this.recipeSteps = recipeSteps;
-        this.recipeTags = recipeTags;
-    }
-
 
     public String getTitle() {
         return title;
@@ -123,6 +83,14 @@ public class Recipe {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getMainMediaUrl() {
+        return mainMediaUrl;
+    }
+
+    public void setMainMediaUrl(String mainMediaUrl) {
+        this.mainMediaUrl = mainMediaUrl;
     }
 
     public Date getDateCreated() {
@@ -149,14 +117,6 @@ public class Recipe {
         this.calories = calories;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public int getServingSize() {
         return servingSize;
     }
@@ -165,20 +125,28 @@ public class Recipe {
         this.servingSize = servingSize;
     }
 
-    public void setRecipeSteps(RecipeStepsList recipeSteps) {
-        this.recipeSteps = recipeSteps;
+    public User getUser() {
+        return user;
     }
 
-    public void setRecipeIngredients(RecipeIngredientsList recipeIngredients) {
-        this.recipeIngredients = recipeIngredients;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public RecipeIngredientsList getRecipeIngredients() {
-        return recipeIngredients;
+    public List<RecipeIngredientsJson> getRecipeIngredientsList() {
+        return recipeIngredientsList;
     }
 
-    public RecipeStepsList getRecipeSteps() {
-        return recipeSteps;
+    public void setRecipeIngredientsList(List<RecipeIngredientsJson> recipeIngredientsList) {
+        this.recipeIngredientsList = recipeIngredientsList;
+    }
+
+    public List<RecipeStepsJson> getRecipeStepsList() {
+        return recipeStepsList;
+    }
+
+    public void setRecipeStepsList(List<RecipeStepsJson> recipeStepsList) {
+        this.recipeStepsList = recipeStepsList;
     }
 
     public RecipeTagList getRecipeTags() {
@@ -203,13 +171,5 @@ public class Recipe {
 
     public void setLikesDislikes(LikesDislikesList likesDislikes) {
         this.likesDislikes = likesDislikes;
-    }
-
-    public String getMainMediaUrl() {
-        return mainMediaUrl;
-    }
-
-    public void setMainMediaUrl(String mainMediaUrl) {
-        this.mainMediaUrl = mainMediaUrl;
     }
 }

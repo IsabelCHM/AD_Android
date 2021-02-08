@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.service.APIService;
 
 import java.util.Date;
 
@@ -51,7 +51,7 @@ public class CreateRecipeZ extends AppCompatActivity {
     }
 
     public void sendRecipe(String title, String description, int duration, int calories, int servingSize) {
-        Recipe recipe = new Recipe(title, description, new Date(), duration, calories, servingSize);
+        /*Recipe recipe = new Recipe(title, description, new Date(), duration, calories, servingSize);
         Call<Recipe> call = service.saveRecipe(recipe);
         call.enqueue(new Callback<Recipe>() {
             @Override
@@ -66,7 +66,7 @@ public class CreateRecipeZ extends AppCompatActivity {
             public void onFailure(Call<Recipe> call, Throwable t) {
                 Toast.makeText(CreateRecipeZ.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
 

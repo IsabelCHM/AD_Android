@@ -23,6 +23,10 @@ public class RecipeIngredientsList {
         this.recipeIngredients = recipeIngredients;
     }
 
+    public RecipeIngredientsList(List<RecipeIngredients> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
+    }
+
     public void setRecipeIngredients(List<RecipeIngredients> recipeIngredients) {
         this.recipeIngredients = recipeIngredients;
     }
