@@ -11,8 +11,9 @@ import retrofit2.http.HEAD;
 
 public class Recipe {
 
-    //@SerializedName("recipeId")
-    //private int id;
+    @SerializedName("recipeId")
+    @Expose
+    private int id;
 
     @SerializedName("title")
     @Expose
@@ -46,18 +47,8 @@ public class Recipe {
     private User user;
 
     @SerializedName("recipeIngredients")
-    private RecipeIngredientsList recipeIngredients;
-
     @Expose
-    private List<RecipeIngredients> recipeIngredientsList;
-
-    public List<RecipeIngredients> getRecipeIngredientsList() {
-        return recipeIngredientsList;
-    }
-
-    public void setRecipeIngredientsList(List<RecipeIngredients> recipeIngredientsList) {
-        this.recipeIngredientsList = recipeIngredientsList;
-    }
+    private RecipeIngredientsList recipeIngredients;
 
     @SerializedName("recipeSteps")
     @Expose
@@ -107,6 +98,7 @@ public class Recipe {
         this.recipeSteps = recipeSteps;
         this.recipeTags = recipeTags;
     }
+
 
 
     public String getTitle() {
@@ -203,6 +195,14 @@ public class Recipe {
 
     public void setLikesDislikes(LikesDislikesList likesDislikes) {
         this.likesDislikes = likesDislikes;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getMainMediaUrl() {
