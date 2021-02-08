@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.booleanJson;
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.service.APIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;

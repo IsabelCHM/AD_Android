@@ -1,6 +1,8 @@
 package com.example.androidprototype.adpater;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidprototype.R;
 import com.example.androidprototype.model.RecipeSteps;
+import com.example.androidprototype.model.RecipeStepsJson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
@@ -31,12 +35,15 @@ public class RecipeStepAdapter extends
             recipeStep = (TextView) itemView.findViewById(R.id.recipeStep);
             stepImg = (ImageView) itemView.findViewById(R.id.stepImg);
             stepInstruction = (EditText) itemView.findViewById(R.id.stepInstruction);
+
+            InstructionTextWather instructionTextWather = new InstructionTextWather(stepInstruction);
+            stepInstruction.addTextChangedListener(instructionTextWather);
         }
     }
 
-    private ArrayList<RecipeSteps> recipeStepsList;
+    private ArrayList<RecipeStepsJson> recipeStepsList;
 
-    public RecipeStepAdapter(ArrayList<RecipeSteps> recipeStepsList) {
+    public RecipeStepAdapter(ArrayList<RecipeStepsJson> recipeStepsList) {
         this.recipeStepsList = recipeStepsList;
     }
 
@@ -56,10 +63,13 @@ public class RecipeStepAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull RecipeStepAdapter.ViewHolder holder, int position) {
-        RecipeSteps recipeSteps = recipeStepsList.get(position);
+        RecipeStepsJson recipeSteps = recipeStepsList.get(position);
 
         TextView textView = holder.recipeStep;
         textView.setText("Step " + String.valueOf(recipeSteps.getStepNumber()));
+
+        holder.stepImg.setTag(position);
+        holder.stepInstruction.setTag(position);
 
     }
 
@@ -68,8 +78,29 @@ public class RecipeStepAdapter extends
         return recipeStepsList.size();
     }
 
-    public void addStep(RecipeSteps newRecipeStep) {
+    public void addStep(RecipeStepsJson newRecipeStep) {
         recipeStepsList.add(newRecipeStep);
         notifyItemInserted(recipeStepsList.size()-1);
+    }
+
+    public List<RecipeStepsJson> getRecipeStepsList() { return recipeStepsList; }
+
+    class InstructionTextWather implements TextWatcher {
+
+        private EditText editText;
+
+        public InstructionTextWather(EditText editText) { this.editText = editText; }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            int position = (int) editText.getTag();
+            recipeStepsList.get(position).setTextInstructions(s.toString());
+        }
     }
 }
