@@ -50,4 +50,7 @@ public interface APIService {
 
     @GET("/api/mRecipe/getAllRecipes/")
     Call<RecipeList> getAllRecipes();
+
+    @GET("/api/mRecipe/search/{search}")
+    Call<RecipeList> searchRecipes(@Path("search") String search);
 }
