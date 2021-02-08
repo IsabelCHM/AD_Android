@@ -4,16 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.androidprototype.APIService;
+import com.example.androidprototype.adpater.RecipeUserProfileAdaptor;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.User;
+import com.example.androidprototype.service.DownloadImageTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,29 +52,46 @@ public class ViewUserProfile extends AppCompatActivity {
                         String firstName = response.body().getFirstName();
                         String lastName = response.body().getLastName();
                         String userName = response.body().getUsername();
-                        tvFullname.setText("Name: " + firstName + " " +  lastName);
-                        tvFullname.setText("Username: " + userName);
-
-                        ArrayList<Recipe> recipeList = response.body().getRecipes().getRecipelist();
                         int noOfRecipes = response.body().getRecipes().getRecipelist().size();
 
-                        String[] recipesTitle = new String[noOfRecipes];
-                        int[] recipesId = new int[noOfRecipes];
+                        tvFullname.setText("Name: " + firstName + " " +  lastName);
+                        tvFullname.setText("Username: " + userName);
+                        tvNoOfRecipe.setText("Recipes Created: " + Integer.toString(noOfRecipes));
 
-                        for (int i = 0; i < noOfRecipes; i++) {
-                            Recipe recipe = recipeList.get(i);
-                            recipesTitle[i] = recipe.getTitle();
-                            recipesId[i] = recipe.getId();
+                        List<Recipe> recipeList = response.body().getRecipes().getRecipelist();
 
+                        if (recipeList != null) {
+                            RecipeUserProfileAdaptor adaptor = new RecipeUserProfileAdaptor(ViewUserProfile.this, 0);
+                            adaptor.setData(recipeList);
+
+                            ListView listview = findViewById(R.id.lvRecipes);
+
+                            if (listview != null) {
+                                listview.setAdapter(adaptor);
+//                                setListViewHeightBasedOnChildren(listview);
+                            }
                         }
 
-                        //Test area
-                        String test = "";
-                        for (int i = 0; i < noOfRecipes; i++) {
-                            test = test + " " + recipesTitle[i] + "\n";
-                        }
 
-                        tvNoOfRecipe.setText(test);
+//                        int noOfRecipes = response.body().getRecipes().getRecipelist().size();
+//
+//                        String[] recipesTitle = new String[noOfRecipes];
+//                        int[] recipesId = new int[noOfRecipes];
+//
+//                        for (int i = 0; i < noOfRecipes; i++) {
+//                            Recipe recipe = recipeList.get(i);
+//                            recipesTitle[i] = recipe.getTitle();
+//                            recipesId[i] = recipe.getId();
+//
+//                        }
+//
+//                        //Test area
+//                        String test = "";
+//                        for (int i = 0; i < noOfRecipes; i++) {
+//                            test = test + " " + recipesTitle[i] + "\n";
+//                        }
+//
+//                        tvNoOfRecipe.setText(test);
                     }
 
                     @Override
@@ -77,5 +101,36 @@ public class ViewUserProfile extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public static void setListViewHeightBasedOnChildren(ListView listView)
+    {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight=0;
+        View view = null;
+
+        for (int i = 0; i < listAdapter.getCount(); i++)
+        {
+            view = listAdapter.getView(i, view, listView);
+
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + ((listView.getDividerHeight()) * (listAdapter.getCount()));
+
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+
     }
 }
