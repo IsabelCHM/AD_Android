@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.model.RecipeIngredients;
 import com.example.androidprototype.model.RecipeSteps;
 import com.example.androidprototype.model.RecipeTag;
