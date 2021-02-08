@@ -31,6 +31,8 @@ public class RecipeIngredientAdapter extends
             super(itemView);
             material = itemView.findViewById(R.id.recipeIngredient);
             qty = itemView.findViewById(R.id.recipeQty);
+
+
         }
     }
 
@@ -56,7 +58,8 @@ public class RecipeIngredientAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull RecipeIngredientAdapter.ViewHolder holder, int position) {
-
+        holder.material.setTag(position);
+        holder.qty.setTag(position);
     }
 
     @Override
