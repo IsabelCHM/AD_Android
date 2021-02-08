@@ -76,7 +76,7 @@ public class ViewUserProfile extends AppCompatActivity {
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                         int recipeId = recipeList.get(i).getId();
                                         Intent intent = new Intent(ViewUserProfile.this, ViewRecipe.class);
-                                        intent.putExtra("recipeId", recipeId);
+                                        intent.putExtra("RecipeId", recipeId);
                                         startActivity(intent);
                                     }
                                 });

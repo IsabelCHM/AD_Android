@@ -23,6 +23,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.androidprototype.service.APIService;
+
 public class HomeActivity extends AppCompatActivity
         implements View.OnClickListener{
 
@@ -35,7 +37,7 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        com.example.androidprototype.APIService service = RetrofitClient.getRetrofitInstance().create(com.example.androidprototype.APIService.class);
+        APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<RecipeList> call = service.getAllRecipes();
 
 
@@ -46,7 +48,10 @@ public class HomeActivity extends AppCompatActivity
             public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
 
                 RecipeList recipes = response.body();
-                recipeList = recipes.getRecipelist();
+                if (recipes != null) {
+                    recipeList = recipes.getRecipelist();
+                }
+
 
                 // binding adpater and layout manager with steps recyclerview
                 rvHome = (RecyclerView) findViewById(R.id.HomeRecycler);
