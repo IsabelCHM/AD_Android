@@ -22,16 +22,8 @@
         android:layout_height="300dp"
         app:layout_constraintTop_toBottomOf="@id/tv_lv_RecipeName"/>
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_lv_RecipeName"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toLeftOf="@id/tv_lv_RecipeDurtation"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tv_iv_RecipeMainImage"/>-->
-
     <TextView
-        android:id="@+id/tv_lv_RecipeDurtation"
+        android:id="@+id/tv_lv_RecipeDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv_iv_RecipeMainImage"
@@ -43,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv_iv_RecipeMainImage"
-        app:layout_constraintLeft_toRightOf="@id/tv_lv_RecipeDurtation"
+        app:layout_constraintLeft_toRightOf="@id/tv_lv_RecipeDuration"
         app:layout_constraintRight_toLeftOf="@id/tv_lv_RecipeServingSize"/>
 
     <TextView

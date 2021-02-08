@@ -2,7 +2,6 @@ package com.example.androidprototype.adpater;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,7 @@ public class RecipeUserProfileAdaptor extends ArrayAdapter {
         }
 
         TextView tvRecipeName = view.findViewById(R.id.tv_lv_RecipeName);
-        TextView tvRecipeDuration = view.findViewById(R.id.tv_lv_RecipeDurtation);
+        TextView tvRecipeDuration = view.findViewById(R.id.tv_lv_RecipeDuration);
         TextView tvRecipeServingSize = view.findViewById(R.id.tv_lv_RecipeServingSize);
         TextView tvRecipeCalories = view.findViewById(R.id.tv_lv_RecipeCalories);
 

@@ -80,30 +80,8 @@ public class ViewUserProfile extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 });
-//                                setListViewHeightBasedOnChildren(listview);
                             }
                         }
-
-
-//                        int noOfRecipes = response.body().getRecipes().getRecipelist().size();
-//
-//                        String[] recipesTitle = new String[noOfRecipes];
-//                        int[] recipesId = new int[noOfRecipes];
-//
-//                        for (int i = 0; i < noOfRecipes; i++) {
-//                            Recipe recipe = recipeList.get(i);
-//                            recipesTitle[i] = recipe.getTitle();
-//                            recipesId[i] = recipe.getId();
-//
-//                        }
-//
-//                        //Test area
-//                        String test = "";
-//                        for (int i = 0; i < noOfRecipes; i++) {
-//                            test = test + " " + recipesTitle[i] + "\n";
-//                        }
-//
-//                        tvNoOfRecipe.setText(test);
                     }
 
                     @Override
@@ -113,36 +91,5 @@ public class ViewUserProfile extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    public static void setListViewHeightBasedOnChildren(ListView listView)
-    {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight=0;
-        View view = null;
-
-        for (int i = 0; i < listAdapter.getCount(); i++)
-        {
-            view = listAdapter.getView(i, view, listView);
-
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + ((listView.getDividerHeight()) * (listAdapter.getCount()));
-
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-
     }
 }
