@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
         int id = v.getId();
 
         if (id == R.id.createRecipe) {
-            Intent intent = new Intent(this, CreateRecipe.class);
+            Intent intent = new Intent(this, CreateRecipeZ.class);
             startActivity(intent);
         }
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (id == R.id.createRecipeX) {
-            Intent intent = new Intent(this, CreateRecipeX.class);
+            Intent intent = new Intent(this, CreateRecipe.class);
             startActivity(intent);
         }
     }
