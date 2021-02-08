@@ -2,15 +2,18 @@ package com.example.androidprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidprototype.APIService;
 import com.example.androidprototype.adpater.RecipeUserProfileAdaptor;
@@ -68,6 +71,15 @@ public class ViewUserProfile extends AppCompatActivity {
 
                             if (listview != null) {
                                 listview.setAdapter(adaptor);
+                                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        int recipeId = recipeList.get(i).getId();
+                                        Intent intent = new Intent(ViewUserProfile.this, ViewRecipe.class);
+                                        intent.putExtra("recipeId", recipeId);
+                                        startActivity(intent);
+                                    }
+                                });
 //                                setListViewHeightBasedOnChildren(listview);
                             }
                         }

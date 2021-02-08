@@ -46,6 +46,7 @@ public class RecipeUserProfileAdaptor extends ArrayAdapter {
         TextView tvRecipeName = view.findViewById(R.id.tv_lv_RecipeName);
         TextView tvRecipeDuration = view.findViewById(R.id.tv_lv_RecipeDurtation);
         TextView tvRecipeServingSize = view.findViewById(R.id.tv_lv_RecipeServingSize);
+        TextView tvRecipeCalories = view.findViewById(R.id.tv_lv_RecipeCalories);
 
         if (recipes.get(pos).getMainMediaUrl() == null) {
             ImageView recipeImage = view.findViewById(R.id.tv_iv_RecipeMainImage);
@@ -56,10 +57,10 @@ public class RecipeUserProfileAdaptor extends ArrayAdapter {
                     .execute(recipes.get(pos).getMainMediaUrl());
         }
 
-        tvRecipeName.setText("Name: " + recipes.get(pos).getTitle() + "  ");
+        tvRecipeName.setText(recipes.get(pos).getTitle());
         tvRecipeServingSize.setText("Serving Size: " + Integer.toString(recipes.get(pos).getServingSize()) + "  ");
         tvRecipeDuration.setText("Preparation Time: " + Integer.toString(recipes.get(pos).getDurationInMins()));
-
+        tvRecipeCalories.setText("Calories: " + Integer.toString(recipes.get(pos).getCalories()));
         return view;
     }
 }
