@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.androidprototype.model.booleanJson;
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.service.APIService;
 
 import retrofit2.Call;
 import retrofit2.Callback;

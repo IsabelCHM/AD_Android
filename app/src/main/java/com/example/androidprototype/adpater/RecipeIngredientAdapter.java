@@ -1,21 +1,21 @@
 package com.example.androidprototype.adpater;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidprototype.R;
-import com.example.androidprototype.model.RecipeIngredients;
-import com.example.androidprototype.model.RecipeSteps;
+import com.example.androidprototype.model.RecipeIngredientsJson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
@@ -31,12 +31,18 @@ public class RecipeIngredientAdapter extends
             super(itemView);
             material = itemView.findViewById(R.id.recipeIngredient);
             qty = itemView.findViewById(R.id.recipeQty);
+
+            IngredientTextWatcher ingredientTextWatcher = new IngredientTextWatcher(material);
+            material.addTextChangedListener(ingredientTextWatcher);
+
+            QtyTextWatcher qtyTextWatcher = new QtyTextWatcher(qty);
+            qty.addTextChangedListener(qtyTextWatcher);
         }
     }
 
-    private ArrayList<RecipeIngredients> recipeIngredientList;
+    private ArrayList<RecipeIngredientsJson> recipeIngredientList;
 
-    public RecipeIngredientAdapter(ArrayList<RecipeIngredients> recipeIngredientList) {
+    public RecipeIngredientAdapter(ArrayList<RecipeIngredientsJson> recipeIngredientList) {
         this.recipeIngredientList = recipeIngredientList;
     }
 
@@ -56,7 +62,8 @@ public class RecipeIngredientAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull RecipeIngredientAdapter.ViewHolder holder, int position) {
-
+        holder.material.setTag(position);
+        holder.qty.setTag(position);
     }
 
     @Override
@@ -64,8 +71,50 @@ public class RecipeIngredientAdapter extends
         return recipeIngredientList.size();
     }
 
-    public void addStep(RecipeIngredients newRecipeIngredient) {
-        recipeIngredientList.add(newRecipeIngredient);
+    public void addStep(RecipeIngredientsJson newRecipeIngredientJson) {
+        recipeIngredientList.add(newRecipeIngredientJson);
         notifyItemInserted(recipeIngredientList.size()-1);
+    }
+
+    public List<RecipeIngredientsJson> getRecipeIngredientList() {
+        return recipeIngredientList;
+    }
+
+    public class IngredientTextWatcher implements TextWatcher {
+
+        private EditText editText;
+
+        public IngredientTextWatcher(EditText editText) { this.editText = editText; }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            int position = (int) editText.getTag();
+            recipeIngredientList.get(position).setIngredient(s.toString());
+        }
+    }
+
+    public class QtyTextWatcher implements TextWatcher {
+
+        private EditText editText;
+
+        public QtyTextWatcher(EditText editText) { this.editText = editText; }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            int position = (int) editText.getTag();
+            recipeIngredientList.get(position).setQuantity(Double.parseDouble(s.toString()));
+        }
     }
 }

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroupList;
@@ -31,7 +31,7 @@ public class UserAllergenAct extends AppCompatActivity {
             public void onClick(View view) {
                 int userId = Integer.parseInt(etUserId.getText().toString());
 
-                APIService service = RetrofitClient.getRetrofitInstance().create(com.example.androidprototype.APIService.class);
+                APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
                 Call<UserAllergenList> call = service.getUserAllergenList(userId);
 
                 call.enqueue(new Callback<UserAllergenList>() {
