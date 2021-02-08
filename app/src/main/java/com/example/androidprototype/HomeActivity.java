@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.androidprototype.adpater.HomeAdapter;
@@ -31,6 +32,7 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView rvHome;
     private HomeAdapter homeAdapter;
     private ArrayList<Recipe> recipeList;
+    private boolean search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,45 +40,118 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
 
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
-        Call<RecipeList> call = service.getAllRecipes();
 
+        SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
+        simpleSearchView.setIconifiedByDefault(true);
+        simpleSearchView.setQueryHint("Search recipes");
 
-
-        call.enqueue(new Callback<RecipeList>() {
-
+        simpleSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
+            public boolean onQueryTextSubmit(String query) {
+                // do something on text submit
+                Intent intent1 = new Intent(HomeActivity.this, HomeActivity.class);
+                intent1.setAction("SEARCH");
+                intent1.putExtra("query", query);
+                startActivity(intent1);
 
-                RecipeList recipes = response.body();
-                if (recipes != null) {
-                    recipeList = recipes.getRecipelist();
-                }
-
-
-                // binding adpater and layout manager with steps recyclerview
-                rvHome = (RecyclerView) findViewById(R.id.HomeRecycler);
-                homeAdapter = new HomeAdapter(recipeList, HomeActivity.this);
-
-                rvHome.setAdapter(homeAdapter);
-                LinearLayoutManager lym_rs = new LinearLayoutManager(HomeActivity.this);
-                lym_rs.setStackFromEnd(false);
-                rvHome.setLayoutManager(lym_rs);
-                rvHome.addItemDecoration(new DividerItemDecoration(HomeActivity.this, DividerItemDecoration.VERTICAL));
-
+                return false;
             }
 
             @Override
-            public void onFailure(Call<RecipeList> call, Throwable t) {
-                System.out.println(t.getMessage());
-                Toast.makeText(HomeActivity.this, "No recipes to show", Toast.LENGTH_SHORT).show();
+            public boolean onQueryTextChange(String newText) {
+// do something when text changes
+                return false;
             }
         });
+
+        Intent intent = getIntent();
+        String search = intent.getAction();
+        if (search.equals("SEARCH"))
+        {
+            //do something
+            String query = intent.getStringExtra("query");
+            System.out.println(query);
+
+            Call<RecipeList> call = service.searchRecipes(query);
+
+
+            call.enqueue(new Callback<RecipeList>() {
+
+                @Override
+                public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
+
+                    RecipeList recipes = response.body();
+                    if (recipes != null) {
+                        recipeList = recipes.getRecipelist();
+                    }
+
+
+                    // binding adpater and layout manager with steps recyclerview
+                    rvHome = (RecyclerView) findViewById(R.id.HomeRecycler);
+                    homeAdapter = new HomeAdapter(recipeList, HomeActivity.this);
+
+                    rvHome.setAdapter(homeAdapter);
+                    LinearLayoutManager lym_rs = new LinearLayoutManager(HomeActivity.this);
+                    lym_rs.setStackFromEnd(false);
+                    rvHome.setLayoutManager(lym_rs);
+                    rvHome.addItemDecoration(new DividerItemDecoration(HomeActivity.this, DividerItemDecoration.VERTICAL));
+
+                }
+
+                @Override
+                public void onFailure(Call<RecipeList> call, Throwable t) {
+                    System.out.println(t.getMessage());
+                    Toast.makeText(HomeActivity.this, "No recipes to show", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        }
+        else {
+
+
+            Call<RecipeList> call = service.getAllRecipes();
+
+
+            call.enqueue(new Callback<RecipeList>() {
+
+                @Override
+                public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
+
+                    RecipeList recipes = response.body();
+                    if (recipes != null) {
+                        recipeList = recipes.getRecipelist();
+                    }
+
+
+                    // binding adpater and layout manager with steps recyclerview
+                    rvHome = (RecyclerView) findViewById(R.id.HomeRecycler);
+                    homeAdapter = new HomeAdapter(recipeList, HomeActivity.this);
+
+                    rvHome.setAdapter(homeAdapter);
+                    LinearLayoutManager lym_rs = new LinearLayoutManager(HomeActivity.this);
+                    lym_rs.setStackFromEnd(false);
+                    rvHome.setLayoutManager(lym_rs);
+                    rvHome.addItemDecoration(new DividerItemDecoration(HomeActivity.this, DividerItemDecoration.VERTICAL));
+
+                }
+
+                @Override
+                public void onFailure(Call<RecipeList> call, Throwable t) {
+                    System.out.println(t.getMessage());
+                    Toast.makeText(HomeActivity.this, "No recipes to show", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         FloatingActionButton fab = findViewById(R.id.fabCreate);
         fab.setOnClickListener(this);
 
         Button test = findViewById(R.id.test);
         test.setOnClickListener(this);
+
+        Button home = findViewById(R.id.refreshHome);
+        home.setOnClickListener(this);
     }
 
     @Override
@@ -90,6 +165,12 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.test) {
             Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.refreshHome) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction("REFRESH");
             startActivity(intent);
         }
 
