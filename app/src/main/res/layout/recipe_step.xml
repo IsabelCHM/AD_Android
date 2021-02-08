@@ -10,7 +10,8 @@
         android:id="@+id/recipeStep"
         android:layout_width="match_parent"
         android:layout_height="33dp"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:textSize="20dp"/>
 
     <ImageView
         android:id="@+id/stepImg"

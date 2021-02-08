@@ -7,16 +7,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.model.RecipeIngredients;
 import com.example.androidprototype.model.RecipeSteps;
 import com.example.androidprototype.model.RecipeTag;
+import com.example.androidprototype.service.DownloadImageTask;
 import com.example.androidprototype.service.ViewRecipeIngredientAdapter;
 import com.example.androidprototype.service.ViewRecipeStepAdapter;
 
@@ -34,8 +36,11 @@ public class ViewRecipe extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
+        Intent intent = getIntent();
+        int recipeId = intent.getIntExtra("RecipeId",1);
+
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
-        Call<Recipe> call = service.getRecipe(1);
+        Call<Recipe> call = service.getRecipe(recipeId);
 
         Button back = findViewById(R.id.back);
         Button edit = findViewById(R.id.edit);
@@ -61,6 +66,9 @@ public class ViewRecipe extends AppCompatActivity
                 calories.setText(Integer.toString(recipe.getCalories()) + " kcal");
                 datecreated.setText("Created on " + recipe.getDateCreated().toString());
                 user.setText("By " + recipe.getUser().getUsername());
+
+                new DownloadImageTask((ImageView) findViewById(R.id.recipeImage))
+                        .execute(recipe.getMainMediaUrl());
 
                 String warnings = "";
                 String tags = "";

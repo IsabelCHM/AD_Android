@@ -1,26 +1,53 @@
 package com.example.androidprototype;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.androidprototype.model.Recipe;
-import com.example.androidprototype.APIService;
+import com.example.androidprototype.adpater.RecipeIngredientAdapter;
+import com.example.androidprototype.adpater.RecipeStepAdapter;
+import com.example.androidprototype.model.RecipeIngredients;
+import com.example.androidprototype.model.RecipeIngredientsJson;
+import com.example.androidprototype.model.RecipeJson;
+import com.example.androidprototype.model.RecipeSteps;
 
-import java.util.Date;
+import com.example.androidprototype.model.RecipeStepsJson;
+import com.example.androidprototype.service.APIService;
 
+import java.util.ArrayList;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CreateRecipe extends AppCompatActivity {
+public class CreateRecipe extends AppCompatActivity
+    implements View.OnClickListener {
+    private Button addStepBtn;
+    private Button addIngredientBtn;
+    private Button createRecipeBtn;
+    //private Button deleteIngredientBtn;
+    private ArrayList<RecipeStepsJson> recipeStepsList;
+    private ArrayList<RecipeIngredientsJson> recipeIngredientsList;
+    private RecyclerView rvRecipeStep;
+    private RecyclerView rvRecipeIngredient;
+    private RecipeStepAdapter rsAdapter;
+    private RecipeIngredientAdapter riAdapter;
+
+    private ImageView imgView;
+    private EditText titleET;
+    private EditText desET;
+    private EditText servingSizeET;
+    private EditText durationET;
+
     private APIService service;
 
     @Override
@@ -28,47 +55,118 @@ public class CreateRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
 
-        final EditText titleET = (EditText) findViewById(R.id.recipeTitle);
-        final EditText desET = (EditText) findViewById(R.id.description);
-        final EditText durationET = (EditText) findViewById(R.id.duration);
-        final EditText caloriesET = (EditText) findViewById(R.id.calories);
-        final EditText servingSizeET = (EditText) findViewById(R.id.servingSize);
-        Button submit = (Button) findViewById(R.id.submit);
+        // Retrofit Service
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = titleET.getText().toString().trim();
-                String description = desET.getText().toString().trim();
-                int duration = Integer.parseInt(durationET.getText().toString());
-                int calories = Integer.parseInt(caloriesET.getText().toString());
-                int servingSize = Integer.parseInt(servingSizeET.getText().toString());
+        imgView = (ImageView) findViewById(R.id.recipeCover);
+        titleET = (EditText) findViewById(R.id.recipeTitle);
+        desET = (EditText) findViewById(R.id.description);
+        servingSizeET = (EditText) findViewById(R.id.servingSize);
+        durationET = (EditText) findViewById(R.id.duration);
 
-                if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description))
-                    sendRecipe(title, description, duration, calories, servingSize);
-            }
-        });
+
+        // Initiate a new list for recipe steps
+        RecipeStepsJson recipeSteps = new RecipeStepsJson();
+        recipeSteps.setStepNumber(1);
+        recipeStepsList= new ArrayList<>();
+
+        recipeStepsList.add(recipeSteps);
+
+        // Initiate a new list for recipe ingredients
+        RecipeIngredientsJson recipeIngredientsJson = new RecipeIngredientsJson();
+        //recipeIngredients.setRecipeIngredientsId(1);
+        recipeIngredientsList = new ArrayList<>();
+
+        recipeIngredientsList.add(recipeIngredientsJson);
+
+        // binding adpater and layout manager with steps recyclerview
+        rvRecipeStep = (RecyclerView) findViewById(R.id.rvRecipeStep);
+        rsAdapter = new RecipeStepAdapter(recipeStepsList);
+
+        rvRecipeStep.setAdapter(rsAdapter);
+        LinearLayoutManager lym_rs = new LinearLayoutManager(this);
+        lym_rs.setStackFromEnd(true);
+        rvRecipeStep.setLayoutManager(lym_rs);
+
+        // binding adapter and layout manager with ingredients recyclerview
+        rvRecipeIngredient = (RecyclerView) findViewById(R.id.rvIngredient);
+        riAdapter = new RecipeIngredientAdapter(recipeIngredientsList);
+
+        rvRecipeIngredient.setAdapter(riAdapter);
+        LinearLayoutManager lym_ri = new LinearLayoutManager(this);
+        lym_ri.setStackFromEnd(true);
+        rvRecipeIngredient.setLayoutManager(lym_ri);
+
+        addStepBtn = findViewById(R.id.addStep);
+        addIngredientBtn = findViewById(R.id.addIngredient);
+        createRecipeBtn = findViewById(R.id.createRecipe);
+        //deleteIngredientBtn = findViewById(R.id.deleteIngredient);
+
+        addStepBtn.setOnClickListener(this);
+        addIngredientBtn.setOnClickListener(this);
+        createRecipeBtn.setOnClickListener(this);
+        //deleteIngredientBtn.setOnClickListener(this);
     }
 
-    public void sendRecipe(String title, String description, int duration, int calories, int servingSize) {
-        Recipe recipe = new Recipe(title, description, new Date(), duration, calories, servingSize);
-        Call<Recipe> call = service.saveRecipe(recipe);
-        call.enqueue(new Callback<Recipe>() {
-            @Override
-            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-                if (response.isSuccessful()){
-                    Intent intent = new Intent(getApplicationContext(), SuccessPage.class);
-                    startActivity(intent);
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.addStep) {
+            RecipeStepsJson newRecipeStep = new RecipeStepsJson();
+            newRecipeStep.setStepNumber(recipeStepsList.size()+1);
+            rsAdapter.addStep(newRecipeStep);
+            rvRecipeStep.scrollToPosition(recipeStepsList.size()-1);
+        }
+
+        if (id == R.id.addIngredient) {
+            RecipeIngredientsJson newRecipeIngredient = new RecipeIngredientsJson();
+            //newRecipeIngredient.setRecipeIngredientsId(recipeIngredientsList.size()+1);
+            riAdapter.addStep(newRecipeIngredient);
+            rvRecipeIngredient.scrollToPosition(recipeStepsList.size()-1);
+        }
+
+        if (id == R.id.createRecipe) {
+            RecipeJson newRecipe = new RecipeJson();
+            newRecipe.setTitle(titleET.getText().toString());
+            newRecipe.setDescription(desET.getText().toString());
+            newRecipe.setRecipeIngredientsList(riAdapter.getRecipeIngredientList());
+            newRecipe.setRecipeStepsList(rsAdapter.getRecipeStepsList());
+            newRecipe.setServingSize(Integer.parseInt(servingSizeET.getText().toString()));
+
+            Call<ResponseBody> call = service.saveRecipe(newRecipe);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful()) {
+                        Intent intent = new Intent(getApplicationContext(), SuccessPage.class);
+                        startActivity(intent);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Recipe> call, Throwable t) {
-                Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
+                }
+            });
+            /*Call<Recipe> call = service.saveRecipe(newRecipe);
+            call.enqueue(new Callback<Recipe>() {
+                @Override
+                public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+                        Intent intent = new Intent(getApplicationContext(), SuccessPage.class);
+                        startActivity(intent);
+
+                }
+
+                @Override
+                public void onFailure(Call<Recipe> call, Throwable t) {
+                    Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
+                }
+            });*/
+
+        }
     }
+
 
 
 }

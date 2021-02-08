@@ -1,99 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".CreateRecipe">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/recipeCover"
             android:layout_width="match_parent"
+            android:layout_height="183dp"
+            android:src="@drawable/placeholder"/>
+
+        <EditText
+            android:id="@+id/recipeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Add title of the recipe..."
+            android:layout_marginTop="20dp"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ingredients"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIngredient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
-            <EditText
-                android:id="@+id/recipeTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Name"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Description"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/duration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Duration in Mins"
-                android:inputType="number"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/calories"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="calories"
-                android:inputType="number"
-                android:layout_marginTop="20dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Serving Size:"
+                android:textSize="20dp"
+                android:gravity="center"/>
 
             <EditText
                 android:id="@+id/servingSize"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Serving Size"
-                android:inputType="number"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/instruction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Instruction"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/recipeIngredient"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Ingredient"
-                android:layout_marginTop="20dp" />
-
-            <EditText
-                android:id="@+id/quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Quantity"
-                android:inputType="number"
-                android:layout_marginTop="20dp"/>
-
-            <EditText
-                android:id="@+id/unitOfMeasurement"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Unit of Measurement"
-                android:layout_marginTop="20dp"/>
-
-            <Button
-                android:id="@+id/submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Submit"
-                android:textAllCaps="false"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"/>
 
         </LinearLayout>
 
-    </ScrollView>
+        <Button
+            android:id="@+id/addIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Ingredient"
+            android:textAllCaps="false"
+            android:layout_gravity="center"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!--<Button
+            android:id="@+id/deleteIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Ingredient"
+            android:textAllCaps="false"
+            android:layout_gravity="center"/>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecipeStep"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <Button
+            android:id="@+id/addStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add step"
+            android:textAllCaps="false"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Duration"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/mins15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="15 Mins"
+                    android:layout_marginLeft="10dp"/>
+
+                <Button
+                    android:id="@+id/mins15_30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="15 ~ 30 Mins"
+                    android:layout_marginLeft="10dp"/>
+
+                <Button
+                    android:id="@+id/mins30_60"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="30 ~ 60 Mins"
+                    android:layout_marginLeft="10dp"/>
+
+                <Button
+                    android:id="@+id/mins60plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Over an hour"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textAllCaps="false"/>
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/createRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create this Recipe"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
+
+
+
+
+        <!--<androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/addStep"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/addStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add step"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/rvRecipe"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>-->
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

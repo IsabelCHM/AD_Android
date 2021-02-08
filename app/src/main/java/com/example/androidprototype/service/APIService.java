@@ -1,6 +1,8 @@
-package com.example.androidprototype;
+package com.example.androidprototype.service;
 
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.model.RecipeJson;
+import com.example.androidprototype.model.RecipeList;
 import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
@@ -28,7 +30,8 @@ public interface APIService {
     Call<Recipe> getRecipe(@Path("id") int recipeId);
 
     @POST("api/mRecipe/")
-    Call<Recipe> saveRecipe(@Body Recipe recipe);
+    //Call<Recipe> saveRecipe(@Body Recipe recipe);
+    Call<ResponseBody> saveRecipe(@Body RecipeJson recipeJson);
 
     @DELETE("api/mRecipe/delete/{id}")
     Call<booleanJson> deleteRecipe(@Path("id") int recipeId);
@@ -44,4 +47,7 @@ public interface APIService {
 
     @GET("/api/mUser/userallergen/{id}")
     Call<UserAllergenList> getUserAllergenList(@Path("id") int userId);
+
+    @GET("/api/mRecipe/getAllRecipes/")
+    Call<RecipeList> getAllRecipes();
 }
