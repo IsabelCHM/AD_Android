@@ -10,8 +10,9 @@ import retrofit2.http.HEAD;
 
 public class Recipe {
 
-    //@SerializedName("recipeId")
-    //private int id;
+    @SerializedName("recipeId")
+    @Expose
+    private int id;
 
     @SerializedName("title")
     @Expose
@@ -95,6 +96,11 @@ public class Recipe {
         this.recipeIngredients = recipeIngredients;
         this.recipeSteps = recipeSteps;
         this.recipeTags = recipeTags;
+    }
+
+
+    public int getId() {
+        return id;
     }
 
 
