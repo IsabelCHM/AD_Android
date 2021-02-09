@@ -7,6 +7,10 @@ import java.util.Date;
 
 public class Group {
 
+    @SerializedName("groupId")
+    @Expose
+    private int groupId;
+
     @SerializedName("groupName")
     @Expose
     private String groupName;
@@ -26,6 +30,10 @@ public class Group {
     @Expose
     private boolean isPublished;
 
+    @SerializedName("recipeGroups")
+    @Expose
+    private RecipeGroupList recipeGroupList;
+
     public Group() {
         super();
     }
@@ -36,6 +44,14 @@ public class Group {
         this.description = description;
         this.dateCreated = dateCreated;
         this.isPublished = isPublished;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public String getGroupName() {
@@ -76,5 +92,13 @@ public class Group {
 
     public void setPublished(boolean published) {
         isPublished = published;
+    }
+
+    public RecipeGroupList getRecipeGroupList() {
+        return recipeGroupList;
+    }
+
+    public void setRecipeGroupList(RecipeGroupList recipeGroupList) {
+        this.recipeGroupList = recipeGroupList;
     }
 }
