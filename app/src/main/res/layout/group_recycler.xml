@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="100dp"
+        android:src="@drawable/placeholder"
+        android:id="@+id/groupImage"></ImageView>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupName"
+            style="@style/HeaderTextStyle"
+            android:textSize="20sp"
+            android:text="Group Name"
+            android:layout_marginTop="10dp"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupDate"
+            style="@style/NormalTextStyle"
+            android:textSize="12sp"
+            android:text="Created on"
+            android:textColor="#9F9F9F"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/groupDesc"
+            style="@style/NormalTextStyle"
+            android:textSize="15sp"
+            android:text="Group Description"></TextView>
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
