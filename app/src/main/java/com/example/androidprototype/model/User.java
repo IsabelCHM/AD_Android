@@ -47,6 +47,10 @@ public class User<T> {
     @Expose
     private RecipeList recipes;
 
+    @SerializedName("usersGroups")
+    @Expose
+    private UserGroupList groups;
+
     public User() {
         super();
     }
@@ -130,5 +134,13 @@ public class User<T> {
 
     public void setLikesDislikes(LikesDislikesList likesDislikes) {
         this.likesDislikes = likesDislikes;
+    }
+
+    public UserGroupList getGroups() {
+        return groups;
+    }
+
+    public void setGroups(UserGroupList groups) {
+        this.groups = groups;
     }
 }
