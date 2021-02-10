@@ -18,6 +18,7 @@ import com.example.androidprototype.HomeActivity;
 import com.example.androidprototype.R;
 import com.example.androidprototype.RetrofitClient;
 import com.example.androidprototype.ViewRecipe;
+import com.example.androidprototype.ViewUserProfile;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.RecipeTag;
 import com.example.androidprototype.model.SavedRecipe;
@@ -88,6 +89,17 @@ public class HomeAdapter extends
                         SavedRecipeJson savedRecipeJson = new SavedRecipeJson(Integer.parseInt(user.getId()), recipeId);
                         saveSelectedRecipe(savedRecipeJson);
                     }
+                }
+            });
+
+            author.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int i = getAdapterPosition();
+                    int userId = recipeList.get(i).getId();
+                    Intent intent = new Intent(context, ViewUserProfile.class);
+                    intent.putExtra("userId", userId);
+                    context.startActivity(intent);
                 }
             });
         }
