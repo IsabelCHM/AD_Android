@@ -13,6 +13,14 @@ public class SavedRecipe {
     @Expose
     private Recipe recipe;
 
+    @SerializedName("userId")
+    @Expose
+    private int userId;
+
+    @SerializedName("recipeId")
+    @Expose
+    private int recipeId;
+
     public SavedRecipe() {
         super();
     }
@@ -36,5 +44,21 @@ public class SavedRecipe {
 
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public int getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

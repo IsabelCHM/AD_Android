@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,13 +16,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidprototype.CreateRecipe;
 import com.example.androidprototype.HomeActivity;
 import com.example.androidprototype.R;
+import com.example.androidprototype.RetrofitClient;
 import com.example.androidprototype.ViewRecipe;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.RecipeTag;
+import com.example.androidprototype.model.SavedRecipe;
+import com.example.androidprototype.model.SavedRecipeJson;
+import com.example.androidprototype.model.User;
+import com.example.androidprototype.model.booleanJson;
+import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.service.DownloadImageTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Body;
 
 public class HomeAdapter extends
         RecyclerView.Adapter<HomeAdapter.ViewHolder>{
@@ -36,7 +50,7 @@ public class HomeAdapter extends
         public TextView calories;
         public TextView tags;
         public Recipe recipe;
-
+        public Button saveRecipe;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -47,6 +61,7 @@ public class HomeAdapter extends
             allergens = itemView.findViewById(R.id.recipeallergyhome);
             calories = itemView.findViewById(R.id.recipecalorieshome);
             tags = itemView.findViewById(R.id.recipehometags);
+            saveRecipe = itemView.findViewById(R.id.btnSaveRecipe);
 
             itemView.findViewById(R.id.viewRecipe).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,6 +70,24 @@ public class HomeAdapter extends
                     int i = getAdapterPosition();
                     intent.putExtra("RecipeId", recipeList.get(i).getId());
                     context.startActivity(intent);
+                }
+            });
+
+            saveRecipe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // need to change after login in done. Might be able to remove if user passed in.
+                    if (user == null) {
+//                        Intent intent = new Intent(context, login.class);
+//                        context.startActivity(intent);
+                    }
+                    else {
+                        int i = getAdapterPosition();
+                        int recipeId = recipeList.get(i).getId();
+
+                        SavedRecipeJson savedRecipeJson = new SavedRecipeJson(Integer.parseInt(user.getId()), recipeId);
+                        saveSelectedRecipe(savedRecipeJson);
+                    }
                 }
             });
         }
@@ -86,14 +119,52 @@ public class HomeAdapter extends
         public TextView getTags() {
             return tags;
         }
+
+        public Button getSaveRecipe() {
+            return saveRecipe;
+        }
+
+        public void saveButtonswitcher() {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (saveRecipe.getText().toString().equalsIgnoreCase("save")) {
+                        saveRecipe.setText("saved");
+                    }
+                    else {
+                        saveRecipe.setText("save");
+                    }
+                }
+            }).start();
+        }
+
+        public void saveSelectedRecipe(SavedRecipeJson savedRecipeJson) {
+            service = RetrofitClient.getRetrofitInstance().create(APIService.class);
+            Call<booleanJson> call = service.saveRecipeList(savedRecipeJson);
+            call.enqueue(new Callback<booleanJson>() {
+                @Override
+                public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
+                    System.out.println("In response");
+                    saveButtonswitcher();
+                }
+
+                @Override
+                public void onFailure(Call<booleanJson> call, Throwable t) {
+                    System.out.println("In failure");
+                }
+            });
+        }
     }
 
     private ArrayList<Recipe> recipeList;
     private Context context;
+    private APIService service;
+    public User user;
 
-    public HomeAdapter(ArrayList<Recipe> recipeList, Context context) {
+    public HomeAdapter(ArrayList<Recipe> recipeList, Context context, User user) {
         this.recipeList = recipeList;
         this.context = context;
+        this.user = user;
     }
 
     @NonNull
@@ -114,6 +185,23 @@ public class HomeAdapter extends
     public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
 
         holder.getTitle().setText(recipeList.get(position).getTitle());
+        // Need to change this part when login is done
+        if (user != null) {
+            String loggedInUsername = user.getUsername();
+            if (loggedInUsername.equalsIgnoreCase(recipeList.get(position).getUser().getUsername())) {
+                holder.getSaveRecipe().setVisibility(View.GONE);
+            }
+            List<SavedRecipe> userSavedRecipe = user.getSavedRecipeList().getsavedRecipe();
+            List<Integer> userSavedRecipeId = new ArrayList();
+            for (SavedRecipe savedRecipe : userSavedRecipe) {
+                int i = savedRecipe.getRecipeId();
+                userSavedRecipeId.add(i);
+            }
+            int currentRecipeId = recipeList.get(position).getId();
+            if (userSavedRecipeId.contains(currentRecipeId)) {
+                holder.getSaveRecipe().setText("Saved");
+            }
+        }
         holder.getAuthor().setText("By " + recipeList.get(position).getUser().getUsername());
         holder.getDuration().setText(Integer.toString(recipeList.get(position).getDurationInMins())
                                     + "mins");
@@ -150,6 +238,4 @@ public class HomeAdapter extends
     public int getItemCount() {
         return recipeList.size();
     }
-
-
 }
