@@ -42,6 +42,10 @@ public class Recipe {
     @Expose
     private int servingSize;
 
+    @SerializedName("userId")
+    @Expose
+    private int userId;
+
     @SerializedName("user")
     @Expose
     private User user;
@@ -211,5 +215,13 @@ public class Recipe {
 
     public void setMainMediaUrl(String mainMediaUrl) {
         this.mainMediaUrl = mainMediaUrl;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 }

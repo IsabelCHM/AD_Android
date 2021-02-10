@@ -96,7 +96,7 @@ public class HomeAdapter extends
                 @Override
                 public void onClick(View view) {
                     int i = getAdapterPosition();
-                    int userId = recipeList.get(i).getId();
+                    int userId = recipeList.get(i).getUserId();
                     Intent intent = new Intent(context, ViewUserProfile.class);
                     intent.putExtra("userId", userId);
                     context.startActivity(intent);
