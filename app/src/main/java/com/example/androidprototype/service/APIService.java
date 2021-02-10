@@ -10,8 +10,10 @@ import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.model.UserGroupList;
 import com.example.androidprototype.model.booleanJson;
+import com.example.androidprototype.model.groupUserJson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -23,8 +25,10 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface APIService {
@@ -62,6 +66,15 @@ public interface APIService {
     @GET("/api/mGroup/{id}")
     Call<Group> getGroup(@Path("id") int groupId);
 
+    @GET("/api/mGroup/recipeGroups/{id}")
+    Call<GroupList> postRecipeToGroups(@Path("id") int id);
+
     @GET("/api/mGroup/search/{search}")
     Call<GroupList> searchGroups(@Path("search") String search);
+
+    @POST("api/mGroup/")
+    Call<Group> saveGroup(@Body groupUserJson guj);
+
+    @POST("api/mGroup/addRtoG/{id}")
+    Call<ResponseBody> postRecipe(@Path("id") int id, @Body ArrayList<Group> groups);
 }
