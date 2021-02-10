@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserGroup {
 
-    /*@SerializedName("groupId")
+    @SerializedName("groupId")
     @Expose
-    private String groupId;
+    private int groupId;
 
     @SerializedName("userId")
     @Expose
-    private String userId;*/
+    private int userId;
 
     @SerializedName("isMod")
     @Expose
@@ -39,6 +39,12 @@ public class UserGroup {
         this.user = user;
     }
 
+    public UserGroup(int groupId, int userId, boolean isMod) {
+        this.groupId = groupId;
+        this.userId = userId;
+        this.isMod = isMod;
+    }
+
     public boolean isMod() {
         return isMod;
     }
@@ -61,5 +67,21 @@ public class UserGroup {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

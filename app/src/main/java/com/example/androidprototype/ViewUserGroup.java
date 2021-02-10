@@ -5,15 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.androidprototype.model.Group;
 import com.example.androidprototype.model.User;
+import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.model.UserGroupList;
 import com.example.androidprototype.service.APIService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ViewUserGroup extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,8 @@ public class ViewUserGroup extends AppCompatActivity {
             public void onResponse(Call<UserGroupList> call, Response<UserGroupList> response) {
                 UserGroupList user = response.body();
                 //System.out.println(user.getUsergrouplist().get(0).getUser().getFirstName());
+
+
 
             }
 

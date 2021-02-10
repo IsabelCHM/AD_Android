@@ -1,5 +1,7 @@
 package com.example.androidprototype.service;
 
+import com.example.androidprototype.model.Group;
+import com.example.androidprototype.model.GroupList;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.RecipeJson;
 import com.example.androidprototype.model.RecipeList;
@@ -42,6 +44,9 @@ public interface APIService {
     @GET("/api/mUserGroup/UserId/{id}")
     Call<UserGroupList> getUserGroupList(@Path("id") int userId);
 
+    @POST("api/mUserGroup/")
+    Call<ResponseBody> joinGroup(@Body UserGroup usergroup);
+
     @POST("api/mRecipe/update/{id}")
     Call<booleanJson> updateRecipe(@Body Recipe recipe, @Path("id") int recipeId);
 
@@ -53,4 +58,10 @@ public interface APIService {
 
     @GET("/api/mRecipe/search/{search}")
     Call<RecipeList> searchRecipes(@Path("search") String search);
+
+    @GET("/api/mGroup/{id}")
+    Call<Group> getGroup(@Path("id") int groupId);
+
+    @GET("/api/mGroup/search/{search}")
+    Call<GroupList> searchGroups(@Path("search") String search);
 }

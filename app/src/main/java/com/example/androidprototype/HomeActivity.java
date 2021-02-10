@@ -32,7 +32,6 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView rvHome;
     private HomeAdapter homeAdapter;
     private ArrayList<Recipe> recipeList;
-    private boolean search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +151,9 @@ public class HomeActivity extends AppCompatActivity
 
         Button home = findViewById(R.id.refreshHome);
         home.setOnClickListener(this);
+
+        Button groups = findViewById(R.id.groups);
+        groups.setOnClickListener(this);
     }
 
     @Override
@@ -171,6 +173,12 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.refreshHome) {
             Intent intent = new Intent(this, HomeActivity.class);
             intent.setAction("REFRESH");
+            startActivity(intent);
+        }
+
+        if (id == R.id.groups) {
+            Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.setAction("view");
             startActivity(intent);
         }
 

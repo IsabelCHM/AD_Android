@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewGroupActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal"
+        android:id="@+id/groupDetails">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="100dp"
+            android:src="@drawable/placeholder"
+            android:id="@+id/viewgroupImage"></ImageView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="100dp"
+            android:orientation="vertical"
+            android:background="#F8F0E5">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewgroupName"
+                style="@style/HeaderTextStyle"
+                android:textSize="20sp"
+                android:text="Group Name"
+                android:layout_marginTop="10dp"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewgroupDate"
+                style="@style/NormalTextStyle"
+                android:textSize="12sp"
+                android:text="Created on"
+                android:textColor="#9F9F9F"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewgroupDesc"
+                style="@style/NormalTextStyle"
+                android:textSize="15sp"
+                android:text="Group Description"></TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/joinGroup"
+        android:text="Join Group"
+        app:layout_constraintTop_toBottomOf="@id/groupDetails"></Button>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/noRecipeMsg"
+        app:layout_constraintTop_toBottomOf="@+id/joinGroup"
+        android:text="Nothing to show at this moment"
+        android:gravity="center"
+        ></TextView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:paddingTop="?android:attr/actionBarSize"
+        android:id="@+id/ViewGroupRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/joinGroup"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingBottom="?attr/actionBarSize"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F8F0E5"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/bottomNav">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="home"
+            android:id="@+id/refreshHome"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"></Button>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:id="@+id/test"></Button>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="groups"
+            android:id="@+id/groups"></Button>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

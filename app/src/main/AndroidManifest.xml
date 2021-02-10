@@ -13,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidPrototype">
-        <activity android:name=".ViewUserProfile"></activity>
+        <activity android:name=".ViewGroupActivity"></activity>
+        <activity android:name=".adpater.ViewGroupActivity" />
+        <activity android:name=".ListGroupActivity" />
+        <activity android:name=".ViewUserProfile" />
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserAllergenAct"></activity>
+        <activity android:name=".UserAllergenAct" />
         <activity android:name=".ViewUserGroup" />
         <activity android:name=".DeleteRecipe" />
         <activity android:name=".EditRecipe" />
@@ -30,9 +33,7 @@
         <activity android:name=".CreateRecipeZ" />
         <activity android:name=".ViewRecipe" />
         <activity android:name=".CreateRecipe" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
