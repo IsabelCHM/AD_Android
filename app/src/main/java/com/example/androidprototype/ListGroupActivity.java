@@ -162,7 +162,7 @@ public class ListGroupActivity extends AppCompatActivity
 
     public void getUserGroup(int userId) {
         if (userId == 0) {
-            userId = 1;
+            userId = 1; // change to intent for login when login is done
         }
         Call<User> call = service.getUser(userId);
 
