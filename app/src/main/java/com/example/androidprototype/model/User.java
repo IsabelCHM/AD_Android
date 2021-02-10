@@ -19,7 +19,7 @@ public class User<T> {
     @Expose
     private String lastName;
 
-    @SerializedName("username")
+    @SerializedName("userName")
     @Expose
     private String username;
 
