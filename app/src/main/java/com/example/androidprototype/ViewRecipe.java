@@ -32,6 +32,7 @@ import retrofit2.Response;
 public class ViewRecipe extends AppCompatActivity
     implements View.OnClickListener{
 
+    private int rId;
     private Recipe recipe;
     private APIService service;
 
@@ -42,16 +43,19 @@ public class ViewRecipe extends AppCompatActivity
 
         Intent intent = getIntent();
         int recipeId = intent.getIntExtra("RecipeId",1);
+        rId = recipeId;
 
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<Recipe> call = service.getRecipe(recipeId);
 
         Button back = findViewById(R.id.back);
         Button edit = findViewById(R.id.edit);
+        Button postToGrp = findViewById(R.id.post2Grp);
         Button delete = findViewById(R.id.btnDeleteRecipe);
 
         back.setOnClickListener(this);
         edit.setOnClickListener(this);
+        postToGrp.setOnClickListener(this);
         delete.setOnClickListener(this);
 
         call.enqueue(new Callback<Recipe>() {
@@ -143,12 +147,19 @@ public class ViewRecipe extends AppCompatActivity
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.back) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction("nil");
             startActivity(intent);
         }
 
         if (id == R.id.edit) {
             Intent intent = new Intent(this, EditRecipe.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.post2Grp) {
+            Intent intent = new Intent(this, PostRecipeToGroupActivity.class);
+            intent.putExtra("recipeId", rId);
             startActivity(intent);
         }
 

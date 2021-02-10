@@ -86,7 +86,7 @@ public class HomeAdapter extends
                         int i = getAdapterPosition();
                         int recipeId = recipeList.get(i).getId();
 
-                        SavedRecipeJson savedRecipeJson = new SavedRecipeJson(Integer.parseInt(user.getId()), recipeId);
+                        SavedRecipeJson savedRecipeJson = new SavedRecipeJson(user.getId(), recipeId);
                         saveSelectedRecipe(savedRecipeJson);
                     }
                 }

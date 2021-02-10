@@ -9,7 +9,11 @@ import java.util.List;
 public class User<T> {
     @SerializedName("$id")
     @Expose
-    private String id;
+    private String $id;
+
+    @SerializedName("id")
+    @Expose
+    private int id;
 
     @SerializedName("firstName")
     @Expose
@@ -68,14 +72,12 @@ public class User<T> {
         this.isAdmin = isAdmin;
     }
 
-    public User(String id, String firstName, String lastName, String username, String password, String email, boolean isAdmin) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.isAdmin = isAdmin;
     }
 
     public String getFirstName() {
@@ -156,14 +158,6 @@ public class User<T> {
 
     public void setGroups(UserGroupList groups) {
         this.groups = groups;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public SavedRecipeList getSavedRecipeList() {
