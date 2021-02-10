@@ -51,11 +51,25 @@ public class User<T> {
     @Expose
     private UserGroupList groups;
 
+    @SerializedName("savedRecipes")
+    @Expose
+    private SavedRecipeList savedRecipeList;
+
     public User() {
         super();
     }
 
     public User(String firstName, String lastName, String username, String password, String email, boolean isAdmin) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isAdmin = isAdmin;
+    }
+
+    public User(String id, String firstName, String lastName, String username, String password, String email, boolean isAdmin) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -142,5 +156,21 @@ public class User<T> {
 
     public void setGroups(UserGroupList groups) {
         this.groups = groups;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public SavedRecipeList getSavedRecipeList() {
+        return savedRecipeList;
+    }
+
+    public void setSavedRecipeList(SavedRecipeList savedRecipeList) {
+        this.savedRecipeList = savedRecipeList;
     }
 }
