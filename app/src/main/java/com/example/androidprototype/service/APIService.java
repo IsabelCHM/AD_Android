@@ -5,6 +5,8 @@ import com.example.androidprototype.model.GroupList;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.RecipeJson;
 import com.example.androidprototype.model.RecipeList;
+import com.example.androidprototype.model.SavedRecipe;
+import com.example.androidprototype.model.SavedRecipeJson;
 import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
@@ -56,6 +58,9 @@ public interface APIService {
 
     @GET("/api/mUser/userallergen/{id}")
     Call<UserAllergenList> getUserAllergenList(@Path("id") int userId);
+
+    @POST("/api/mUser/saveuserrecipelist")
+    Call<booleanJson> saveRecipeList(@Body SavedRecipeJson savedRecipeJson);
 
     @GET("/api/mRecipe/getAllRecipes/")
     Call<RecipeList> getAllRecipes();

@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity
 
         Button btn1 = findViewById(R.id.createRecipe);
         Button btn2 = findViewById(R.id.reviewRecipe);
-        Button btn3 = findViewById(R.id.btnDeleteRecipe);
+        Button btn3 = findViewById(R.id.btnDeleteRecipe1);
         Button btn4 = findViewById(R.id.getUser);
         Button btn5 = findViewById(R.id.btnGetUserAllergen);
         Button btn6 = findViewById(R.id.createRecipeX);
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-        if (id == R.id.btnDeleteRecipe) {
+        if (id == R.id.btnDeleteRecipe1) {
             Intent intent = new Intent(this, DeleteRecipe.class);
             startActivity(intent);
         }

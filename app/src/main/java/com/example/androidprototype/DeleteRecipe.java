@@ -23,7 +23,7 @@ public class DeleteRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_delete_recipe);
 
         EditText etRecipieId = findViewById(R.id.etDeleteRecipeId);
-        Button btnDeleteRecipe = findViewById(R.id.btnDeleteRecipe);
+        Button btnDeleteRecipe = findViewById(R.id.btnDeleteRecipe1);
 
         btnDeleteRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
