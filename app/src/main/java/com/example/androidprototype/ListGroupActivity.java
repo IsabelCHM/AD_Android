@@ -105,7 +105,7 @@ public class ListGroupActivity extends AppCompatActivity
                 @Override
                 public void onFailure(Call<GroupList> call, Throwable t) {
                     System.out.println(t.getMessage());
-                    Toast.makeText(ListGroupActivity.this, "No recipes to show", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -157,6 +157,9 @@ public class ListGroupActivity extends AppCompatActivity
         Button groups = findViewById(R.id.groups);
         groups.setOnClickListener(this);
 
+        Button cG = findViewById(R.id.createGroup);
+        cG.setOnClickListener(this);
+
     }
 
     @Override
@@ -178,6 +181,11 @@ public class ListGroupActivity extends AppCompatActivity
         if (id == R.id.groups) {
             Intent intent = new Intent(this, ListGroupActivity.class);
             intent.setAction("view");
+            startActivity(intent);
+        }
+
+        if (id == R.id.createGroup) {
+            Intent intent = new Intent(this, CreateGroupActivity.class);
             startActivity(intent);
         }
 

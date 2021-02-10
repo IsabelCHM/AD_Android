@@ -34,6 +34,9 @@ public class Group {
     @Expose
     private RecipeGroupList recipeGroupList;
 
+    //To add recipe to multiple groups
+    private boolean isSelected = false;
+
     public Group() {
         super();
     }
@@ -100,5 +103,13 @@ public class Group {
 
     public void setRecipeGroupList(RecipeGroupList recipeGroupList) {
         this.recipeGroupList = recipeGroupList;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
