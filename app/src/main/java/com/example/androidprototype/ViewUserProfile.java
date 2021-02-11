@@ -81,32 +81,18 @@ public class ViewUserProfile extends AppCompatActivity {
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                String userName = response.body().getUsername();
-                int noOfRecipes = response.body().getRecipes().getRecipelist().size();
-                int noOfGroup = response.body().getGroups().getUsergrouplist().size();
-                tvUserProfileHeader.setText(userName);
-                tvNoOfRecipe.setText("Recipes created: " + Integer.toString(noOfRecipes));
-                tvNoOfGroup.setText("Groups Joined: " + Integer.toString(noOfGroup));
+                if (response.isSuccessful()) {
+                    String userName = response.body().getUsername();
+                    int noOfRecipes = response.body().getRecipes().getRecipelist().size();
+                    int noOfGroup = response.body().getGroups().getUsergrouplist().size();
+                    tvUserProfileHeader.setText(userName);
+                    tvNoOfRecipe.setText("Recipes created: " + Integer.toString(noOfRecipes));
+                    tvNoOfGroup.setText("Groups Joined: " + Integer.toString(noOfGroup));
 
-                List<Recipe> recipeList = response.body().getRecipes().getRecipelist();
+                    List<Recipe> recipeList = response.body().getRecipes().getRecipelist();
 
-                if (recipeList != null) {
-                    RecipeUserProfileAdaptor adaptor = new RecipeUserProfileAdaptor(ViewUserProfile.this, 0);
-                    adaptor.setData(recipeList);
-
-                    ListView listview = findViewById(R.id.lvRecipes);
-
-                    if (listview != null) {
-                        listview.setAdapter(adaptor);
-                        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                int recipeId = recipeList.get(i).getId();
-                                Intent intent = new Intent(ViewUserProfile.this, ViewRecipe.class);
-                                intent.putExtra("RecipeId", recipeId);
-                                startActivity(intent);
-                            }
-                        });
+                    if (recipeList != null) {
+                        displayRecipe(recipeList);
                     }
                 }
             }
@@ -116,5 +102,25 @@ public class ViewUserProfile extends AppCompatActivity {
                 System.out.println("onFailure");
             }
         });
+    }
+
+    public void displayRecipe(List<Recipe> recipeList) {
+        RecipeUserProfileAdaptor adaptor = new RecipeUserProfileAdaptor(ViewUserProfile.this, 0);
+        adaptor.setData(recipeList);
+
+        ListView listview = findViewById(R.id.lvRecipes);
+
+        if (listview != null) {
+            listview.setAdapter(adaptor);
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    int recipeId = recipeList.get(i).getId();
+                    Intent intent = new Intent(ViewUserProfile.this, ViewRecipe.class);
+                    intent.putExtra("RecipeId", recipeId);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 }

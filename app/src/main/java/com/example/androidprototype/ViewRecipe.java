@@ -35,11 +35,15 @@ public class ViewRecipe extends AppCompatActivity
     private int rId;
     private Recipe recipe;
     private APIService service;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+
+        // Need to change after user login is done
+        userId = 1;
 
         Intent intent = getIntent();
         int recipeId = intent.getIntExtra("RecipeId",1);
@@ -133,6 +137,11 @@ public class ViewRecipe extends AppCompatActivity
                         setListViewHeightBasedOnChildren(steplist);
                     }
                 }
+
+                if (userId != recipe.getUserId()) {
+                    edit.setVisibility(View.GONE);
+                    delete.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -164,11 +173,9 @@ public class ViewRecipe extends AppCompatActivity
         }
 
         if (id == R.id.btnDeleteRecipe) {
-            // Assuming loggin user as id of 1 with username "wc"
             int recipeId = recipe.getId();
-            String userName = "wc";
-            String recipeCreatedByUserName = recipe.getUser().getUsername();
-            if (userName.equalsIgnoreCase(recipeCreatedByUserName)) {
+            int recipeCreatedByUserId = recipe.getUserId();
+            if (userId == recipeCreatedByUserId) {
                 deleteRecipe(recipeId);
             }
         }
