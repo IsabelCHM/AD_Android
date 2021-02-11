@@ -2,16 +2,19 @@ package com.example.androidprototype.adpater;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.example.androidprototype.R;
+import com.example.androidprototype.ViewRecipe;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.service.DownloadImageTask;
 
@@ -46,6 +49,7 @@ public class RecipeUserProfileAdaptor extends ArrayAdapter {
         TextView tvRecipeDuration = view.findViewById(R.id.tv_lv_RecipeDuration);
         TextView tvRecipeServingSize = view.findViewById(R.id.tv_lv_RecipeServingSize);
         TextView tvRecipeCalories = view.findViewById(R.id.tv_lv_RecipeCalories);
+        Button btnViewRecipe = view.findViewById(R.id.btn_lv_ViewRecipe);
 
         if (recipes.get(pos).getMainMediaUrl() == null) {
             ImageView recipeImage = view.findViewById(R.id.tv_iv_RecipeMainImage);
@@ -60,6 +64,15 @@ public class RecipeUserProfileAdaptor extends ArrayAdapter {
         tvRecipeServingSize.setText("Serving Size: " + Integer.toString(recipes.get(pos).getServingSize()) + "  ");
         tvRecipeDuration.setText("Preparation Time: " + Integer.toString(recipes.get(pos).getDurationInMins()));
         tvRecipeCalories.setText("Calories: " + Integer.toString(recipes.get(pos).getCalories()));
+        btnViewRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int recipeId = recipes.get(pos).getId();
+                Intent intent = new Intent(getContext(), ViewRecipe.class);
+                intent.putExtra("RecipeId", recipeId);
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 }
