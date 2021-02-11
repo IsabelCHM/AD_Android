@@ -11,6 +11,9 @@
         android:layout_height="30dp"
         android:textSize="25sp"
         android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,12 +23,15 @@
         android:id="@+id/tv_iv_RecipeMainImage"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintTop_toBottomOf="@id/tv_lv_RecipeName"/>
 
     <TextView
         android:id="@+id/tv_lv_RecipeDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         app:layout_constraintTop_toBottomOf="@id/tv_iv_RecipeMainImage"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/tv_lv_RecipeCalories"/>
@@ -42,8 +48,20 @@
         android:id="@+id/tv_lv_RecipeServingSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
         app:layout_constraintTop_toBottomOf="@id/tv_iv_RecipeMainImage"
         app:layout_constraintLeft_toRightOf="@id/tv_lv_RecipeCalories"
         app:layout_constraintRight_toRightOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_lv_ViewRecipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="See Recipe"
+        android:focusable="false"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_lv_RecipeServingSize"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
