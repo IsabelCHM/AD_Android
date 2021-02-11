@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.androidprototype.adpater.HomeAdapter;
 import com.example.androidprototype.model.RecipeList;
+import com.example.androidprototype.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class HomeActivity extends AppCompatActivity
     private RecyclerView rvHome;
     private HomeAdapter homeAdapter;
     private ArrayList<Recipe> recipeList;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,22 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
 
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
+
+        // Need to change after login is done. Cheating here with username
+        Call<User> call1 = service.getUser(1);
+        call1.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    user = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                System.out.println("Fail to get user. redirect to login");
+            }
+        });
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
         simpleSearchView.setIconifiedByDefault(true);
@@ -87,7 +105,7 @@ public class HomeActivity extends AppCompatActivity
 
                     // binding adpater and layout manager with steps recyclerview
                     rvHome = (RecyclerView) findViewById(R.id.HomeRecycler);
-                    homeAdapter = new HomeAdapter(recipeList, HomeActivity.this);
+                    homeAdapter = new HomeAdapter(recipeList, HomeActivity.this, user);
 
                     rvHome.setAdapter(homeAdapter);
                     LinearLayoutManager lym_rs = new LinearLayoutManager(HomeActivity.this);
@@ -110,8 +128,6 @@ public class HomeActivity extends AppCompatActivity
 
 
             Call<RecipeList> call = service.getAllRecipes();
-
-
             call.enqueue(new Callback<RecipeList>() {
 
                 @Override
@@ -125,7 +141,7 @@ public class HomeActivity extends AppCompatActivity
 
                     // binding adpater and layout manager with steps recyclerview
                     rvHome = (RecyclerView) findViewById(R.id.HomeRecycler);
-                    homeAdapter = new HomeAdapter(recipeList, HomeActivity.this);
+                    homeAdapter = new HomeAdapter(recipeList, HomeActivity.this, user);
 
                     rvHome.setAdapter(homeAdapter);
                     LinearLayoutManager lym_rs = new LinearLayoutManager(HomeActivity.this);

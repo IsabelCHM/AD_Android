@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.model.RecipeIngredients;
 import com.example.androidprototype.model.RecipeSteps;
@@ -31,6 +32,10 @@ import retrofit2.Response;
 public class ViewRecipe extends AppCompatActivity
     implements View.OnClickListener{
 
+    private int rId;
+    private Recipe recipe;
+    private APIService service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,21 +43,25 @@ public class ViewRecipe extends AppCompatActivity
 
         Intent intent = getIntent();
         int recipeId = intent.getIntExtra("RecipeId",1);
+        rId = recipeId;
 
-        APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
+        service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<Recipe> call = service.getRecipe(recipeId);
 
         Button back = findViewById(R.id.back);
         Button edit = findViewById(R.id.edit);
+        Button postToGrp = findViewById(R.id.post2Grp);
+        Button delete = findViewById(R.id.btnDeleteRecipe);
 
         back.setOnClickListener(this);
         edit.setOnClickListener(this);
-
+        postToGrp.setOnClickListener(this);
+        delete.setOnClickListener(this);
 
         call.enqueue(new Callback<Recipe>() {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-                Recipe recipe = response.body();
+                recipe = response.body();
                 TextView name = findViewById(R.id.recipeTitle);
                 TextView description = findViewById(R.id.recipeDescription);
                 TextView calories = findViewById(R.id.recipeCalories);
@@ -138,13 +147,30 @@ public class ViewRecipe extends AppCompatActivity
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.back) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction("nil");
             startActivity(intent);
         }
 
         if (id == R.id.edit) {
             Intent intent = new Intent(this, EditRecipe.class);
             startActivity(intent);
+        }
+
+        if (id == R.id.post2Grp) {
+            Intent intent = new Intent(this, PostRecipeToGroupActivity.class);
+            intent.putExtra("recipeId", rId);
+            startActivity(intent);
+        }
+
+        if (id == R.id.btnDeleteRecipe) {
+            // Assuming loggin user as id of 1 with username "wc"
+            int recipeId = recipe.getId();
+            String userName = "wc";
+            String recipeCreatedByUserName = recipe.getUser().getUsername();
+            if (userName.equalsIgnoreCase(recipeCreatedByUserName)) {
+                deleteRecipe(recipeId);
+            }
         }
     }
 
@@ -177,5 +203,25 @@ public class ViewRecipe extends AppCompatActivity
         listView.setLayoutParams(params);
         listView.requestLayout();
 
+    }
+
+    public void deleteRecipe(int userId) {
+        Call<booleanJson> call = service.deleteRecipe(userId);
+
+        call.enqueue(new Callback<booleanJson>() {
+            @Override
+            public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
+                    intent.putExtra("userId", 1); // change when user login is done
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<booleanJson> call, Throwable t) {
+                System.out.println("Fail to delete");
+            }
+        });
     }
 }

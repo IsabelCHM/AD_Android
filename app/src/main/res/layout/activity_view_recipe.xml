@@ -34,6 +34,12 @@
             android:layout_marginRight="10dp"
             android:src="@drawable/placeholder"></ImageView>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/post2Grp"
+            android:text="Post to Groups"></Button>
+
 
         <TextView
             android:id="@+id/recipeDescription"
@@ -125,7 +131,12 @@
             android:textAllCaps="false"
             android:layout_gravity="center"/>
 
-
+        <Button
+            android:id="@+id/btnDeleteRecipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Recipe"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 

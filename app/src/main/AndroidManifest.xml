@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidPrototype">
-        <activity android:name=".ViewGroupActivity"></activity>
+        <activity android:name=".PostRecipeToGroupActivity"></activity>
+        <activity android:name=".CreateGroupActivity" />
+        <activity android:name=".ViewGroupActivity" />
         <activity android:name=".adpater.ViewGroupActivity" />
         <activity android:name=".ListGroupActivity" />
         <activity android:name=".ViewUserProfile" />

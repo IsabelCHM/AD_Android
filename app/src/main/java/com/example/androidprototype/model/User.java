@@ -9,7 +9,11 @@ import java.util.List;
 public class User<T> {
     @SerializedName("$id")
     @Expose
-    private String id;
+    private String $id;
+
+    @SerializedName("id")
+    @Expose
+    private int id;
 
     @SerializedName("firstName")
     @Expose
@@ -19,7 +23,7 @@ public class User<T> {
     @Expose
     private String lastName;
 
-    @SerializedName("username")
+    @SerializedName("userName")
     @Expose
     private String username;
 
@@ -51,6 +55,10 @@ public class User<T> {
     @Expose
     private UserGroupList groups;
 
+    @SerializedName("savedRecipes")
+    @Expose
+    private SavedRecipeList savedRecipeList;
+
     public User() {
         super();
     }
@@ -62,6 +70,14 @@ public class User<T> {
         this.password = password;
         this.email = email;
         this.isAdmin = isAdmin;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -142,5 +158,13 @@ public class User<T> {
 
     public void setGroups(UserGroupList groups) {
         this.groups = groups;
+    }
+
+    public SavedRecipeList getSavedRecipeList() {
+        return savedRecipeList;
+    }
+
+    public void setSavedRecipeList(SavedRecipeList savedRecipeList) {
+        this.savedRecipeList = savedRecipeList;
     }
 }

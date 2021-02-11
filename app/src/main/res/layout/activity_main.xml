@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/createRecipe" />
 
     <Button
-        android:id="@+id/btnDeleteRecipe"
+        android:id="@+id/btnDeleteRecipe1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete Recipe"
@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get User Profile"
-        app:layout_constraintBottom_toTopOf="@+id/btnDeleteRecipe"
+        app:layout_constraintBottom_toTopOf="@+id/btnDeleteRecipe1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent" />
