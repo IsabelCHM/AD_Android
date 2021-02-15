@@ -5,13 +5,17 @@ import com.example.androidprototype.model.GroupList;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.RecipeJson;
 import com.example.androidprototype.model.RecipeList;
+import com.example.androidprototype.model.SavedRecipe;
+import com.example.androidprototype.model.SavedRecipeJson;
 import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.model.UserGroupList;
 import com.example.androidprototype.model.booleanJson;
+import com.example.androidprototype.model.groupUserJson;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -23,8 +27,10 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface APIService {
@@ -53,6 +59,9 @@ public interface APIService {
     @GET("/api/mUser/userallergen/{id}")
     Call<UserAllergenList> getUserAllergenList(@Path("id") int userId);
 
+    @POST("/api/mUser/saveuserrecipelist")
+    Call<booleanJson> saveRecipeList(@Body SavedRecipeJson savedRecipeJson);
+
     @GET("/api/mRecipe/getAllRecipes/")
     Call<RecipeList> getAllRecipes();
 
@@ -62,6 +71,15 @@ public interface APIService {
     @GET("/api/mGroup/{id}")
     Call<Group> getGroup(@Path("id") int groupId);
 
+    @GET("/api/mGroup/recipeGroups/{id}")
+    Call<GroupList> postRecipeToGroups(@Path("id") int id);
+
     @GET("/api/mGroup/search/{search}")
     Call<GroupList> searchGroups(@Path("search") String search);
+
+    @POST("api/mGroup/")
+    Call<Group> saveGroup(@Body groupUserJson guj);
+
+    @POST("api/mGroup/addRtoG/{id}")
+    Call<ResponseBody> postRecipe(@Path("id") int id, @Body ArrayList<Group> groups);
 }

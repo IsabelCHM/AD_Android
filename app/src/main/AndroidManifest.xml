@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,8 +14,11 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AndroidPrototype">
-        <activity android:name=".ViewGroupActivity"></activity>
+        android:theme="@style/Theme.AndroidPrototype"
+        android:requestLegacyExternalStorage="true">
+        <activity android:name=".PostRecipeToGroupActivity"></activity>
+        <activity android:name=".CreateGroupActivity" />
+        <activity android:name=".ViewGroupActivity" />
         <activity android:name=".adpater.ViewGroupActivity" />
         <activity android:name=".ListGroupActivity" />
         <activity android:name=".ViewUserProfile" />

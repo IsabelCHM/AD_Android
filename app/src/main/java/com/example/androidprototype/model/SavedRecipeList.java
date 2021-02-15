@@ -13,11 +13,11 @@ public class SavedRecipeList {
 
     @SerializedName("$values")
     @Expose
-    private ArrayList<SavedRecipe> savedrecipelist;
+    private ArrayList<SavedRecipe> savedRecipe;
 
-    public SavedRecipeList(String id, ArrayList<SavedRecipe> savedrecipelist) {
+    public SavedRecipeList(String id, ArrayList<SavedRecipe> savedRecipe) {
         this.id = id;
-        this.savedrecipelist = savedrecipelist;
+        this.savedRecipe = savedRecipe;
     }
 
     public String getId() {
@@ -28,11 +28,11 @@ public class SavedRecipeList {
         this.id = id;
     }
 
-    public ArrayList<SavedRecipe> getSavedrecipelist() {
-        return savedrecipelist;
+    public ArrayList<SavedRecipe> getsavedRecipe() {
+        return savedRecipe;
     }
 
-    public void setSavedrecipelist(ArrayList<SavedRecipe> savedrecipelist) {
-        this.savedrecipelist = savedrecipelist;
+    public void setSavedRecipe(ArrayList<SavedRecipe> savedRecipe) {
+        this.savedRecipe = savedRecipe;
     }
 }

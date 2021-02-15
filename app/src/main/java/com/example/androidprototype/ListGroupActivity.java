@@ -36,13 +36,16 @@ public class ListGroupActivity extends AppCompatActivity
     private ArrayList<Group> myGroups;
     private RecyclerView rvGroup;
     private GroupAdapter groupAdapter;
+    private int userId; // get from intent when coming in from userprofile
+    private APIService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_group);
 
-        APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
+        userId = getIntent().getIntExtra("userId", 0);
+        service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
         simpleSearchView.setIconifiedByDefault(true);
@@ -67,86 +70,60 @@ public class ListGroupActivity extends AppCompatActivity
             }
         });
 
-        Intent intent = getIntent();
-        String search = intent.getAction();
-        if (search.equals("SEARCH")) {
-
-            String query = intent.getStringExtra("query");
-            System.out.println(query);
-
-            Call<GroupList> call = service.searchGroups(query);
-
-            TextView mG = findViewById(R.id.mG);
-            mG.setText("Results");
-
-            call.enqueue(new Callback<GroupList>() {
-
-                @Override
-                public void onResponse(Call<GroupList> call, Response<GroupList> response) {
-
-                    GroupList groups = response.body();
-                    if (groups != null) {
-                        myGroups = groups.getGrouplist();
-                    }
-
-                    if (myGroups.size() > 0) {
-                        // binding adpater and layout manager with steps recyclerview
-                        rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
-                        groupAdapter = new GroupAdapter(myGroups, ListGroupActivity.this);
-
-                        rvGroup.setAdapter(groupAdapter);
-                        LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
-                        lym_rs.setStackFromEnd(false);
-                        rvGroup.setLayoutManager(lym_rs);
-                        rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<GroupList> call, Throwable t) {
-                    System.out.println(t.getMessage());
-                    Toast.makeText(ListGroupActivity.this, "No recipes to show", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-
+        if (userId != 0) {
+            getUserGroup(userId);
         }
         else {
-            Call<User> call = service.getUser(1);
+            Intent intent = getIntent();
+            String search = intent.getAction();
+            if (search.equals("SEARCH")) {
 
-            call.enqueue(new Callback<User>() {
-                @Override
-                public void onResponse(Call<User> call, Response<User> response) {
-                    User user = response.body();
+                String query = intent.getStringExtra("query");
+                System.out.println(query);
 
-                    List<UserGroup> ug = user.getGroups().getUsergrouplist();
-                    if (ug.size() > 0) {
-                        myGroups = new ArrayList<>();
+                Call<GroupList> call = service.searchGroups(query);
 
-                        for (UserGroup u : ug) {
-                            myGroups.add(u.getGroup());
+                TextView mG = findViewById(R.id.mG);
+                mG.setText("Results");
+
+                call.enqueue(new Callback<GroupList>() {
+
+                    @Override
+                    public void onResponse(Call<GroupList> call, Response<GroupList> response) {
+
+                        GroupList groups = response.body();
+                        if (groups != null) {
+                            myGroups = groups.getGrouplist();
                         }
 
-                        // binding adpater and layout manager with steps recyclerview
-                        rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
-                        groupAdapter = new GroupAdapter(myGroups, ListGroupActivity.this);
+                        if (myGroups.size() > 0) {
+                            // binding adpater and layout manager with steps recyclerview
+                            rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
+                            groupAdapter = new GroupAdapter(myGroups, ListGroupActivity.this);
 
-                        rvGroup.setAdapter(groupAdapter);
-                        LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
-                        lym_rs.setStackFromEnd(false);
-                        rvGroup.setLayoutManager(lym_rs);
-                        rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
+                            rvGroup.setAdapter(groupAdapter);
+                            LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
+                            lym_rs.setStackFromEnd(false);
+                            rvGroup.setLayoutManager(lym_rs);
+                            rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<User> call, Throwable t) {
-                    System.out.println(t.getMessage());
-                    Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
-                }
-            });
+                    @Override
+                    public void onFailure(Call<GroupList> call, Throwable t) {
+                        System.out.println(t.getMessage());
+                        Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+            }
+            else {
+                getUserGroup(userId);
+            }
         }
+
 
         Button test = findViewById(R.id.test);
         test.setOnClickListener(this);
@@ -157,6 +134,8 @@ public class ListGroupActivity extends AppCompatActivity
         Button groups = findViewById(R.id.groups);
         groups.setOnClickListener(this);
 
+        Button cG = findViewById(R.id.createGroup);
+        cG.setOnClickListener(this);
     }
 
     @Override
@@ -181,6 +160,49 @@ public class ListGroupActivity extends AppCompatActivity
             startActivity(intent);
         }
 
+        if (id == R.id.createGroup) {
+            Intent intent = new Intent(this, CreateGroupActivity.class);
+            startActivity(intent);
+        }
+
     }
 
+    public void getUserGroup(int userId) {
+        if (userId == 0) {
+            userId = 1; // change to intent for login when login is done
+        }
+        Call<User> call = service.getUser(userId);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User user = response.body();
+
+                List<UserGroup> ug = user.getGroups().getUsergrouplist();
+                if (ug.size() > 0) {
+                    myGroups = new ArrayList<>();
+
+                    for (UserGroup u : ug) {
+                        myGroups.add(u.getGroup());
+                    }
+
+                    // binding adpater and layout manager with steps recyclerview
+                    rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
+                    groupAdapter = new GroupAdapter(myGroups, ListGroupActivity.this);
+
+                    rvGroup.setAdapter(groupAdapter);
+                    LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
+                    lym_rs.setStackFromEnd(false);
+                    rvGroup.setLayoutManager(lym_rs);
+                    rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                System.out.println(t.getMessage());
+                Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
