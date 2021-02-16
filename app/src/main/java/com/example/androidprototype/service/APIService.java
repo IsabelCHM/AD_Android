@@ -11,6 +11,7 @@ import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.model.UserGroupList;
+import com.example.androidprototype.model.UserJson;
 import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.model.groupUserJson;
 
@@ -46,6 +47,9 @@ public interface APIService {
 
     @GET("/api/mUser/{id}")
     Call<User> getUser(@Path("id") int userId);
+
+    @POST("api/mUser/validateuser")
+    Call<User> validateUser(@Body UserJson userjson);
 
     @GET("/api/mUserGroup/UserId/{id}")
     Call<UserGroupList> getUserGroupList(@Path("id") int userId);
