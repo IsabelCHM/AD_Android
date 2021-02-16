@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidprototype.R;
+import com.example.androidprototype.model.RecipeIngredientsJson;
 import com.example.androidprototype.model.RecipeStepsJson;
 import com.example.androidprototype.service.ListItemClickListener;
 
@@ -31,8 +32,19 @@ public class RecipeStepAdapter extends
     final private ListItemClickListener mOnClickListener;
     private int selectedPos = -1;
 
+    RecipeStepsJson mRecentlyDeletedItem;
+    int mRecentlyDeletedItemPos;
+
     private ArrayList<RecipeStepsJson> recipeStepsList;
     private ArrayList<Bitmap> stepImg;
+
+    public void deleteItem(int position) {
+        mRecentlyDeletedItem = recipeStepsList.get(position);
+        mRecentlyDeletedItemPos = position;
+        recipeStepsList.remove(position);
+        notifyItemRemoved(position);
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView recipeStep;
@@ -131,7 +143,10 @@ public class RecipeStepAdapter extends
         @Override
         public void afterTextChanged(Editable s) {
             int position = (int) editText.getTag();
-            recipeStepsList.get(position).setTextInstructions(s.toString());
+            if (!s.toString().trim().equals("")) {
+                recipeStepsList.get(position).setTextInstructions(s.toString());
+            }
+
         }
     }
 

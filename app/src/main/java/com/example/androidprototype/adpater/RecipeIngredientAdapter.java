@@ -22,6 +22,9 @@ import java.util.List;
 public class RecipeIngredientAdapter extends
         RecyclerView.Adapter<RecipeIngredientAdapter.ViewHolder> {
 
+    RecipeIngredientsJson mRecentlyDeletedItem;
+    int mRecentlyDeletedItemPos;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public EditText material;
@@ -82,6 +85,28 @@ public class RecipeIngredientAdapter extends
         notifyItemInserted(recipeIngredientList.size()-1);
     }
 
+    public void deleteItem(int position) {
+        mRecentlyDeletedItem = recipeIngredientList.get(position);
+        mRecentlyDeletedItemPos = position;
+        recipeIngredientList.remove(position);
+        notifyItemRemoved(position);
+        //showUndoSnackbar();
+    }
+
+    /*private void showUndoSnackbar() {
+        View view = mActivity.findViewById(R.id.coordinator_layout);
+        Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text,
+                Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
+        snackbar.show();
+    }
+
+    private void undoDelete() {
+        mListItems.add(mRecentlyDeletedItemPosition,
+                mRecentlyDeletedItem);
+        notifyItemInserted(mRecentlyDeletedItemPosition);
+    }*/
+
     public List<RecipeIngredientsJson> getRecipeIngredientList() {
         return recipeIngredientList;
     }
@@ -101,7 +126,9 @@ public class RecipeIngredientAdapter extends
         @Override
         public void afterTextChanged(Editable s) {
             int position = (int) editText.getTag();
-            recipeIngredientList.get(position).setIngredient(s.toString());
+            if(!s.toString().trim().equals("")) {
+                recipeIngredientList.get(position).setIngredient(s.toString());
+            }
         }
     }
 
@@ -120,7 +147,9 @@ public class RecipeIngredientAdapter extends
         @Override
         public void afterTextChanged(Editable s) {
             int position = (int) editText.getTag();
-            recipeIngredientList.get(position).setQuantity(Double.parseDouble(s.toString()));
+            if (!s.toString().trim().equals("")) {
+                recipeIngredientList.get(position).setQuantity(Double.parseDouble(s.toString()));
+            }
         }
     }
 
@@ -141,7 +170,10 @@ public class RecipeIngredientAdapter extends
         @Override
         public void afterTextChanged(Editable s) {
             int position = (int) editText.getTag();
-            recipeIngredientList.get(position).setUnitOfMeasurement(s.toString());
+            if (!s.toString().trim().equals("")) {
+                recipeIngredientList.get(position).setUnitOfMeasurement(s.toString());
+            }
+
         }
     }
 }
