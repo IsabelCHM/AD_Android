@@ -54,35 +54,55 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Serving Size:"
-                android:textSize="20dp"
-                android:gravity="center"/>
-
-            <EditText
-                android:id="@+id/servingSize"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"/>
-
-        </LinearLayout>
-
         <Button
             android:id="@+id/addIngredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Ingredient"
             android:textAllCaps="false"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            style="@style/RecipeButton"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Serving Size:"
+                android:textSize="20dp"
+                android:gravity="center_vertical"
+                android:layout_weight="1.5"/>
+
+            <EditText
+                android:id="@+id/servingSize"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:inputType="number"
+                android:layout_weight="0.5"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Calories:"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/recipeCalories"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:inputType="number"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
 
         <!--<Button
             android:id="@+id/deleteIngredient"
@@ -105,7 +125,8 @@
             android:layout_height="wrap_content"
             android:text="Add step"
             android:textAllCaps="false"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            style="@style/RecipeButton"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -129,30 +150,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="15 Mins"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:textAllCaps="false"
+                    style="@style/RecipeButton"/>
 
                 <Button
                     android:id="@+id/mins15_30"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="15 ~ 30 Mins"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:textAllCaps="false"
+                    style="@style/RecipeButton"/>
 
                 <Button
                     android:id="@+id/mins30_60"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="30 ~ 60 Mins"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="10dp"
+                    android:textAllCaps="false"
+                    style="@style/RecipeButton"/>
 
                 <Button
                     android:id="@+id/mins60plus"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Over an hour"
+                    android:text="> 60 Mins"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:textAllCaps="false"/>
+                    android:textAllCaps="false"
+                    style="@style/RecipeButton"/>
 
             </LinearLayout>
 
@@ -166,7 +194,8 @@
             android:textAllCaps="false"
             android:textSize="20dp"
             android:layout_marginTop="20dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            style="@style/RecipeButton"/>
 
 
 
