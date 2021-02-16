@@ -3,6 +3,7 @@ package com.example.androidprototype;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +40,9 @@ import com.example.androidprototype.model.Tag;
 import com.example.androidprototype.model.TagList;
 import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.service.ImgService;
+import com.example.androidprototype.service.IngreSwipeToDeleteCallback;
 import com.example.androidprototype.service.ListItemClickListener;
+import com.example.androidprototype.service.StepSwipeToDeleteCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -82,11 +85,8 @@ public class CreateRecipe extends AppCompatActivity
     private EditText desET;
     private EditText servingSizeET;
     private EditText durationET;
-<<<<<<< HEAD
     private EditText caloriesET;
-=======
     private TextView allergenWarnings;
->>>>>>> 452973e2d10d03f6bacb35a14bb675075756e802
 
     private APIService service;
     private ImgService imgService;
@@ -155,6 +155,9 @@ public class CreateRecipe extends AppCompatActivity
         lym_rs.setStackFromEnd(true);
         rvRecipeStep.setLayoutManager(lym_rs);
 
+        ItemTouchHelper itemTouchHelper_rs = new ItemTouchHelper(new StepSwipeToDeleteCallback(this, rsAdapter));
+        itemTouchHelper_rs.attachToRecyclerView(rvRecipeStep);
+
         // binding adapter and layout manager with ingredients recyclerview
         rvRecipeIngredient = (RecyclerView) findViewById(R.id.rvIngredient);
         riAdapter = new RecipeIngredientAdapter(recipeIngredientsList);
@@ -163,6 +166,9 @@ public class CreateRecipe extends AppCompatActivity
         LinearLayoutManager lym_ri = new LinearLayoutManager(this);
         lym_ri.setStackFromEnd(true);
         rvRecipeIngredient.setLayoutManager(lym_ri);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new IngreSwipeToDeleteCallback(this, riAdapter));
+        itemTouchHelper.attachToRecyclerView(rvRecipeIngredient);
 
         addStepBtn = findViewById(R.id.addStep);
         addIngredientBtn = findViewById(R.id.addIngredient);

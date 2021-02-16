@@ -23,6 +23,8 @@ import com.example.androidprototype.service.DownloadImageTask;
 import com.example.androidprototype.service.ViewRecipeIngredientAdapter;
 import com.example.androidprototype.service.ViewRecipeStepAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -73,6 +75,7 @@ public class ViewRecipe extends AppCompatActivity
                 TextView user = findViewById(R.id.recipeUser);
                 TextView warning = findViewById(R.id.recipeWarning);
                 TextView tag = findViewById(R.id.recipeTags);
+                TextView duration = findViewById(R.id.recipeDuration);
 
                 if (recipe.getUserId() != userId)
                 {
@@ -84,6 +87,22 @@ public class ViewRecipe extends AppCompatActivity
                 calories.setText(Integer.toString(recipe.getCalories()) + " kcal");
                 datecreated.setText("Created on " + recipe.getDateCreated().toString());
                 user.setText("By " + recipe.getUser().getUsername());
+
+                int durationFlag = recipe.getDurationInMins();
+                switch (durationFlag) {
+                    case 1:
+                        duration.setText("15mins");
+                        break;
+                    case 2:
+                        duration.setText("15 ~ 30mins");
+                        break;
+                    case 3:
+                        duration.setText("30 ~ 60mins");
+                        break;
+                    case 4:
+                        duration.setText("> 60mins");
+                        break;
+                }
 
                 new DownloadImageTask((ImageView) findViewById(R.id.recipeImage))
                         .execute(recipe.getMainMediaUrl());

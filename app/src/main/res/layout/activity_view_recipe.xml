@@ -77,6 +77,14 @@
             style="@style/NormalTextStyle"/>
 
         <TextView
+            android:id="@+id/recipeDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NormalTextStyle"
+            android:background="@drawable/textview_border"
+            android:padding="3dp"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
