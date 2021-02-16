@@ -11,7 +11,7 @@ public class User<T> {
     @Expose
     private String $id;
 
-    @SerializedName("id")
+    @SerializedName("userId")
     @Expose
     private int id;
 
