@@ -216,10 +216,16 @@
             android:layout_gravity="center"
             style="@style/RecipeButton"/>
 
-
-
-
-
+        <Button
+            android:id="@+id/editRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Recipe"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            style="@style/RecipeButton"/>
 
         <!--<androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecipe"

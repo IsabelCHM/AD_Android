@@ -23,8 +23,6 @@ import com.example.androidprototype.service.DownloadImageTask;
 import com.example.androidprototype.service.ViewRecipeIngredientAdapter;
 import com.example.androidprototype.service.ViewRecipeStepAdapter;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import retrofit2.Call;
@@ -102,6 +100,8 @@ public class ViewRecipe extends AppCompatActivity
                     case 4:
                         duration.setText("> 60mins");
                         break;
+                    default:
+                        duration.setText(Integer.toString(durationFlag));
                 }
 
                 new DownloadImageTask((ImageView) findViewById(R.id.recipeImage))
@@ -186,7 +186,9 @@ public class ViewRecipe extends AppCompatActivity
         }
 
         if (id == R.id.edit) {
-            Intent intent = new Intent(this, EditRecipe.class);
+            Intent intent = new Intent(this, CreateRecipe.class);
+            intent.setAction("EDIT_RECIPE");
+            intent.putExtra("RecipeId", rId);
             startActivity(intent);
         }
 

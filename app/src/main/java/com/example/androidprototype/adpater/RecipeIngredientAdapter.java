@@ -73,6 +73,13 @@ public class RecipeIngredientAdapter extends
         holder.material.setTag(position);
         holder.qty.setTag(position);
         holder.unit.setTag(position);
+
+        holder.material.setText(recipeIngredientList.get(position).getIngredient());
+        holder.unit.setText(recipeIngredientList.get(position).getUnitOfMeasurement());
+
+        if (recipeIngredientList.get(position).getQuantity() != 0) {
+            holder.qty.setText(Double.toString(recipeIngredientList.get(position).getQuantity()));
+        }
     }
 
     @Override

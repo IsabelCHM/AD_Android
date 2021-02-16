@@ -178,6 +178,7 @@ public class HomeActivity extends AppCompatActivity
         int id = view.getId();
         if (id == R.id.fabCreate){
             Intent intent = new Intent(this, CreateRecipe.class);
+            intent.setAction("CREATE_RECIPE");
             startActivity(intent);
         }
 
