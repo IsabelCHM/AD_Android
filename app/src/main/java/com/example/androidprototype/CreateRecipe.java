@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidprototype.adpater.RecipeIngredientAdapter;
@@ -32,12 +33,17 @@ import com.example.androidprototype.model.RecipeIngredientsJson;
 import com.example.androidprototype.model.RecipeJson;
 
 import com.example.androidprototype.model.RecipeStepsJson;
+import com.example.androidprototype.model.RecipeTag;
+import com.example.androidprototype.model.RecipeTagList;
+import com.example.androidprototype.model.Tag;
+import com.example.androidprototype.model.TagList;
 import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.service.ImgService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -56,11 +62,13 @@ public class CreateRecipe extends AppCompatActivity
     private Button mins15_30;
     private Button mins30_60;
     private Button mins60Plus;
+    private Button generateATag;
     //private Button deleteIngredientBtn;
     private int durationFlag;
     private boolean isClicked;
     private ArrayList<RecipeStepsJson> recipeStepsList;
     private ArrayList<RecipeIngredientsJson> recipeIngredientsList;
+    private List<RecipeTag> tags;
     private RecyclerView rvRecipeStep;
     private RecyclerView rvRecipeIngredient;
     private RecipeStepAdapter rsAdapter;
@@ -71,6 +79,7 @@ public class CreateRecipe extends AppCompatActivity
     private EditText desET;
     private EditText servingSizeET;
     private EditText durationET;
+    private TextView allergenWarnings;
 
     private APIService service;
     private ImgService imgService;
@@ -98,17 +107,20 @@ public class CreateRecipe extends AppCompatActivity
         desET = (EditText) findViewById(R.id.description);
         servingSizeET = (EditText) findViewById(R.id.servingSize);
         durationET = (EditText) findViewById(R.id.duration);
+        allergenWarnings = (TextView) findViewById(R.id.allergens);
 
         mins15 = (Button) findViewById(R.id.mins15);
         mins15_30 = (Button) findViewById(R.id.mins15_30);
         mins30_60 = (Button) findViewById(R.id.mins30_60);
         mins60Plus = (Button) findViewById(R.id.mins60plus);
+        generateATag = (Button) findViewById(R.id.generateATags);
 
         mins15.setOnClickListener(this);
         mins15_30.setOnClickListener(this);
         mins30_60.setOnClickListener(this);
         mins60Plus.setOnClickListener(this);
         recipeCover.setOnClickListener(this);
+        generateATag.setOnClickListener(this);
 
         // Initiate a new list for recipe steps
         RecipeStepsJson recipeSteps = new RecipeStepsJson();
@@ -209,6 +221,40 @@ public class CreateRecipe extends AppCompatActivity
                     }
                 });
                 break;
+            case R.id.generateATags:
+                Call<RecipeTagList> call1 = service.generateATags(riAdapter.getRecipeIngredientList());
+                call1.enqueue(new Callback<RecipeTagList>() {
+                    @Override
+                    public void onResponse(Call<RecipeTagList> call, Response<RecipeTagList> response) {
+                        if (response.isSuccessful()) {
+                            tags = response.body().getRecipeTags();
+                            String warnings = "";
+                            for (RecipeTag r : tags)
+                            {
+                                if (r.getAllergenTag())
+                                {
+                                    warnings += r.getTagXXId().getWarning();
+                                }
+                            }
+                            if (!warnings.isEmpty())
+                            {
+                                allergenWarnings.setText("May cause " + warnings);
+                            }
+                            else {
+                                allergenWarnings.setText("No allergy warnings");
+                            }
+
+                            System.out.println("Reached back");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RecipeTagList> call, Throwable t) {
+                        Toast.makeText(CreateRecipe.this, "Unable to generate tags", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                break;
+
         }
 
     }

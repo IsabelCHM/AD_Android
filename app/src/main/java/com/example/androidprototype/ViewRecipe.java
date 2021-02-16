@@ -74,6 +74,11 @@ public class ViewRecipe extends AppCompatActivity
                 TextView warning = findViewById(R.id.recipeWarning);
                 TextView tag = findViewById(R.id.recipeTags);
 
+                if (recipe.getUserId() != userId)
+                {
+                    postToGrp.setVisibility(View.GONE);
+                }
+
                 name.setText(recipe.getTitle());
                 description.setText(recipe.getDescription());
                 calories.setText(Integer.toString(recipe.getCalories()) + " kcal");

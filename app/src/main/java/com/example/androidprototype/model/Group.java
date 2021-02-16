@@ -34,6 +34,11 @@ public class Group {
     @Expose
     private RecipeGroupList recipeGroupList;
 
+    @SerializedName("isJoined")
+    @Expose
+    private boolean isJoined;
+
+
     //To add recipe to multiple groups
     private boolean isSelected = false;
 
@@ -111,5 +116,13 @@ public class Group {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public boolean isJoined() {
+        return isJoined;
+    }
+
+    public void setJoined(boolean joined) {
+        isJoined = joined;
     }
 }

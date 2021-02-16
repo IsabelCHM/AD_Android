@@ -23,6 +23,7 @@ import com.example.androidprototype.model.RecipeGroup;
 import com.example.androidprototype.model.RecipeIngredients;
 import com.example.androidprototype.model.RecipeSteps;
 import com.example.androidprototype.model.RecipeTag;
+import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.service.DownloadImageTask;
 import com.example.androidprototype.service.JoinGroupTask;
@@ -43,6 +44,7 @@ public class ViewGroupActivity extends AppCompatActivity
     private ArrayList<Recipe> recipes;
     private RecyclerView rvHome;
     private HomeAdapter homeAdapter;
+    private Button jG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +54,15 @@ public class ViewGroupActivity extends AppCompatActivity
         Intent intent = getIntent();
         int groupId = intent.getIntExtra("GroupId",1);
 
+        UserGroup ug = new UserGroup();
+        ug.setGroupId(groupId);
+        ug.setUserId(1);
+
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
-        Call<Group> call = service.getGroup(groupId);
+        Call<Group> call = service.getGroup(ug);
+
+        jG = findViewById(R.id.joinGroup);
+        jG.setOnClickListener(this);
 
         call.enqueue(new Callback<Group>() {
             @Override
@@ -68,6 +77,11 @@ public class ViewGroupActivity extends AppCompatActivity
                 groupName.setText(group.getGroupName());
                 groupDesc.setText(group.getDescription());
                 groupDate.setText("Created on " + group.getDateCreated().toString());
+
+                if (group.isJoined())
+                {
+                    jG.setText("Leave Group");
+                }
 
                 new DownloadImageTask((ImageView) findViewById(R.id.viewgroupImage))
                         .execute(group.getGroupPhoto());
@@ -106,8 +120,7 @@ public class ViewGroupActivity extends AppCompatActivity
             }
         });
 
-        Button jG = findViewById(R.id.joinGroup);
-        jG.setOnClickListener(this);
+
 
         Button test = findViewById(R.id.test);
         test.setOnClickListener(this);
@@ -125,7 +138,7 @@ public class ViewGroupActivity extends AppCompatActivity
         int id = view.getId();
 
         if (id == R.id.joinGroup) {
-            JoinGroupTask.JoinGroup(group.getGroupId(), 1, this);
+            JoinGroupTask.JoinGroup(group.getGroupId(), 1, this, jG);
         }
 
         if (id == R.id.test) {
@@ -146,6 +159,7 @@ public class ViewGroupActivity extends AppCompatActivity
         }
 
     }
+
 
 
 }
