@@ -159,6 +159,25 @@
         </HorizontalScrollView>
 
         <Button
+            android:id="@+id/generateATags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Generate Allergen Tags"
+            android:textAllCaps="false"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/allergens"
+            android:hint="Allergens will be displayed here"
+            android:textSize="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <Button
             android:id="@+id/createRecipe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -167,6 +186,8 @@
             android:textSize="20dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"/>
+
+
 
 
 
