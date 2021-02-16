@@ -91,6 +91,9 @@ public interface APIService {
     @POST("api/mGroup/addRtoG/{id}")
     Call<ResponseBody> postRecipe(@Path("id") int id, @Body ArrayList<Group> groups);
 
+    @GET("api/mGroup/getall")
+    Call<GroupList> getAllGroups();
+
     @POST("api/mRecipe/generateATags")
     Call<RecipeTagList> generateATags(@Body List<RecipeIngredientsJson> ingredients);
 }
