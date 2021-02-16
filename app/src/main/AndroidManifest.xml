@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidPrototype">
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login" />
         <activity android:name=".PostRecipeToGroupActivity" />
         <activity android:name=".CreateGroupActivity" />
         <activity android:name=".ViewGroupActivity" />
@@ -33,7 +33,7 @@
         <activity android:name=".UserAllergenAct" />
         <activity android:name=".ViewUserGroup" />
         <activity android:name=".DeleteRecipe" />
-        <activity android:name=".EditRecipe" />
+        <activity android:name=".EditRecipeZ" />
         <activity android:name=".SuccessPage" />
         <activity android:name=".ViewUser" />
         <activity android:name=".CreateRecipeZ" />

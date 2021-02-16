@@ -18,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditRecipe extends AppCompatActivity
+public class EditRecipeZ extends AppCompatActivity
     implements View.OnClickListener {
     private APIService apiService;
     EditText titleET;
@@ -29,14 +29,18 @@ public class EditRecipe extends AppCompatActivity
     Button update;
     Button back;
 
+    private int RecipeId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_recipe);
+        setContentView(R.layout.activity_edit_recipe_z);
 
         apiService = RetrofitClient.getRetrofitInstance().create(APIService.class);
         // hard coded recipe Id, need to change later
-        Call<Recipe> call = apiService.getRecipe(1);
+        Intent intent = getIntent();
+        RecipeId = intent.getIntExtra("RecipeId", 0);
+        Call<Recipe> call = apiService.getRecipe(RecipeId);
 
         titleET = findViewById(R.id.recipeTitle);
         descriptionET = findViewById(R.id.description);
@@ -64,7 +68,7 @@ public class EditRecipe extends AppCompatActivity
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
                 System.out.println(t.getMessage());
-                Toast.makeText(EditRecipe.this, "Unable to load recipe", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditRecipeZ.this, "Unable to load recipe", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -75,9 +79,9 @@ public class EditRecipe extends AppCompatActivity
     public void sendRecipe(String title, String description, int duration,
                            int calories, int servingSize) {
         Recipe recipe = new Recipe(title, description, duration, calories, servingSize);
-        Call<booleanJson> call = apiService.updateRecipe(recipe, 1);
+        //Call<booleanJson> call = apiService.updateRecipe(recipe, 1);
 
-        call.enqueue(new Callback<booleanJson>() {
+        /*call.enqueue(new Callback<booleanJson>() {
             @Override
             public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
                 if (response.isSuccessful()) {
@@ -91,7 +95,7 @@ public class EditRecipe extends AppCompatActivity
             public void onFailure(Call<booleanJson> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Unable to save recipe", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     @Override
