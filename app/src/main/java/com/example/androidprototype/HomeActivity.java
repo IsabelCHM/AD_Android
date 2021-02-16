@@ -186,6 +186,7 @@ public class HomeActivity extends AppCompatActivity
             }
             else {
                 Intent intent = new Intent(this, CreateRecipe.class);
+                intent.setAction("CREATE_RECIPE");
                 startActivity(intent);
             }
         }

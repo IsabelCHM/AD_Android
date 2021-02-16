@@ -222,8 +222,28 @@ public class HomeAdapter extends
             }
         }
         holder.getAuthor().setText("By " + recipeList.get(position).getUser().getUsername());
-        holder.getDuration().setText(Integer.toString(recipeList.get(position).getDurationInMins())
-                                    + "mins");
+        //holder.getDuration().setText(Integer.toString(recipeList.get(position).getDurationInMins()) + "mins");
+
+        int durationFlag = recipeList.get(position).getDurationInMins();
+
+        switch (durationFlag) {
+            case 1:
+                holder.getDuration().setText("15mins");
+                break;
+            case 2:
+                holder.getDuration().setText("15 ~ 30mins");
+                break;
+            case 3:
+                holder.getDuration().setText("30 ~ 60mins");
+                break;
+            case 4:
+                holder.getDuration().setText("> 60mins");
+                break;
+            default:
+                holder.getDuration().setText(Integer.toString(recipeList.get(position).getDurationInMins()) + "mins");
+                break;
+        }
+
         holder.getCalories().setText(Integer.toString(recipeList.get(position).getCalories()) + " kcal");
 
         new DownloadImageTask((ImageView) holder.getMainMedia())

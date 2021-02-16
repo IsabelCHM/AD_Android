@@ -62,7 +62,7 @@ public interface APIService {
     Call<booleanJson> joinGroup(@Body UserGroup usergroup);
 
     @POST("api/mRecipe/update/{id}")
-    Call<booleanJson> updateRecipe(@Body Recipe recipe, @Path("id") int recipeId);
+    Call<booleanJson> updateRecipe(@Body RecipeJson recipeJson, @Path("id") int recipeId);
 
     @GET("/api/mUser/userallergen/{id}")
     Call<UserAllergenList> getUserAllergenList(@Path("id") int userId);

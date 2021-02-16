@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.model.RecipeJson;
 import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.service.APIService;
 
@@ -18,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EditRecipe extends AppCompatActivity
+public class EditRecipeZ extends AppCompatActivity
     implements View.OnClickListener {
     private APIService apiService;
     EditText titleET;
@@ -28,18 +29,20 @@ public class EditRecipe extends AppCompatActivity
     EditText servingSizeET;
     Button update;
     Button back;
-    int recipeId;
+    private int RecipeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_recipe);
+        setContentView(R.layout.activity_edit_recipe_z);
 
-        recipeId = getIntent().getIntExtra("recipeId", 0);
+        RecipeId = getIntent().getIntExtra("recipeId", 0);
 
         apiService = RetrofitClient.getRetrofitInstance().create(APIService.class);
         // hard coded recipe Id, need to change later
-        Call<Recipe> call = apiService.getRecipe(recipeId);
+        Intent intent = getIntent();
+        RecipeId = intent.getIntExtra("RecipeId", 0);
+        Call<Recipe> call = apiService.getRecipe(RecipeId);
 
         titleET = findViewById(R.id.recipeTitle);
         descriptionET = findViewById(R.id.description);
@@ -67,7 +70,7 @@ public class EditRecipe extends AppCompatActivity
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
                 System.out.println(t.getMessage());
-                Toast.makeText(EditRecipe.this, "Unable to load recipe", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditRecipeZ.this, "Unable to load recipe", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -77,8 +80,8 @@ public class EditRecipe extends AppCompatActivity
 
     public void sendRecipe(String title, String description, int duration,
                            int calories, int servingSize) {
-        Recipe recipe = new Recipe(title, description, duration, calories, servingSize);
-        Call<booleanJson> call = apiService.updateRecipe(recipe, recipeId);
+        RecipeJson recipe = new RecipeJson(title, description, duration, calories, servingSize);
+        Call<booleanJson> call = apiService.updateRecipe(recipe, RecipeId);
 
         call.enqueue(new Callback<booleanJson>() {
             @Override
@@ -86,8 +89,8 @@ public class EditRecipe extends AppCompatActivity
                 if (response.isSuccessful()) {
                     if (response.body().getFlag() == true){
                         Toast.makeText(getApplicationContext(), "Recipe has been updated successfully!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), EditRecipe.class);
-                        intent.putExtra("recipeId", recipeId);
+                        Intent intent = new Intent(getApplicationContext(), EditRecipeZ.class);
+                        intent.putExtra("recipeId", RecipeId);
                         startActivity(intent);
                     }
                 }

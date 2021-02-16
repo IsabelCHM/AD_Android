@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.createRecipeX) {
             Intent intent = new Intent(this, CreateRecipe.class);
+            intent.setAction("CREATE_RECIPE");
             startActivity(intent);
         }
 
