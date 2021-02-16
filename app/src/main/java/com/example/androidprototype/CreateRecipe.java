@@ -39,6 +39,7 @@ import com.example.androidprototype.model.Tag;
 import com.example.androidprototype.model.TagList;
 import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.service.ImgService;
+import com.example.androidprototype.service.ListItemClickListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,7 +55,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CreateRecipe extends AppCompatActivity
-        implements View.OnClickListener {
+        implements View.OnClickListener, ListItemClickListener {
     private Button addStepBtn;
     private Button addIngredientBtn;
     private Button createRecipeBtn;
@@ -66,6 +67,8 @@ public class CreateRecipe extends AppCompatActivity
     //private Button deleteIngredientBtn;
     private int durationFlag;
     private boolean isClicked;
+    private String coverImgUrl;
+    private String stepImgUrl;
     private ArrayList<RecipeStepsJson> recipeStepsList;
     private ArrayList<RecipeIngredientsJson> recipeIngredientsList;
     private List<RecipeTag> tags;
@@ -79,11 +82,17 @@ public class CreateRecipe extends AppCompatActivity
     private EditText desET;
     private EditText servingSizeET;
     private EditText durationET;
+<<<<<<< HEAD
+    private EditText caloriesET;
+=======
     private TextView allergenWarnings;
+>>>>>>> 452973e2d10d03f6bacb35a14bb675075756e802
 
     private APIService service;
     private ImgService imgService;
-    private final int SELECT_PHOTO = 1;
+    private final int SELECT_COVER_PHOTO = 1;
+    private final int SELECT_STEP_PHOTO = 2;
+    private int stepImgPos = -1;
     private String Document_img1="";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -106,6 +115,7 @@ public class CreateRecipe extends AppCompatActivity
         titleET = (EditText) findViewById(R.id.recipeTitle);
         desET = (EditText) findViewById(R.id.description);
         servingSizeET = (EditText) findViewById(R.id.servingSize);
+        caloriesET = (EditText) findViewById(R.id.recipeCalories);
         durationET = (EditText) findViewById(R.id.duration);
         allergenWarnings = (TextView) findViewById(R.id.allergens);
 
@@ -138,7 +148,7 @@ public class CreateRecipe extends AppCompatActivity
 
         // binding adpater and layout manager with steps recyclerview
         rvRecipeStep = (RecyclerView) findViewById(R.id.rvRecipeStep);
-        rsAdapter = new RecipeStepAdapter(recipeStepsList);
+        rsAdapter = new RecipeStepAdapter(this, recipeStepsList);
 
         rvRecipeStep.setAdapter(rsAdapter);
         LinearLayoutManager lym_rs = new LinearLayoutManager(this);
@@ -171,7 +181,7 @@ public class CreateRecipe extends AppCompatActivity
 
         switch (id) {
             case R.id.recipeCover:
-                selectImg();
+                selectCoverImg();
                 break;
             case R.id.addStep:
                 RecipeStepsJson newRecipeStep = new RecipeStepsJson();
@@ -199,11 +209,14 @@ public class CreateRecipe extends AppCompatActivity
                 break;
             case R.id.createRecipe:
                 RecipeJson newRecipe = new RecipeJson();
+                newRecipe.setMainMediaUrl(coverImgUrl);
                 newRecipe.setTitle(titleET.getText().toString());
                 newRecipe.setDescription(desET.getText().toString());
+                newRecipe.setCalories(Integer.parseInt(caloriesET.getText().toString()));
                 newRecipe.setRecipeIngredientsList(riAdapter.getRecipeIngredientList());
                 newRecipe.setRecipeStepsList(rsAdapter.getRecipeStepsList());
                 newRecipe.setServingSize(Integer.parseInt(servingSizeET.getText().toString()));
+                newRecipe.setDurationInMins(getDuration(durationFlag));
 
                 Call<ResponseBody> call = service.saveRecipe(newRecipe);
                 call.enqueue(new Callback<ResponseBody>() {
@@ -259,38 +272,57 @@ public class CreateRecipe extends AppCompatActivity
 
     }
 
-    private void selectImg() {
-        Intent intent = new   Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, SELECT_PHOTO);
+    private void selectCoverImg() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, SELECT_COVER_PHOTO);
+    }
+
+    private void selectStepImg(int position) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        stepImgPos = position;
+        startActivityForResult(intent, SELECT_STEP_PHOTO);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PHOTO) {
-                verifyStoragePermissions(CreateRecipe.this);
-                Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                String picturePath = c.getString(columnIndex);
-                c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+            verifyStoragePermissions(CreateRecipe.this);
+            Uri selectedImage = data.getData();
+            String[] filePath = { MediaStore.Images.Media.DATA };
+            Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePath[0]);
+            String picturePath = c.getString(columnIndex);
+            c.close();
+            Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+            File imgToUpload = new File(picturePath);
+            if (requestCode == SELECT_COVER_PHOTO) {
                 //thumbnail = getResizedBitmap(thumbnail, 400);
-                //Log.w("path of image from gallery......******************.........", picturePath+"");
                 recipeCover.setImageBitmap(thumbnail);
                 //String encodedImg = BitMapToString(thumbnail);
-                File imgToUpload = new File(picturePath);
-                Thread bkgdThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        UploadToImgBB(imgToUpload);
-                    }
-                });
-                bkgdThread.start();
-
+                if (imgToUpload != null) {
+                    Thread bkgdThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            uploadCoverImgToImgBB(imgToUpload);
+                        }
+                    });
+                    bkgdThread.start();
+                }
+            }
+            if (requestCode == SELECT_STEP_PHOTO) {
+                rsAdapter.setStepImg(thumbnail, stepImgPos);
+                rsAdapter.notifyDataSetChanged();
+                if (imgToUpload != null) {
+                    Thread bkgdThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            uploadStepImgToImgBB(imgToUpload);
+                        }
+                    });
+                    bkgdThread.start();
+                }
             }
         }
     }
@@ -318,7 +350,7 @@ public class CreateRecipe extends AppCompatActivity
         return Document_img1;
     }
 
-    private void UploadToImgBB(File img) {
+    private void uploadCoverImgToImgBB(File img) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), img);
         MultipartBody.Part part = MultipartBody.Part.createFormData("image", img.getName(), requestBody);
 
@@ -340,32 +372,60 @@ public class CreateRecipe extends AppCompatActivity
         call.enqueue(new Callback<ImgBB>() {
             @Override
             public void onResponse(Call<ImgBB> call, Response<ImgBB> response) {
-                String img_url = response.body().getImgBBData().getUrl();
-                Toast.makeText(CreateRecipe.this, "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()){
+                    coverImgUrl = response.body().getImgBBData().getUrl();
+                    Toast.makeText(CreateRecipe.this, "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<ImgBB> call, Throwable t) {
-                Toast.makeText(CreateRecipe.this, "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateRecipe.this, "Unable to upload photo", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-    @SuppressLint("ResourceAsColor")
+    private void uploadStepImgToImgBB(File img) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), img);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("image", img.getName(), requestBody);
+
+        Call<ImgBB> call = imgService.uploadImg(ImgClient.myKey, part);
+        call.enqueue(new Callback<ImgBB>() {
+            @Override
+            public void onResponse(Call<ImgBB> call, Response<ImgBB> response) {
+                if (response.isSuccessful()){
+                    stepImgUrl = response.body().getImgBBData().getUrl();
+                    rsAdapter.setStepImgUrl(stepImgUrl, stepImgPos);
+                    Toast.makeText(CreateRecipe.this, "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ImgBB> call, Throwable t) {
+                Toast.makeText(CreateRecipe.this, "Unable to upload photo", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     public void resetDuration(int durationFlag) {
         switch (durationFlag) {
             case R.id.mins15:
-                mins15.setBackgroundColor(R.color.purple_test);
+                //mins15.setBackgroundColor(R.color.purple_test);
+                mins15.setBackgroundColor(getResources().getColor(R.color.purple_test));
                 break;
             case R.id.mins15_30:
-                mins15_30.setBackgroundColor(R.color.purple_test);
+                //mins15_30.setBackgroundColor(R.color.purple_test);
+                mins15_30.setBackgroundColor(getResources().getColor(R.color.purple_test));
                 break;
             case R.id.mins30_60:
-                mins30_60.setBackgroundColor(R.color.purple_test);
+                //mins30_60.setBackgroundColor(R.color.purple_test);
+                mins30_60.setBackgroundColor(getResources().getColor(R.color.purple_test));
                 break;
             case R.id.mins60plus:
-                mins60Plus.setBackgroundColor(R.color.purple_test);
+                //mins60Plus.setBackgroundColor(R.color.purple_test);
+                mins60Plus.setBackgroundColor(getResources().getColor(R.color.purple_test));
                 break;
         }
     }
@@ -374,9 +434,24 @@ public class CreateRecipe extends AppCompatActivity
         if (isClicked) {
             resetDuration(durationFlag);
         }
-        btn.setBackgroundColor(Color.RED);
+        btn.setBackgroundColor(getResources().getColor(R.color.checked));
         this.durationFlag = btn.getId();
         this.isClicked = true;
+    }
+
+    public int getDuration(int durationFlag) {
+        int duration = 0;
+
+        if (durationFlag == R.id.mins15)
+            duration = 1;
+        else if (durationFlag == R.id.mins15_30)
+            duration = 2;
+        else if (durationFlag == R.id.mins30_60)
+            duration = 3;
+        else if (durationFlag == R.id.mins60plus)
+            duration = 4;
+
+        return duration;
     }
 
     public static void verifyStoragePermissions(Activity activity) {
@@ -393,4 +468,8 @@ public class CreateRecipe extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onListItemClick(int position) {
+        selectStepImg(position);
+    }
 }

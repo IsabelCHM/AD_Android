@@ -26,17 +26,22 @@ public class RecipeIngredientAdapter extends
 
         public EditText material;
         public EditText qty;
+        public EditText unit;
 
         public ViewHolder(View itemView) {
             super(itemView);
             material = itemView.findViewById(R.id.recipeIngredient);
             qty = itemView.findViewById(R.id.recipeQty);
+            unit = itemView.findViewById(R.id.ingreUnit);
 
             IngredientTextWatcher ingredientTextWatcher = new IngredientTextWatcher(material);
             material.addTextChangedListener(ingredientTextWatcher);
 
             QtyTextWatcher qtyTextWatcher = new QtyTextWatcher(qty);
             qty.addTextChangedListener(qtyTextWatcher);
+
+            UnitTextWatcher unitTextWatcher = new UnitTextWatcher(unit);
+            unit.addTextChangedListener(unitTextWatcher);
         }
     }
 
@@ -64,6 +69,7 @@ public class RecipeIngredientAdapter extends
     public void onBindViewHolder(@NonNull RecipeIngredientAdapter.ViewHolder holder, int position) {
         holder.material.setTag(position);
         holder.qty.setTag(position);
+        holder.unit.setTag(position);
     }
 
     @Override
@@ -115,6 +121,27 @@ public class RecipeIngredientAdapter extends
         public void afterTextChanged(Editable s) {
             int position = (int) editText.getTag();
             recipeIngredientList.get(position).setQuantity(Double.parseDouble(s.toString()));
+        }
+    }
+
+    public class UnitTextWatcher implements TextWatcher {
+        private EditText editText;
+        public UnitTextWatcher(EditText editText) { this.editText = editText; }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            int position = (int) editText.getTag();
+            recipeIngredientList.get(position).setUnitOfMeasurement(s.toString());
         }
     }
 }
