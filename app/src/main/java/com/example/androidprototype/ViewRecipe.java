@@ -3,6 +3,7 @@ package com.example.androidprototype;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,10 +44,11 @@ public class ViewRecipe extends AppCompatActivity
         setContentView(R.layout.activity_view_recipe);
 
         // Need to change after user login is done
-        userId = 1;
+        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        userId = pref.getInt("UserId", 0);
 
         Intent intent = getIntent();
-        int recipeId = intent.getIntExtra("RecipeId",1);
+        int recipeId = intent.getIntExtra("RecipeId",0);
         rId = recipeId;
 
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
@@ -168,6 +170,7 @@ public class ViewRecipe extends AppCompatActivity
 
         if (id == R.id.edit) {
             Intent intent = new Intent(this, EditRecipe.class);
+            intent.putExtra("recipeId", recipe.getId());
             startActivity(intent);
         }
 
@@ -217,15 +220,15 @@ public class ViewRecipe extends AppCompatActivity
 
     }
 
-    public void deleteRecipe(int userId) {
-        Call<booleanJson> call = service.deleteRecipe(userId);
+    public void deleteRecipe(int recipeId) {
+        Call<booleanJson> call = service.deleteRecipe(recipeId);
 
         call.enqueue(new Callback<booleanJson>() {
             @Override
             public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
                 if (response.isSuccessful()) {
                     Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
-                    intent.putExtra("userId", 1); // change when user login is done
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
                 }
             }

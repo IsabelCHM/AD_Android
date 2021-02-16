@@ -82,11 +82,8 @@ public class CreateRecipe extends AppCompatActivity
     private EditText desET;
     private EditText servingSizeET;
     private EditText durationET;
-<<<<<<< HEAD
     private EditText caloriesET;
-=======
     private TextView allergenWarnings;
->>>>>>> 452973e2d10d03f6bacb35a14bb675075756e802
 
     private APIService service;
     private ImgService imgService;
