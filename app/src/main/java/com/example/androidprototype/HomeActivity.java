@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
         SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
-        int userId = pref.getInt("UserId", 0);
+        userId = pref.getInt("UserId", 0);
 
         if (userId != 0) {
             Call<User> call1 = service.getUser(userId);
