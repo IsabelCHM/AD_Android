@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -45,7 +46,7 @@ import retrofit2.Response;
 import static com.example.androidprototype.CreateRecipe.verifyStoragePermissions;
 
 public class CreateGroupActivity extends AppCompatActivity
-        implements View.OnClickListener{
+    implements View.OnClickListener{
 
     private EditText nameET;
     private EditText descET;
@@ -150,8 +151,11 @@ public class CreateGroupActivity extends AppCompatActivity
 
         String tags = tagsET.getText().toString();
 
+        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        int userId = pref.getInt("UserId", 0);
+
         User u = new User();
-        u.setId(1);
+        u.setIdJson(userId);
 
         Call<Group> call = service.saveGroup(new groupUserJson(u, newGroup, tags));
         call.enqueue(new Callback<Group>() {

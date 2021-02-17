@@ -15,6 +15,10 @@ public class User<T> {
     @Expose
     private int id;
 
+    @SerializedName("id")
+    @Expose
+    private int idJson;
+
     @SerializedName("firstName")
     @Expose
     private String firstName;
@@ -166,5 +170,13 @@ public class User<T> {
 
     public void setSavedRecipeList(SavedRecipeList savedRecipeList) {
         this.savedRecipeList = savedRecipeList;
+    }
+
+    public void setIdJson(int idJson) {
+        this.idJson = idJson;
+    }
+
+    public int getIdJson() {
+        return idJson;
     }
 }
