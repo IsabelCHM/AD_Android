@@ -172,4 +172,12 @@ public class RecipeJson {
     public void setLikesDislikes(LikesDislikesList likesDislikes) {
         this.likesDislikes = likesDislikes;
     }
+
+    public RecipeJson(String title, String description, int duration, int calories, int servingSize) {
+        this.title = title;
+        this.description = description;
+        this.durationInMins = duration;
+        this.calories = calories;
+        this.servingSize = servingSize;
+    }
 }

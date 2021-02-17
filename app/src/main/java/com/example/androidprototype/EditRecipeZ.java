@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.model.RecipeJson;
 import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.service.APIService;
 
@@ -28,13 +29,14 @@ public class EditRecipeZ extends AppCompatActivity
     EditText servingSizeET;
     Button update;
     Button back;
-
     private int RecipeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipe_z);
+
+        RecipeId = getIntent().getIntExtra("recipeId", 0);
 
         apiService = RetrofitClient.getRetrofitInstance().create(APIService.class);
         // hard coded recipe Id, need to change later
@@ -78,15 +80,18 @@ public class EditRecipeZ extends AppCompatActivity
 
     public void sendRecipe(String title, String description, int duration,
                            int calories, int servingSize) {
-        Recipe recipe = new Recipe(title, description, duration, calories, servingSize);
-        //Call<booleanJson> call = apiService.updateRecipe(recipe, 1);
+        RecipeJson recipe = new RecipeJson(title, description, duration, calories, servingSize);
+        Call<booleanJson> call = apiService.updateRecipe(recipe, RecipeId);
 
-        /*call.enqueue(new Callback<booleanJson>() {
+        call.enqueue(new Callback<booleanJson>() {
             @Override
             public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getFlag() == true){
                         Toast.makeText(getApplicationContext(), "Recipe has been updated successfully!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), EditRecipeZ.class);
+                        intent.putExtra("recipeId", RecipeId);
+                        startActivity(intent);
                     }
                 }
             }
@@ -95,7 +100,7 @@ public class EditRecipeZ extends AppCompatActivity
             public void onFailure(Call<booleanJson> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Unable to save recipe", Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
     }
 
     @Override
