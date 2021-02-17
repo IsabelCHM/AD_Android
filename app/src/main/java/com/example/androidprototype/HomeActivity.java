@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity
     private HomeAdapter homeAdapter;
     private ArrayList<Recipe> recipeList;
     private User user;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +50,25 @@ public class HomeActivity extends AppCompatActivity
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
         SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
-        int userId = pref.getInt("UserId", 0);
-        Call<User> call1 = service.getUser(userId);
-        call1.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    user = response.body();
-                }
-            }
+        userId = pref.getInt("UserId", 0);
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                System.out.println("Fail to get user. redirect to login");
-            }
-        });
+        if (userId != 0) {
+            Call<User> call1 = service.getUser(userId);
+            call1.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        user = response.body();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    System.out.println("Fail to get user. redirect to login");
+                }
+            });
+        }
+
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
         simpleSearchView.setIconifiedByDefault(true);
@@ -195,6 +200,7 @@ public class HomeActivity extends AppCompatActivity
             else {
                 Intent intent = new Intent(this, CreateRecipe.class);
                 intent.setAction("CREATE_RECIPE");
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         }

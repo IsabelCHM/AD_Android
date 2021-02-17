@@ -36,11 +36,14 @@ import com.example.androidprototype.model.RecipeIngredients;
 import com.example.androidprototype.model.RecipeIngredientsJson;
 import com.example.androidprototype.model.RecipeJson;
 
+import com.example.androidprototype.model.RecipePlusTags;
 import com.example.androidprototype.model.RecipeSteps;
 import com.example.androidprototype.model.RecipeStepsJson;
 import com.example.androidprototype.model.RecipeTag;
+import com.example.androidprototype.model.RecipeTagJson;
 import com.example.androidprototype.model.RecipeTagList;
 import com.example.androidprototype.model.Tag;
+import com.example.androidprototype.model.TagJson;
 import com.example.androidprototype.model.TagList;
 import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.service.APIService;
@@ -49,6 +52,7 @@ import com.example.androidprototype.service.ImgService;
 import com.example.androidprototype.service.IngreSwipeToDeleteCallback;
 import com.example.androidprototype.service.ListItemClickListener;
 import com.example.androidprototype.service.StepSwipeToDeleteCallback;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -83,6 +87,7 @@ public class CreateRecipe extends AppCompatActivity
     private ArrayList<RecipeStepsJson> recipeStepsList;
     private ArrayList<RecipeIngredientsJson> recipeIngredientsList;
     private List<RecipeTag> tags;
+    private List<RecipeTagJson> recipeTagsList;
     private RecyclerView rvRecipeStep;
     private RecyclerView rvRecipeIngredient;
     private RecipeStepAdapter rsAdapter;
@@ -94,6 +99,7 @@ public class CreateRecipe extends AppCompatActivity
     private EditText servingSizeET;
     private EditText durationET;
     private EditText caloriesET;
+    private EditText tagET;
     private TextView allergenWarnings;
 
     private APIService service;
@@ -109,6 +115,7 @@ public class CreateRecipe extends AppCompatActivity
     };
 
     private int recipeId;
+    private int userId;
 
 
     @Override
@@ -130,6 +137,7 @@ public class CreateRecipe extends AppCompatActivity
         servingSizeET = (EditText) findViewById(R.id.servingSize);
         caloriesET = (EditText) findViewById(R.id.recipeCalories);
         durationET = (EditText) findViewById(R.id.duration);
+        tagET = (EditText) findViewById(R.id.recipeTag);
         allergenWarnings = (TextView) findViewById(R.id.allergens);
 
         mins15 = (Button) findViewById(R.id.mins15);
@@ -160,12 +168,14 @@ public class CreateRecipe extends AppCompatActivity
         recipeStepsList = new ArrayList<>();
 
         // Initiate a new list for recipe ingredients
-        //recipeIngredients.setRecipeIngredientsId(1);
         recipeIngredientsList = new ArrayList<>();
+
+        // Initiate a new list for recipe tags
+        recipeTagsList = new ArrayList<>();
 
         Intent intent = getIntent();
         if (getIntent().getAction().equals("CREATE_RECIPE")) {
-
+            userId = intent.getIntExtra("userId", 0);
             editRecipeBtn.setVisibility(View.GONE);
 
             RecipeStepsJson recipeSteps = new RecipeStepsJson();
@@ -175,28 +185,7 @@ public class CreateRecipe extends AppCompatActivity
             RecipeIngredientsJson recipeIngredientsJson = new RecipeIngredientsJson();
             recipeIngredientsList.add(recipeIngredientsJson);
 
-            rvRecipeStep = (RecyclerView) findViewById(R.id.rvRecipeStep);
-            rsAdapter = new RecipeStepAdapter(CreateRecipe.this, recipeStepsList);
-
-            rvRecipeStep.setAdapter(rsAdapter);
-            LinearLayoutManager lym_rs = new LinearLayoutManager(CreateRecipe.this);
-            lym_rs.setStackFromEnd(true);
-            rvRecipeStep.setLayoutManager(lym_rs);
-
-            ItemTouchHelper itemTouchHelper_rs = new ItemTouchHelper(new StepSwipeToDeleteCallback(this, rsAdapter));
-            itemTouchHelper_rs.attachToRecyclerView(rvRecipeStep);
-
-            // binding adapter and layout manager with ingredients recyclerview
-            rvRecipeIngredient = (RecyclerView) findViewById(R.id.rvIngredient);
-            riAdapter = new RecipeIngredientAdapter(recipeIngredientsList);
-
-            rvRecipeIngredient.setAdapter(riAdapter);
-            LinearLayoutManager lym_ri = new LinearLayoutManager(CreateRecipe.this);
-            lym_ri.setStackFromEnd(true);
-            rvRecipeIngredient.setLayoutManager(lym_ri);
-
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new IngreSwipeToDeleteCallback(this, riAdapter));
-            itemTouchHelper.attachToRecyclerView(rvRecipeIngredient);
+            setAdapter();
         }
         else if (getIntent().getAction().equals("EDIT_RECIPE")) {
             createRecipeBtn.setVisibility(View.GONE);
@@ -243,29 +232,7 @@ public class CreateRecipe extends AppCompatActivity
                     caloriesET.setText(Integer.toString(recipe.getCalories()));
                     servingSizeET.setText(Integer.toString(recipe.getServingSize()));
 
-                    rvRecipeStep = (RecyclerView) findViewById(R.id.rvRecipeStep);
-                    rsAdapter = new RecipeStepAdapter(CreateRecipe.this, recipeStepsList);
-
-                    rvRecipeStep.setAdapter(rsAdapter);
-                    LinearLayoutManager lym_rs = new LinearLayoutManager(CreateRecipe.this);
-                    lym_rs.setStackFromEnd(true);
-                    rvRecipeStep.setLayoutManager(lym_rs);
-
-                    ItemTouchHelper itemTouchHelper_rs = new ItemTouchHelper(new StepSwipeToDeleteCallback(CreateRecipe.this, rsAdapter));
-                    itemTouchHelper_rs.attachToRecyclerView(rvRecipeStep);
-
-                    // binding adapter and layout manager with ingredients recyclerview
-                    rvRecipeIngredient = (RecyclerView) findViewById(R.id.rvIngredient);
-                    riAdapter = new RecipeIngredientAdapter(recipeIngredientsList);
-
-                    rvRecipeIngredient.setAdapter(riAdapter);
-                    LinearLayoutManager lym_ri = new LinearLayoutManager(CreateRecipe.this);
-                    lym_ri.setStackFromEnd(true);
-                    rvRecipeIngredient.setLayoutManager(lym_ri);
-
-                    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new IngreSwipeToDeleteCallback(CreateRecipe.this, riAdapter));
-                    itemTouchHelper.attachToRecyclerView(rvRecipeIngredient);
-
+                    setAdapter();
 
                 }
 
@@ -276,6 +243,31 @@ public class CreateRecipe extends AppCompatActivity
             });
         }
 
+    }
+
+    public void setAdapter() {
+        rvRecipeStep = (RecyclerView) findViewById(R.id.rvRecipeStep);
+        rsAdapter = new RecipeStepAdapter(CreateRecipe.this, recipeStepsList);
+
+        rvRecipeStep.setAdapter(rsAdapter);
+        LinearLayoutManager lym_rs = new LinearLayoutManager(CreateRecipe.this);
+        lym_rs.setStackFromEnd(true);
+        rvRecipeStep.setLayoutManager(lym_rs);
+
+        ItemTouchHelper itemTouchHelper_rs = new ItemTouchHelper(new StepSwipeToDeleteCallback(CreateRecipe.this, rsAdapter));
+        itemTouchHelper_rs.attachToRecyclerView(rvRecipeStep);
+
+        // binding adapter and layout manager with ingredients recyclerview
+        rvRecipeIngredient = (RecyclerView) findViewById(R.id.rvIngredient);
+        riAdapter = new RecipeIngredientAdapter(recipeIngredientsList);
+
+        rvRecipeIngredient.setAdapter(riAdapter);
+        LinearLayoutManager lym_ri = new LinearLayoutManager(CreateRecipe.this);
+        lym_ri.setStackFromEnd(true);
+        rvRecipeIngredient.setLayoutManager(lym_ri);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new IngreSwipeToDeleteCallback(CreateRecipe.this, riAdapter));
+        itemTouchHelper.attachToRecyclerView(rvRecipeIngredient);
 
     }
 
@@ -314,8 +306,30 @@ public class CreateRecipe extends AppCompatActivity
             case R.id.createRecipe:
                 RecipeJson newRecipe = new RecipeJson();
                 setRecipe(newRecipe);
+                String recipeTags = tagET.getText().toString();
 
-                Call<ResponseBody> call = service.saveRecipe(newRecipe);
+                Gson gson = new Gson();
+                String tagJson = gson.toJson(recipeTagsList);
+
+
+                Call<ResponseBody> call_create = service.createRecipe(new RecipePlusTags(newRecipe, tagJson));
+                call_create.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            Intent intent = new Intent(getApplicationContext(), SuccessPage.class);
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                /*Call<ResponseBody> call = service.saveRecipe(newRecipe);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -329,7 +343,7 @@ public class CreateRecipe extends AppCompatActivity
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
                 break;
             case R.id.editRecipe:
                 RecipeJson recipeToEdit = new RecipeJson();
@@ -392,6 +406,20 @@ public class CreateRecipe extends AppCompatActivity
     }
 
     private void setRecipe(RecipeJson recipe) {
+        String tags = tagET.getText().toString();
+        String[] tag_arr = tags.replace(" ", "").split("#");
+        for (String tag : tag_arr) {
+            if (!tag.isEmpty() && tag != null) {
+                TagJson tagJson = new TagJson();
+                tagJson.setTagName(tag);
+                RecipeTagJson recipeTagJson = new RecipeTagJson();
+                recipeTagJson.setTagXXId(tagJson);
+                recipeTagsList.add(recipeTagJson);
+            }
+        }
+
+
+        recipe.setUserId(String.valueOf(userId));
         recipe.setMainMediaUrl(coverImgUrl);
         recipe.setTitle(titleET.getText().toString());
         recipe.setDescription(desET.getText().toString());
@@ -400,6 +428,7 @@ public class CreateRecipe extends AppCompatActivity
         recipe.setRecipeStepsList(rsAdapter.getRecipeStepsList());
         recipe.setServingSize(Integer.parseInt(servingSizeET.getText().toString()));
         recipe.setDurationInMins(getDuration(durationFlag));
+        //recipe.setRecipeTags(recipeTagsList);
     }
 
     private void selectCoverImg() {
@@ -483,20 +512,6 @@ public class CreateRecipe extends AppCompatActivity
     private void uploadCoverImgToImgBB(File img) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), img);
         MultipartBody.Part part = MultipartBody.Part.createFormData("image", img.getName(), requestBody);
-
-        /*Call<ImgBBJson> call = imgService.uploadImg(ImgClient.myKey, encodedImg);
-        call.enqueue(new Callback<ImgBBJson>() {
-            @Override
-            public void onResponse(Call<ImgBBJson> call, Response<ImgBBJson> response) {
-                String img_url = response.body().getUrl();
-                Toast.makeText(CreateRecipe.this, "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<ImgBBJson> call, Throwable t) {
-                Toast.makeText(CreateRecipe.this, "Unable to upload photo", Toast.LENGTH_SHORT).show();
-            }
-        });*/
 
         Call<ImgBB> call = imgService.uploadImg(ImgClient.myKey, part);
         call.enqueue(new Callback<ImgBB>() {

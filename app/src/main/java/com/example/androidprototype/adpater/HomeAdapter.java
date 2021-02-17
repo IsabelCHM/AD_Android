@@ -252,24 +252,29 @@ public class HomeAdapter extends
         String warnings = "";
         String tags = "";
         List<RecipeTag> retag = recipeList.get(position).getRecipeTags().getRecipeTags();
-        for (RecipeTag r : retag)
-        {
-            tags += "#" + r.getTagXXId().getTagName() + "\t";
-
-            if (r.getAllergenTag())
+        if (retag != null && !retag.isEmpty()) {
+            for (RecipeTag r : retag)
             {
-                warnings += r.getTagXXId().getWarning();
+                if (r.getTagXXId() != null) {
+                    tags += "#" + r.getTagXXId().getTagName() + "\t";
+
+                    if (r.getAllergenTag())
+                    {
+                        warnings += r.getTagXXId().getWarning();
+                    }
+                }
+            }
+            holder.getTags().setText(tags);
+
+            if (!warnings.isEmpty())
+            {
+                holder.getAllergens().setText("May cause " + warnings);
+            }
+            else {
+                holder.getAllergens().setText(warnings);
             }
         }
-        holder.getTags().setText(tags);
 
-        if (!warnings.isEmpty())
-        {
-            holder.getAllergens().setText("May cause " + warnings);
-        }
-        else {
-            holder.getAllergens().setText(warnings);
-        }
 
     }
 
