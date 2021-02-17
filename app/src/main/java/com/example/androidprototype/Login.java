@@ -83,17 +83,21 @@ public class Login extends AppCompatActivity {
                         editor.putInt("UserId", response.body().getId());
                         editor.commit();
 
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG).show();
                     }
+                }
+                if (response.body() == null) {
+                    Toast.makeText(getApplicationContext(), "email or password does not match", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG).show();
             }
         });
     }

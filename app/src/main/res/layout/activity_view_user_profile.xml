@@ -6,24 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ViewUserProfile">
 
-    <EditText
-        android:id="@+id/etGetUserProfileId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Enter User Id"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/btnGetUserProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get User Profile"
-        app:layout_constraintTop_toBottomOf="@id/etGetUserProfileId"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
+
 
     <TextView
         android:id="@+id/tvUserProfileHeader"
@@ -31,16 +16,26 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/btnGetUserProfile"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnlogout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnlogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="logout"
+        app:layout_constraintTop_toBottomOf="@id/tvUserProfileHeader"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tvUserProfileHeader"
+        app:layout_constraintTop_toBottomOf="@id/btnlogout"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal">
