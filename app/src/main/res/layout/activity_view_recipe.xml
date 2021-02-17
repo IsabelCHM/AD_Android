@@ -9,6 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="45dp"
         android:orientation="vertical">
 
     <LinearLayout
@@ -38,7 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post2Grp"
-            android:text="Post to Groups"></Button>
+            android:text="Post to Groups"
+            android:layout_gravity="center"></Button>
 
 
         <TextView
@@ -114,14 +116,14 @@
             android:layout_marginTop="10dp"
             style="@style/NormalTextStyle"/>
 
-        <Button
+        <!--<Button
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:text="Go Back"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"/>-->
 
         <Button
             android:id="@+id/edit"
@@ -141,6 +143,49 @@
     </LinearLayout>
 
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#734B5E"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/bottomNav">
+
+        <ImageButton
+            android:id="@+id/refreshHome"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/home"
+            ></ImageButton>
+
+        <!--<Button
+            android:id="@+id/test"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="test"></Button>-->
+
+        <ImageButton
+            android:id="@+id/groups"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/groups"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/myProfile"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/myprofile"></ImageButton>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
