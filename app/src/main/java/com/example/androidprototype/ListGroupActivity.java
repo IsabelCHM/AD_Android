@@ -41,6 +41,7 @@ public class ListGroupActivity extends AppCompatActivity
     private GroupAdapter groupAdapter;
     private int userId; // get from intent when coming in from userprofile
     private APIService service;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ListGroupActivity extends AppCompatActivity
 
         // display the groups that the logged in user has joined
         if (userId == 0) {
-            SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+            pref = getSharedPreferences("user_info", MODE_PRIVATE);
             userId = pref.getInt("UserId", 0);
         }
 
@@ -86,7 +87,7 @@ public class ListGroupActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         String search = intent.getAction();
-        if (search != null) {
+        if (search != null && search.equals("SEARCH")) {
             if (search.equals("SEARCH")) {
 
                 String query = intent.getStringExtra("query");
@@ -170,8 +171,20 @@ public class ListGroupActivity extends AppCompatActivity
 
         if (id == R.id.groups) {
             Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.putExtra("userId", userId);
             intent.setAction("view");
             startActivity(intent);
+        }
+
+        if (id == R.id.myProfile) {
+            if (pref.getInt("UserId", 0) == 0) {
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this, ViewUserProfile.class);
+                startActivity(intent);
+            }
         }
 
         if (id == R.id.createGroup) {

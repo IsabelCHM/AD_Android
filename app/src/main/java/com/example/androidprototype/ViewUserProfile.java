@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +34,12 @@ import retrofit2.Response;
 
 public class ViewUserProfile extends AppCompatActivity {
 
-    EditText etUserId;
-    Button btGetUserProfile;
+    Button btnlogout;
     TextView tvUserProfileHeader;
     TextView tvNoOfRecipe;
     TextView tvNoOfGroup;
     int userId;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,32 +49,37 @@ public class ViewUserProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
-        etUserId = findViewById(R.id.etGetUserProfileId);
-        btGetUserProfile = findViewById(R.id.btnGetUserProfile);
+        pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        userId = getIntent().getIntExtra("userId", 0);
+
         tvUserProfileHeader = findViewById(R.id.tvUserProfileHeader);
         tvNoOfRecipe = findViewById(R.id.tvNoOfRecipes);
         tvNoOfGroup = findViewById(R.id.tvNoOfGroup);
+        btnlogout = findViewById(R.id.btnlogout);
 
-        userId = getIntent().getIntExtra("userId", 0);
+        if (userId == 0) {
+            userId = pref.getInt("UserId", 0);
+        }
         if (userId != 0) {
             display(userId);
-            etUserId.setVisibility(View.GONE);
-            btGetUserProfile.setVisibility(View.GONE);
         }
-
-        btGetUserProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userId = Integer.parseInt(etUserId.getText().toString());
-                display(userId);
-            }
-        });
 
         tvNoOfGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ListGroupActivity.class);
                 intent.putExtra("userId", userId);
+                startActivity(intent);
+            }
+        });
+
+        btnlogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear();
+                editor.commit();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -156,5 +162,4 @@ public class ViewUserProfile extends AppCompatActivity {
             });
         }
     }
-
 }
