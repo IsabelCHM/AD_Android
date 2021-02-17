@@ -3,14 +3,20 @@ package com.example.androidprototype.service;
 import com.example.androidprototype.model.Group;
 import com.example.androidprototype.model.GroupList;
 import com.example.androidprototype.model.Recipe;
+import com.example.androidprototype.model.RecipeIngredients;
+import com.example.androidprototype.model.RecipeIngredientsJson;
 import com.example.androidprototype.model.RecipeJson;
 import com.example.androidprototype.model.RecipeList;
+import com.example.androidprototype.model.RecipePlusTags;
+import com.example.androidprototype.model.RecipeTagList;
 import com.example.androidprototype.model.SavedRecipe;
 import com.example.androidprototype.model.SavedRecipeJson;
+import com.example.androidprototype.model.TagList;
 import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.model.UserGroupList;
+import com.example.androidprototype.model.UserJson;
 import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.model.groupUserJson;
 
@@ -41,20 +47,26 @@ public interface APIService {
     //Call<Recipe> saveRecipe(@Body Recipe recipe);
     Call<ResponseBody> saveRecipe(@Body RecipeJson recipeJson);
 
+    @POST("api/mRecipe/create")
+    Call<ResponseBody> createRecipe(@Body RecipePlusTags recipePlusTags);
+
     @DELETE("api/mRecipe/delete/{id}")
     Call<booleanJson> deleteRecipe(@Path("id") int recipeId);
 
     @GET("/api/mUser/{id}")
     Call<User> getUser(@Path("id") int userId);
 
+    @POST("api/mUser/validateuser")
+    Call<User> validateUser(@Body UserJson userjson);
+
     @GET("/api/mUserGroup/UserId/{id}")
     Call<UserGroupList> getUserGroupList(@Path("id") int userId);
 
     @POST("api/mUserGroup/")
-    Call<ResponseBody> joinGroup(@Body UserGroup usergroup);
+    Call<booleanJson> joinGroup(@Body UserGroup usergroup);
 
     @POST("api/mRecipe/update/{id}")
-    Call<booleanJson> updateRecipe(@Body Recipe recipe, @Path("id") int recipeId);
+    Call<booleanJson> updateRecipe(@Body RecipeJson recipeJson, @Path("id") int recipeId);
 
     @GET("/api/mUser/userallergen/{id}")
     Call<UserAllergenList> getUserAllergenList(@Path("id") int userId);
@@ -68,8 +80,8 @@ public interface APIService {
     @GET("/api/mRecipe/search/{search}")
     Call<RecipeList> searchRecipes(@Path("search") String search);
 
-    @GET("/api/mGroup/{id}")
-    Call<Group> getGroup(@Path("id") int groupId);
+    @POST("/api/mGroup/getGroup")
+    Call<Group> getGroup(@Body UserGroup ug);
 
     @GET("/api/mGroup/recipeGroups/{id}")
     Call<GroupList> postRecipeToGroups(@Path("id") int id);
@@ -82,4 +94,10 @@ public interface APIService {
 
     @POST("api/mGroup/addRtoG/{id}")
     Call<ResponseBody> postRecipe(@Path("id") int id, @Body ArrayList<Group> groups);
+
+    @GET("api/mGroup/getall")
+    Call<GroupList> getAllGroups();
+
+    @POST("api/mRecipe/generateATags")
+    Call<RecipeTagList> generateATags(@Body List<RecipeIngredientsJson> ingredients);
 }

@@ -11,9 +11,13 @@ public class User<T> {
     @Expose
     private String $id;
 
-    @SerializedName("id")
+    @SerializedName("userId")
     @Expose
     private int id;
+
+    @SerializedName("id")
+    @Expose
+    private int idJson;
 
     @SerializedName("firstName")
     @Expose
@@ -166,5 +170,13 @@ public class User<T> {
 
     public void setSavedRecipeList(SavedRecipeList savedRecipeList) {
         this.savedRecipeList = savedRecipeList;
+    }
+
+    public void setIdJson(int idJson) {
+        this.idJson = idJson;
+    }
+
+    public int getIdJson() {
+        return idJson;
     }
 }

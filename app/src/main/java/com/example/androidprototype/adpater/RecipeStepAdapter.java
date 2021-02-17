@@ -1,8 +1,14 @@
 package com.example.androidprototype.adpater;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +20,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidprototype.R;
-import com.example.androidprototype.model.RecipeSteps;
+import com.example.androidprototype.model.RecipeIngredientsJson;
 import com.example.androidprototype.model.RecipeStepsJson;
+import com.example.androidprototype.service.DownloadImageTask;
+import com.example.androidprototype.service.ListItemClickListener;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,26 +34,62 @@ import java.util.List;
 public class RecipeStepAdapter extends
         RecyclerView.Adapter<RecipeStepAdapter.ViewHolder> {
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    final private ListItemClickListener mOnClickListener;
+    private int selectedPos = -1;
+
+    RecipeStepsJson mRecentlyDeletedItem;
+    int mRecentlyDeletedItemPos;
+
+    private ArrayList<RecipeStepsJson> recipeStepsList;
+    private ArrayList<Bitmap> stepImg;
+
+    private Bitmap result;
+    private int imgPos;
+
+    public void deleteItem(int position) {
+        mRecentlyDeletedItem = recipeStepsList.get(position);
+        mRecentlyDeletedItemPos = position;
+        recipeStepsList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView recipeStep;
-        public ImageView stepImg;
+        public ImageView stepImgView;
         public EditText stepInstruction;
 
         public ViewHolder(View itemView) {
             super(itemView);
             recipeStep = (TextView) itemView.findViewById(R.id.recipeStep);
-            stepImg = (ImageView) itemView.findViewById(R.id.stepImg);
+            stepImgView = (ImageView) itemView.findViewById(R.id.stepImg);
             stepInstruction = (EditText) itemView.findViewById(R.id.stepInstruction);
 
-            InstructionTextWather instructionTextWather = new InstructionTextWather(stepInstruction);
-            stepInstruction.addTextChangedListener(instructionTextWather);
+            InstructionTextWatcher instructionTextWatcher = new InstructionTextWatcher(stepInstruction);
+            stepInstruction.addTextChangedListener(instructionTextWatcher);
+
+            stepImgView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            selectedPos = getAdapterPosition();
+            mOnClickListener.onListItemClick(selectedPos);
         }
     }
 
-    private ArrayList<RecipeStepsJson> recipeStepsList;
 
-    public RecipeStepAdapter(ArrayList<RecipeStepsJson> recipeStepsList) {
+
+    public RecipeStepAdapter(ListItemClickListener onClickListener, ArrayList<RecipeStepsJson> recipeStepsList) {
         this.recipeStepsList = recipeStepsList;
+        this.mOnClickListener = onClickListener;
+        this.stepImg = new ArrayList<>();
+
+        for (int i = 0; i < recipeStepsList.size(); i++) {
+            stepImg.add(null);
+        }
+
+        imgPos = recipeStepsList.size()-1;
     }
 
     @NonNull
@@ -59,18 +104,65 @@ public class RecipeStepAdapter extends
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(recipeStepView);
         return viewHolder;
+
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecipeStepAdapter.ViewHolder holder, int position) {
+        holder.stepImgView.setTag(position);
+        holder.stepInstruction.setTag(position);
+
         RecipeStepsJson recipeSteps = recipeStepsList.get(position);
 
         TextView textView = holder.recipeStep;
         textView.setText("Step " + String.valueOf(recipeSteps.getStepNumber()));
 
-        holder.stepImg.setTag(position);
-        holder.stepInstruction.setTag(position);
 
+        if (!recipeSteps.isChanged()) {
+            if (recipeSteps.getMediaFileUrl() != null) {
+                new GetBitmap(holder.stepImgView)
+                        .execute(recipeSteps.getMediaFileUrl());
+                holder.stepInstruction.setText(recipeSteps.getTextInstructions());
+            }
+
+            recipeSteps.setChanged(true);
+        }
+
+        holder.stepImgView.setImageBitmap(stepImg.get(position));
+    }
+
+
+
+    private class GetBitmap extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public GetBitmap(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            //  return the bitmap by doInBackground and store in result
+            result = bitmap;
+            stepImg.set(imgPos, result);
+            bmImage.setImageBitmap(result);
+            imgPos -= 1;
+        }
     }
 
     @Override
@@ -80,16 +172,25 @@ public class RecipeStepAdapter extends
 
     public void addStep(RecipeStepsJson newRecipeStep) {
         recipeStepsList.add(newRecipeStep);
+        stepImg.add(null);
         notifyItemInserted(recipeStepsList.size()-1);
+    }
+
+    public void setStepImg(Bitmap img, int position) {
+        stepImg.set(position, img);
+    }
+
+    public void setStepImgUrl(String imgUrl, int position) {
+        recipeStepsList.get(position).setMediaFileUrl(imgUrl);
     }
 
     public List<RecipeStepsJson> getRecipeStepsList() { return recipeStepsList; }
 
-    class InstructionTextWather implements TextWatcher {
+    class InstructionTextWatcher implements TextWatcher {
 
         private EditText editText;
 
-        public InstructionTextWather(EditText editText) { this.editText = editText; }
+        public InstructionTextWatcher(EditText editText) { this.editText = editText; }
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -100,7 +201,12 @@ public class RecipeStepAdapter extends
         @Override
         public void afterTextChanged(Editable s) {
             int position = (int) editText.getTag();
-            recipeStepsList.get(position).setTextInstructions(s.toString());
+            if (!s.toString().trim().equals("")) {
+                recipeStepsList.get(position).setTextInstructions(s.toString());
+            }
+
         }
     }
+
+
 }

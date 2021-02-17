@@ -16,7 +16,8 @@
     <ImageView
         android:id="@+id/stepImg"
         android:layout_width="match_parent"
-        android:layout_height="265dp" />
+        android:layout_height="265dp"
+        android:src="@drawable/placeholder"/>
 
     <EditText
         android:id="@+id/stepInstruction"

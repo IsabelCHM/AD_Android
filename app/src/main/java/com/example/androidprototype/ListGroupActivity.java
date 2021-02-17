@@ -1,14 +1,17 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +47,18 @@ public class ListGroupActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_group);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+
+        // for user to view groups that other users have joined
         userId = getIntent().getIntExtra("userId", 0);
+
+        // display the groups that the logged in user has joined
+        if (userId == 0) {
+            SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+            userId = pref.getInt("UserId", 0);
+        }
+
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
@@ -70,12 +84,9 @@ public class ListGroupActivity extends AppCompatActivity
             }
         });
 
-        if (userId != 0) {
-            getUserGroup(userId);
-        }
-        else {
-            Intent intent = getIntent();
-            String search = intent.getAction();
+        Intent intent = getIntent();
+        String search = intent.getAction();
+        if (search != null) {
             if (search.equals("SEARCH")) {
 
                 String query = intent.getStringExtra("query");
@@ -115,24 +126,27 @@ public class ListGroupActivity extends AppCompatActivity
                         Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
-            }
-            else {
-                getUserGroup(userId);
             }
         }
 
+        else if (userId != 0) {
+            getUserGroup(userId);
+        }
+        else {
+            getGroups();
+        }
 
-        Button test = findViewById(R.id.test);
-        test.setOnClickListener(this);
+        /*Button test = findViewById(R.id.test);
+        test.setOnClickListener(this);*/
 
-        Button home = findViewById(R.id.refreshHome);
+        ImageButton home = findViewById(R.id.refreshHome);
         home.setOnClickListener(this);
 
-        Button groups = findViewById(R.id.groups);
+        ImageButton groups = findViewById(R.id.groups);
         groups.setOnClickListener(this);
+
+        ImageButton myProfile = findViewById(R.id.myProfile);
+        myProfile.setOnClickListener(this);
 
         Button cG = findViewById(R.id.createGroup);
         cG.setOnClickListener(this);
@@ -143,10 +157,10 @@ public class ListGroupActivity extends AppCompatActivity
 
         int id = view.getId();
 
-        if (id == R.id.test) {
+        /*if (id == R.id.test) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         if (id == R.id.refreshHome) {
             Intent intent = new Intent(this, HomeActivity.class);
@@ -161,16 +175,21 @@ public class ListGroupActivity extends AppCompatActivity
         }
 
         if (id == R.id.createGroup) {
-            Intent intent = new Intent(this, CreateGroupActivity.class);
-            startActivity(intent);
+            SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+            if (pref.getInt("UserId", 0) != 0) {
+                Intent intent = new Intent(this, CreateGroupActivity.class);
+                startActivity(intent);
+            }
+            else {
+                Toast.makeText(this, "Need to login to create groups", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
         }
 
     }
 
     public void getUserGroup(int userId) {
-        if (userId == 0) {
-            userId = 1; // change to intent for login when login is done
-        }
         Call<User> call = service.getUser(userId);
 
         call.enqueue(new Callback<User>() {
@@ -202,6 +221,38 @@ public class ListGroupActivity extends AppCompatActivity
             public void onFailure(Call<User> call, Throwable t) {
                 System.out.println(t.getMessage());
                 Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getGroups() {
+        Call<GroupList> call = service.getAllGroups();
+        call.enqueue(new Callback<GroupList>() {
+            @Override
+            public void onResponse(Call<GroupList> call, Response<GroupList> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<Group> ug = response.body().getGrouplist();
+                    if (ug.size() > 0) {
+
+                        // binding adpater and layout manager with steps recyclerview
+                        rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
+                        groupAdapter = new GroupAdapter(ug, ListGroupActivity.this);
+
+                        rvGroup.setAdapter(groupAdapter);
+                        LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
+                        lym_rs.setStackFromEnd(false);
+                        rvGroup.setLayoutManager(lym_rs);
+                        rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Not able to show group. Please try again later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GroupList> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Not able to show group. Please try again later", Toast.LENGTH_LONG).show();
             }
         });
     }

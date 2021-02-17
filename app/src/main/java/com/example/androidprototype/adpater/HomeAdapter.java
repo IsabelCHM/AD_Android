@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidprototype.CreateRecipe;
 import com.example.androidprototype.HomeActivity;
+import com.example.androidprototype.Login;
 import com.example.androidprototype.R;
 import com.example.androidprototype.RetrofitClient;
 import com.example.androidprototype.ViewRecipe;
@@ -77,10 +79,10 @@ public class HomeAdapter extends
             saveRecipe.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // need to change after login in done. Might be able to remove if user passed in.
                     if (user == null) {
-//                        Intent intent = new Intent(context, login.class);
-//                        context.startActivity(intent);
+                        Toast.makeText(context, "Need to login before saving a recipe", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(context, Login.class);
+                        context.startActivity(intent);
                     }
                     else {
                         int i = getAdapterPosition();
@@ -202,7 +204,7 @@ public class HomeAdapter extends
     public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
 
         holder.getTitle().setText(recipeList.get(position).getTitle());
-        // Need to change this part when login is done
+
         if (user != null) {
             String loggedInUsername = user.getUsername();
             if (loggedInUsername.equalsIgnoreCase(recipeList.get(position).getUser().getUsername())) {
@@ -220,8 +222,28 @@ public class HomeAdapter extends
             }
         }
         holder.getAuthor().setText("By " + recipeList.get(position).getUser().getUsername());
-        holder.getDuration().setText(Integer.toString(recipeList.get(position).getDurationInMins())
-                                    + "mins");
+        //holder.getDuration().setText(Integer.toString(recipeList.get(position).getDurationInMins()) + "mins");
+
+        int durationFlag = recipeList.get(position).getDurationInMins();
+
+        switch (durationFlag) {
+            case 1:
+                holder.getDuration().setText("15mins");
+                break;
+            case 2:
+                holder.getDuration().setText("15 ~ 30mins");
+                break;
+            case 3:
+                holder.getDuration().setText("30 ~ 60mins");
+                break;
+            case 4:
+                holder.getDuration().setText("> 60mins");
+                break;
+            default:
+                holder.getDuration().setText(Integer.toString(recipeList.get(position).getDurationInMins()) + "mins");
+                break;
+        }
+
         holder.getCalories().setText(Integer.toString(recipeList.get(position).getCalories()) + " kcal");
 
         new DownloadImageTask((ImageView) holder.getMainMedia())
@@ -230,24 +252,29 @@ public class HomeAdapter extends
         String warnings = "";
         String tags = "";
         List<RecipeTag> retag = recipeList.get(position).getRecipeTags().getRecipeTags();
-        for (RecipeTag r : retag)
-        {
-            tags += "#" + r.getTagXXId().getTagName() + "\t";
-
-            if (r.getAllergenTag())
+        if (retag != null && !retag.isEmpty()) {
+            for (RecipeTag r : retag)
             {
-                warnings += r.getTagXXId().getWarning();
+                if (r.getTagXXId() != null) {
+                    tags += "#" + r.getTagXXId().getTagName() + "\t";
+
+                    if (r.getAllergenTag())
+                    {
+                        warnings += r.getTagXXId().getWarning();
+                    }
+                }
+            }
+            holder.getTags().setText(tags);
+
+            if (!warnings.isEmpty())
+            {
+                holder.getAllergens().setText("May cause " + warnings);
+            }
+            else {
+                holder.getAllergens().setText(warnings);
             }
         }
-        holder.getTags().setText(tags);
 
-        if (!warnings.isEmpty())
-        {
-            holder.getAllergens().setText("May cause " + warnings);
-        }
-        else {
-            holder.getAllergens().setText(warnings);
-        }
 
     }
 

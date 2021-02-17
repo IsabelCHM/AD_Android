@@ -16,8 +16,11 @@ public class RecipeStepsJson {
     @Expose
     private String mediaFileUrl;
 
+    private boolean isChanged;
+
     public RecipeStepsJson() {
         super();
+        this.isChanged = false;
     }
 
     public int getStepNumber() {
@@ -42,5 +45,13 @@ public class RecipeStepsJson {
 
     public void setMediaFileUrl(String mediaFileUrl) {
         this.mediaFileUrl = mediaFileUrl;
+    }
+
+    public boolean isChanged() {
+        return isChanged;
+    }
+
+    public void setChanged(boolean changed) {
+        isChanged = changed;
     }
 }

@@ -14,6 +14,10 @@ public class RecipeJson {
     //@SerializedName("recipeId")
     //private int id;
 
+    @SerializedName("userId")
+    @Expose
+    private String userId;
+
     @SerializedName("title")
     @Expose
     private String title;
@@ -55,7 +59,7 @@ public class RecipeJson {
 
     @SerializedName("recipeTags")
     @Expose
-    private RecipeTagList recipeTags;
+    private List<RecipeTagJson> recipeTags;
 
     @SerializedName("comments")
     @Expose
@@ -67,6 +71,14 @@ public class RecipeJson {
 
     public RecipeJson() {
         super();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getTitle() {
@@ -149,11 +161,11 @@ public class RecipeJson {
         this.recipeStepsList = recipeStepsList;
     }
 
-    public RecipeTagList getRecipeTags() {
+    public List<RecipeTagJson> getRecipeTags() {
         return recipeTags;
     }
 
-    public void setRecipeTags(RecipeTagList recipeTags) {
+    public void setRecipeTags(List<RecipeTagJson> recipeTags) {
         this.recipeTags = recipeTags;
     }
 
@@ -171,5 +183,13 @@ public class RecipeJson {
 
     public void setLikesDislikes(LikesDislikesList likesDislikes) {
         this.likesDislikes = likesDislikes;
+    }
+
+    public RecipeJson(String title, String description, int duration, int calories, int servingSize) {
+        this.title = title;
+        this.description = description;
+        this.durationInMins = duration;
+        this.calories = calories;
+        this.servingSize = servingSize;
     }
 }

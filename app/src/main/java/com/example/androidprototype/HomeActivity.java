@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidprototype.model.Recipe;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -34,29 +37,38 @@ public class HomeActivity extends AppCompatActivity
     private HomeAdapter homeAdapter;
     private ArrayList<Recipe> recipeList;
     private User user;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
-        // Need to change after login is done. Cheating here with username
-        Call<User> call1 = service.getUser(1);
-        call1.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    user = response.body();
-                }
-            }
+        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        int userId = pref.getInt("UserId", 0);
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                System.out.println("Fail to get user. redirect to login");
-            }
-        });
+        if (userId != 0) {
+            Call<User> call1 = service.getUser(userId);
+            call1.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        user = response.body();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    System.out.println("Fail to get user. redirect to login");
+                }
+            });
+        }
+
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
         simpleSearchView.setIconifiedByDefault(true);
@@ -100,6 +112,9 @@ public class HomeActivity extends AppCompatActivity
                     RecipeList recipes = response.body();
                     if (recipes != null) {
                         recipeList = recipes.getRecipelist();
+                    }
+                    if (recipeList.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "No recipe Found", Toast.LENGTH_LONG).show();
                     }
 
 
@@ -162,14 +177,17 @@ public class HomeActivity extends AppCompatActivity
         FloatingActionButton fab = findViewById(R.id.fabCreate);
         fab.setOnClickListener(this);
 
-        Button test = findViewById(R.id.test);
-        test.setOnClickListener(this);
+        /*Button test = findViewById(R.id.test);
+        test.setOnClickListener(this);*/
 
-        Button home = findViewById(R.id.refreshHome);
+        ImageButton home = findViewById(R.id.refreshHome);
         home.setOnClickListener(this);
 
-        Button groups = findViewById(R.id.groups);
+        ImageButton groups = findViewById(R.id.groups);
         groups.setOnClickListener(this);
+
+        ImageButton myProfile = findViewById(R.id.myProfile);
+        myProfile.setOnClickListener(this);
     }
 
     @Override
@@ -177,14 +195,23 @@ public class HomeActivity extends AppCompatActivity
 
         int id = view.getId();
         if (id == R.id.fabCreate){
-            Intent intent = new Intent(this, CreateRecipe.class);
-            startActivity(intent);
+            if (user == null) {
+                Toast.makeText(this, "Need to login to create a recipe", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this, CreateRecipe.class);
+                intent.setAction("CREATE_RECIPE");
+                intent.putExtra("userId", userId);
+                startActivity(intent);
+            }
         }
 
-        if (id == R.id.test) {
+        /*if (id == R.id.test) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         if (id == R.id.refreshHome) {
             Intent intent = new Intent(this, HomeActivity.class);

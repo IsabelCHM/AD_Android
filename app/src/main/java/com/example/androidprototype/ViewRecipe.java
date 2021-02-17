@@ -1,12 +1,15 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -42,25 +45,38 @@ public class ViewRecipe extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+
         // Need to change after user login is done
-        userId = 1;
+        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        userId = pref.getInt("UserId", 0);
 
         Intent intent = getIntent();
-        int recipeId = intent.getIntExtra("RecipeId",1);
+        int recipeId = intent.getIntExtra("RecipeId",0);
         rId = recipeId;
 
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<Recipe> call = service.getRecipe(recipeId);
 
-        Button back = findViewById(R.id.back);
+        /*Button back = findViewById(R.id.back);*/
         Button edit = findViewById(R.id.edit);
         Button postToGrp = findViewById(R.id.post2Grp);
         Button delete = findViewById(R.id.btnDeleteRecipe);
 
-        back.setOnClickListener(this);
+        /*back.setOnClickListener(this);*/
         edit.setOnClickListener(this);
         postToGrp.setOnClickListener(this);
         delete.setOnClickListener(this);
+
+        ImageButton home = findViewById(R.id.refreshHome);
+        home.setOnClickListener(this);
+
+        ImageButton groups = findViewById(R.id.groups);
+        groups.setOnClickListener(this);
+
+        ImageButton myProfile = findViewById(R.id.myProfile);
+        myProfile.setOnClickListener(this);
 
         call.enqueue(new Callback<Recipe>() {
             @Override
@@ -73,12 +89,36 @@ public class ViewRecipe extends AppCompatActivity
                 TextView user = findViewById(R.id.recipeUser);
                 TextView warning = findViewById(R.id.recipeWarning);
                 TextView tag = findViewById(R.id.recipeTags);
+                TextView duration = findViewById(R.id.recipeDuration);
+
+                if (recipe.getUserId() != userId)
+                {
+                    postToGrp.setVisibility(View.GONE);
+                }
 
                 name.setText(recipe.getTitle());
                 description.setText(recipe.getDescription());
                 calories.setText(Integer.toString(recipe.getCalories()) + " kcal");
                 datecreated.setText("Created on " + recipe.getDateCreated().toString());
                 user.setText("By " + recipe.getUser().getUsername());
+
+                int durationFlag = recipe.getDurationInMins();
+                switch (durationFlag) {
+                    case 1:
+                        duration.setText("15mins");
+                        break;
+                    case 2:
+                        duration.setText("15 ~ 30mins");
+                        break;
+                    case 3:
+                        duration.setText("30 ~ 60mins");
+                        break;
+                    case 4:
+                        duration.setText("> 60mins");
+                        break;
+                    default:
+                        duration.setText(Integer.toString(durationFlag));
+                }
 
                 new DownloadImageTask((ImageView) findViewById(R.id.recipeImage))
                         .execute(recipe.getMainMediaUrl());
@@ -155,14 +195,16 @@ public class ViewRecipe extends AppCompatActivity
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.back) {
+        /*if (id == R.id.back) {
             Intent intent = new Intent(this, HomeActivity.class);
             intent.setAction("nil");
             startActivity(intent);
-        }
+        }*/
 
         if (id == R.id.edit) {
-            Intent intent = new Intent(this, EditRecipe.class);
+            Intent intent = new Intent(this, CreateRecipe.class);
+            intent.setAction("EDIT_RECIPE");
+            intent.putExtra("RecipeId", rId);
             startActivity(intent);
         }
 
@@ -178,6 +220,17 @@ public class ViewRecipe extends AppCompatActivity
             if (userId == recipeCreatedByUserId) {
                 deleteRecipe(recipeId);
             }
+        }
+        if (id == R.id.refreshHome) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction("REFRESH");
+            startActivity(intent);
+        }
+
+        if (id == R.id.groups) {
+            Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.setAction("view");
+            startActivity(intent);
         }
     }
 
@@ -212,15 +265,15 @@ public class ViewRecipe extends AppCompatActivity
 
     }
 
-    public void deleteRecipe(int userId) {
-        Call<booleanJson> call = service.deleteRecipe(userId);
+    public void deleteRecipe(int recipeId) {
+        Call<booleanJson> call = service.deleteRecipe(recipeId);
 
         call.enqueue(new Callback<booleanJson>() {
             @Override
             public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
                 if (response.isSuccessful()) {
                     Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
-                    intent.putExtra("userId", 1); // change when user login is done
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
                 }
             }
