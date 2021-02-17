@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
         SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
-        userId = pref.getInt("UserId", 0);
+        int userId = pref.getInt("UserId", 0);
 
         if (userId != 0) {
             Call<User> call1 = service.getUser(userId);
@@ -112,6 +112,9 @@ public class HomeActivity extends AppCompatActivity
                     RecipeList recipes = response.body();
                     if (recipes != null) {
                         recipeList = recipes.getRecipelist();
+                    }
+                    if (recipeList.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "No recipe Found", Toast.LENGTH_LONG).show();
                     }
 
 

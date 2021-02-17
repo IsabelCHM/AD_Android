@@ -50,7 +50,15 @@ public class ListGroupActivity extends AppCompatActivity
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
+        // for user to view groups that other users have joined
         userId = getIntent().getIntExtra("userId", 0);
+
+        // display the groups that the logged in user has joined
+        if (userId == 0) {
+            SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+            userId = pref.getInt("UserId", 0);
+        }
+
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
@@ -76,12 +84,9 @@ public class ListGroupActivity extends AppCompatActivity
             }
         });
 
-        if (userId != 0) {
-            getUserGroup(userId);
-        }
-        else {
-            Intent intent = getIntent();
-            String search = intent.getAction();
+        Intent intent = getIntent();
+        String search = intent.getAction();
+        if (search != null) {
             if (search.equals("SEARCH")) {
 
                 String query = intent.getStringExtra("query");
@@ -121,15 +126,15 @@ public class ListGroupActivity extends AppCompatActivity
                         Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-
-            }
-            else {
-                getGroups();
             }
         }
 
+        else if (userId != 0) {
+            getUserGroup(userId);
+        }
+        else {
+            getGroups();
+        }
 
         /*Button test = findViewById(R.id.test);
         test.setOnClickListener(this);*/
@@ -185,9 +190,6 @@ public class ListGroupActivity extends AppCompatActivity
     }
 
     public void getUserGroup(int userId) {
-//        if (userId == 0) {
-//            userId = 1; // change to intent for login when login is done
-//        }
         Call<User> call = service.getUser(userId);
 
         call.enqueue(new Callback<User>() {

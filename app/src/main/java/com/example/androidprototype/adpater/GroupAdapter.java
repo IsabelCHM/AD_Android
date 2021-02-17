@@ -121,7 +121,10 @@ public class GroupAdapter extends
         Group group = groupList.get(position);
         holder.getGroupName().setText(group.getGroupName());
         holder.getGroupDesc().setText(group.getDescription());
-        holder.getCreatedOn().setText("Created on " + group.getDateCreated().toString());
+        if (group.getDateCreated() != null) {
+            holder.getCreatedOn().setText("Created on " + group.getDateCreated().toString());
+        }
+//        holder.getCreatedOn().setText("Created on " + group.getDateCreated().toString());
         new DownloadImageTask((ImageView) holder.getMainMedia())
                 .execute(group.getGroupPhoto());
 
