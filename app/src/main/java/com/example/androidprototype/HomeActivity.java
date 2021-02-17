@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidprototype.model.Recipe;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,8 +48,9 @@ public class HomeActivity extends AppCompatActivity
 
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
-        // Need to change after login is done. Cheating here with username
-        Call<User> call1 = service.getUser(1);
+        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        int userId = pref.getInt("UserId", 0);
+        Call<User> call1 = service.getUser(userId);
         call1.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -185,8 +187,16 @@ public class HomeActivity extends AppCompatActivity
 
         int id = view.getId();
         if (id == R.id.fabCreate){
-            Intent intent = new Intent(this, CreateRecipe.class);
-            startActivity(intent);
+            if (user == null) {
+                Toast.makeText(this, "Need to login to create a recipe", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this, CreateRecipe.class);
+                intent.setAction("CREATE_RECIPE");
+                startActivity(intent);
+            }
         }
 
         /*if (id == R.id.test) {

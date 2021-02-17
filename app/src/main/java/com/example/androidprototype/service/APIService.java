@@ -15,6 +15,7 @@ import com.example.androidprototype.model.User;
 import com.example.androidprototype.model.UserAllergenList;
 import com.example.androidprototype.model.UserGroup;
 import com.example.androidprototype.model.UserGroupList;
+import com.example.androidprototype.model.UserJson;
 import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.model.groupUserJson;
 
@@ -51,6 +52,9 @@ public interface APIService {
     @GET("/api/mUser/{id}")
     Call<User> getUser(@Path("id") int userId);
 
+    @POST("api/mUser/validateuser")
+    Call<User> validateUser(@Body UserJson userjson);
+
     @GET("/api/mUserGroup/UserId/{id}")
     Call<UserGroupList> getUserGroupList(@Path("id") int userId);
 
@@ -58,7 +62,7 @@ public interface APIService {
     Call<booleanJson> joinGroup(@Body UserGroup usergroup);
 
     @POST("api/mRecipe/update/{id}")
-    Call<booleanJson> updateRecipe(@Body Recipe recipe, @Path("id") int recipeId);
+    Call<booleanJson> updateRecipe(@Body RecipeJson recipeJson, @Path("id") int recipeId);
 
     @GET("/api/mUser/userallergen/{id}")
     Call<UserAllergenList> getUserAllergenList(@Path("id") int userId);
@@ -86,6 +90,9 @@ public interface APIService {
 
     @POST("api/mGroup/addRtoG/{id}")
     Call<ResponseBody> postRecipe(@Path("id") int id, @Body ArrayList<Group> groups);
+
+    @GET("api/mGroup/getall")
+    Call<GroupList> getAllGroups();
 
     @POST("api/mRecipe/generateATags")
     Call<RecipeTagList> generateATags(@Body List<RecipeIngredientsJson> ingredients);

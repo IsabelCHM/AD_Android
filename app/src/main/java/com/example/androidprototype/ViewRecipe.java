@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +49,11 @@ public class ViewRecipe extends AppCompatActivity
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
         // Need to change after user login is done
-        userId = 1;
+        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        userId = pref.getInt("UserId", 0);
 
         Intent intent = getIntent();
-        int recipeId = intent.getIntExtra("RecipeId",1);
+        int recipeId = intent.getIntExtra("RecipeId",0);
         rId = recipeId;
 
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
@@ -87,6 +89,7 @@ public class ViewRecipe extends AppCompatActivity
                 TextView user = findViewById(R.id.recipeUser);
                 TextView warning = findViewById(R.id.recipeWarning);
                 TextView tag = findViewById(R.id.recipeTags);
+                TextView duration = findViewById(R.id.recipeDuration);
 
                 if (recipe.getUserId() != userId)
                 {
@@ -98,6 +101,24 @@ public class ViewRecipe extends AppCompatActivity
                 calories.setText(Integer.toString(recipe.getCalories()) + " kcal");
                 datecreated.setText("Created on " + recipe.getDateCreated().toString());
                 user.setText("By " + recipe.getUser().getUsername());
+
+                int durationFlag = recipe.getDurationInMins();
+                switch (durationFlag) {
+                    case 1:
+                        duration.setText("15mins");
+                        break;
+                    case 2:
+                        duration.setText("15 ~ 30mins");
+                        break;
+                    case 3:
+                        duration.setText("30 ~ 60mins");
+                        break;
+                    case 4:
+                        duration.setText("> 60mins");
+                        break;
+                    default:
+                        duration.setText(Integer.toString(durationFlag));
+                }
 
                 new DownloadImageTask((ImageView) findViewById(R.id.recipeImage))
                         .execute(recipe.getMainMediaUrl());
@@ -181,7 +202,9 @@ public class ViewRecipe extends AppCompatActivity
         }*/
 
         if (id == R.id.edit) {
-            Intent intent = new Intent(this, EditRecipe.class);
+            Intent intent = new Intent(this, CreateRecipe.class);
+            intent.setAction("EDIT_RECIPE");
+            intent.putExtra("RecipeId", rId);
             startActivity(intent);
         }
 
@@ -242,15 +265,15 @@ public class ViewRecipe extends AppCompatActivity
 
     }
 
-    public void deleteRecipe(int userId) {
-        Call<booleanJson> call = service.deleteRecipe(userId);
+    public void deleteRecipe(int recipeId) {
+        Call<booleanJson> call = service.deleteRecipe(recipeId);
 
         call.enqueue(new Callback<booleanJson>() {
             @Override
             public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
                 if (response.isSuccessful()) {
                     Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
-                    intent.putExtra("userId", 1); // change when user login is done
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
                 }
             }

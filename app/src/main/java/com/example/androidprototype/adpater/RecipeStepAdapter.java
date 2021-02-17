@@ -17,7 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidprototype.R;
+import com.example.androidprototype.model.RecipeIngredientsJson;
 import com.example.androidprototype.model.RecipeStepsJson;
+import com.example.androidprototype.service.DownloadImageTask;
 import com.example.androidprototype.service.ListItemClickListener;
 
 import java.util.ArrayList;
@@ -31,24 +33,35 @@ public class RecipeStepAdapter extends
     final private ListItemClickListener mOnClickListener;
     private int selectedPos = -1;
 
+    RecipeStepsJson mRecentlyDeletedItem;
+    int mRecentlyDeletedItemPos;
+
     private ArrayList<RecipeStepsJson> recipeStepsList;
     private ArrayList<Bitmap> stepImg;
 
+    public void deleteItem(int position) {
+        mRecentlyDeletedItem = recipeStepsList.get(position);
+        mRecentlyDeletedItemPos = position;
+        recipeStepsList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView recipeStep;
-        public ImageView stepImg;
+        public ImageView stepImgView;
         public EditText stepInstruction;
 
         public ViewHolder(View itemView) {
             super(itemView);
             recipeStep = (TextView) itemView.findViewById(R.id.recipeStep);
-            stepImg = (ImageView) itemView.findViewById(R.id.stepImg);
+            stepImgView = (ImageView) itemView.findViewById(R.id.stepImg);
             stepInstruction = (EditText) itemView.findViewById(R.id.stepInstruction);
 
             InstructionTextWatcher instructionTextWatcher = new InstructionTextWatcher(stepInstruction);
             stepInstruction.addTextChangedListener(instructionTextWatcher);
 
-            stepImg.setOnClickListener(this);
+            stepImgView.setOnClickListener(this);
         }
 
         @Override
@@ -88,10 +101,16 @@ public class RecipeStepAdapter extends
         TextView textView = holder.recipeStep;
         textView.setText("Step " + String.valueOf(recipeSteps.getStepNumber()));
 
-        holder.stepImg.setTag(position);
+        holder.stepImgView.setTag(position);
         holder.stepInstruction.setTag(position);
 
-        holder.stepImg.setImageBitmap(stepImg.get(position));
+        if (position < stepImg.size()) {
+            holder.stepImgView.setImageBitmap(stepImg.get(position));
+        }
+
+        new DownloadImageTask(holder.stepImgView)
+                .execute(recipeSteps.getMediaFileUrl());
+        holder.stepInstruction.setText(recipeSteps.getTextInstructions());
 
     }
 
@@ -131,7 +150,10 @@ public class RecipeStepAdapter extends
         @Override
         public void afterTextChanged(Editable s) {
             int position = (int) editText.getTag();
-            recipeStepsList.get(position).setTextInstructions(s.toString());
+            if (!s.toString().trim().equals("")) {
+                recipeStepsList.get(position).setTextInstructions(s.toString());
+            }
+
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -125,7 +126,7 @@ public class ListGroupActivity extends AppCompatActivity
 
             }
             else {
-                getUserGroup(userId);
+                getGroups();
             }
         }
 
@@ -169,16 +170,24 @@ public class ListGroupActivity extends AppCompatActivity
         }
 
         if (id == R.id.createGroup) {
-            Intent intent = new Intent(this, CreateGroupActivity.class);
-            startActivity(intent);
+            SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+            if (pref.getInt("UserId", 0) != 0) {
+                Intent intent = new Intent(this, CreateGroupActivity.class);
+                startActivity(intent);
+            }
+            else {
+                Toast.makeText(this, "Need to login to create groups", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
         }
 
     }
 
     public void getUserGroup(int userId) {
-        if (userId == 0) {
-            userId = 1; // change to intent for login when login is done
-        }
+//        if (userId == 0) {
+//            userId = 1; // change to intent for login when login is done
+//        }
         Call<User> call = service.getUser(userId);
 
         call.enqueue(new Callback<User>() {
@@ -210,6 +219,38 @@ public class ListGroupActivity extends AppCompatActivity
             public void onFailure(Call<User> call, Throwable t) {
                 System.out.println(t.getMessage());
                 Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getGroups() {
+        Call<GroupList> call = service.getAllGroups();
+        call.enqueue(new Callback<GroupList>() {
+            @Override
+            public void onResponse(Call<GroupList> call, Response<GroupList> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<Group> ug = response.body().getGrouplist();
+                    if (ug.size() > 0) {
+
+                        // binding adpater and layout manager with steps recyclerview
+                        rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
+                        groupAdapter = new GroupAdapter(ug, ListGroupActivity.this);
+
+                        rvGroup.setAdapter(groupAdapter);
+                        LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
+                        lym_rs.setStackFromEnd(false);
+                        rvGroup.setLayoutManager(lym_rs);
+                        rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
+                    }
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Not able to show group. Please try again later", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GroupList> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Not able to show group. Please try again later", Toast.LENGTH_LONG).show();
             }
         });
     }
