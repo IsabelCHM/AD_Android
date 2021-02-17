@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,9 @@ public class ListGroupActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_group);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
 
         userId = getIntent().getIntExtra("userId", 0);
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
@@ -125,14 +130,17 @@ public class ListGroupActivity extends AppCompatActivity
         }
 
 
-        Button test = findViewById(R.id.test);
-        test.setOnClickListener(this);
+        /*Button test = findViewById(R.id.test);
+        test.setOnClickListener(this);*/
 
-        Button home = findViewById(R.id.refreshHome);
+        ImageButton home = findViewById(R.id.refreshHome);
         home.setOnClickListener(this);
 
-        Button groups = findViewById(R.id.groups);
+        ImageButton groups = findViewById(R.id.groups);
         groups.setOnClickListener(this);
+
+        ImageButton myProfile = findViewById(R.id.myProfile);
+        myProfile.setOnClickListener(this);
 
         Button cG = findViewById(R.id.createGroup);
         cG.setOnClickListener(this);
@@ -143,10 +151,10 @@ public class ListGroupActivity extends AppCompatActivity
 
         int id = view.getId();
 
-        if (id == R.id.test) {
+        /*if (id == R.id.test) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         if (id == R.id.refreshHome) {
             Intent intent = new Intent(this, HomeActivity.class);

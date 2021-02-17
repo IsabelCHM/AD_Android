@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -42,6 +44,9 @@ public class ViewRecipe extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+
         // Need to change after user login is done
         userId = 1;
 
@@ -52,15 +57,24 @@ public class ViewRecipe extends AppCompatActivity
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<Recipe> call = service.getRecipe(recipeId);
 
-        Button back = findViewById(R.id.back);
+        /*Button back = findViewById(R.id.back);*/
         Button edit = findViewById(R.id.edit);
         Button postToGrp = findViewById(R.id.post2Grp);
         Button delete = findViewById(R.id.btnDeleteRecipe);
 
-        back.setOnClickListener(this);
+        /*back.setOnClickListener(this);*/
         edit.setOnClickListener(this);
         postToGrp.setOnClickListener(this);
         delete.setOnClickListener(this);
+
+        ImageButton home = findViewById(R.id.refreshHome);
+        home.setOnClickListener(this);
+
+        ImageButton groups = findViewById(R.id.groups);
+        groups.setOnClickListener(this);
+
+        ImageButton myProfile = findViewById(R.id.myProfile);
+        myProfile.setOnClickListener(this);
 
         call.enqueue(new Callback<Recipe>() {
             @Override
@@ -160,11 +174,11 @@ public class ViewRecipe extends AppCompatActivity
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.back) {
+        /*if (id == R.id.back) {
             Intent intent = new Intent(this, HomeActivity.class);
             intent.setAction("nil");
             startActivity(intent);
-        }
+        }*/
 
         if (id == R.id.edit) {
             Intent intent = new Intent(this, EditRecipe.class);
@@ -183,6 +197,17 @@ public class ViewRecipe extends AppCompatActivity
             if (userId == recipeCreatedByUserId) {
                 deleteRecipe(recipeId);
             }
+        }
+        if (id == R.id.refreshHome) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction("REFRESH");
+            startActivity(intent);
+        }
+
+        if (id == R.id.groups) {
+            Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.setAction("view");
+            startActivity(intent);
         }
     }
 
