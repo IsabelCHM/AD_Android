@@ -3,6 +3,7 @@ package com.example.androidprototype;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -104,8 +105,11 @@ public class CreateGroupActivity extends AppCompatActivity
 
         String tags = tagsET.getText().toString();
 
+        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        int userId = pref.getInt("UserId", 0);
+
         User u = new User();
-        u.setId(1);
+        u.setIdJson(userId);
 
         Call<Group> call = service.saveGroup(new groupUserJson(u, newGroup, tags));
         call.enqueue(new Callback<Group>() {

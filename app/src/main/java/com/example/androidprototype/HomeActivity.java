@@ -45,20 +45,24 @@ public class HomeActivity extends AppCompatActivity
 
         SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
         int userId = pref.getInt("UserId", 0);
-        Call<User> call1 = service.getUser(userId);
-        call1.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    user = response.body();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                System.out.println("Fail to get user. redirect to login");
-            }
-        });
+        if (userId != 0) {
+            Call<User> call1 = service.getUser(userId);
+            call1.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        user = response.body();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    System.out.println("Fail to get user. redirect to login");
+                }
+            });
+        }
+
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
         simpleSearchView.setIconifiedByDefault(true);
@@ -102,6 +106,9 @@ public class HomeActivity extends AppCompatActivity
                     RecipeList recipes = response.body();
                     if (recipes != null) {
                         recipeList = recipes.getRecipelist();
+                    }
+                    if (recipeList.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "No recipe Found", Toast.LENGTH_LONG).show();
                     }
 
 
