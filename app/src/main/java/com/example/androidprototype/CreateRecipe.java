@@ -412,6 +412,7 @@ public class CreateRecipe extends AppCompatActivity
             if (!tag.isEmpty() && tag != null) {
                 TagJson tagJson = new TagJson();
                 tagJson.setTagName(tag);
+                tagJson.setWarning(tag);
                 RecipeTagJson recipeTagJson = new RecipeTagJson();
                 recipeTagJson.setTagXXId(tagJson);
                 recipeTagsList.add(recipeTagJson);
