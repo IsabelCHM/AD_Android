@@ -83,7 +83,7 @@ public class Login extends AppCompatActivity {
                         editor.putInt("UserId", response.body().getId());
                         editor.commit();
 
-                        goToMain();
+                        finish();
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG);
@@ -96,10 +96,5 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG);
             }
         });
-    }
-
-    public void goToMain() {
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(intent);
     }
 }
