@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -43,6 +45,9 @@ public class ViewUserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_profile);
 
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+
         etUserId = findViewById(R.id.etGetUserProfileId);
         btGetUserProfile = findViewById(R.id.btnGetUserProfile);
         tvUserProfileHeader = findViewById(R.id.tvUserProfileHeader);
@@ -70,6 +75,34 @@ public class ViewUserProfile extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ListGroupActivity.class);
                 intent.putExtra("userId", userId);
                 startActivity(intent);
+            }
+        });
+
+        ImageButton home = findViewById(R.id.refreshHome);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ViewUserProfile.this, HomeActivity.class);
+                intent.setAction("REFRESH");
+                startActivity(intent);
+            }
+        });
+
+        ImageButton groups = findViewById(R.id.groups);
+        groups.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ViewUserProfile.this, ListGroupActivity.class);
+                intent.setAction("view");
+                startActivity(intent);
+            }
+        });
+
+        ImageButton myProfile = findViewById(R.id.myProfile);
+        myProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
@@ -123,4 +156,5 @@ public class ViewUserProfile extends AppCompatActivity {
             });
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,9 @@ public class PostRecipeToGroupActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_recipe_to_group);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
 
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Intent intent = getIntent();
@@ -79,6 +84,15 @@ public class PostRecipeToGroupActivity extends AppCompatActivity
         Button submit = findViewById(R.id.postSubmit);
         submit.setOnClickListener(this);
 
+        ImageButton home = findViewById(R.id.refreshHome);
+        home.setOnClickListener(this);
+
+        ImageButton groups = findViewById(R.id.groups);
+        groups.setOnClickListener(this);
+
+        ImageButton myProfile = findViewById(R.id.myProfile);
+        myProfile.setOnClickListener(this);
+
     }
 
     @Override
@@ -117,6 +131,17 @@ public class PostRecipeToGroupActivity extends AppCompatActivity
 
             Intent intent = new Intent(this, ListGroupActivity.class);
             intent.setAction("nil");
+            startActivity(intent);
+        }
+        if (id == R.id.refreshHome) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setAction("REFRESH");
+            startActivity(intent);
+        }
+
+        if (id == R.id.groups) {
+            Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.setAction("view");
             startActivity(intent);
         }
 
