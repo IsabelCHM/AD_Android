@@ -3,9 +3,12 @@ package com.example.androidprototype.adpater;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import com.example.androidprototype.model.RecipeStepsJson;
 import com.example.androidprototype.service.DownloadImageTask;
 import com.example.androidprototype.service.ListItemClickListener;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +42,9 @@ public class RecipeStepAdapter extends
 
     private ArrayList<RecipeStepsJson> recipeStepsList;
     private ArrayList<Bitmap> stepImg;
+
+    private Bitmap result;
+    private int imgPos;
 
     public void deleteItem(int position) {
         mRecentlyDeletedItem = recipeStepsList.get(position);
@@ -77,7 +84,12 @@ public class RecipeStepAdapter extends
         this.recipeStepsList = recipeStepsList;
         this.mOnClickListener = onClickListener;
         this.stepImg = new ArrayList<>();
-        stepImg.add(null);
+
+        for (int i = 0; i < recipeStepsList.size(); i++) {
+            stepImg.add(null);
+        }
+
+        imgPos = recipeStepsList.size()-1;
     }
 
     @NonNull
@@ -92,26 +104,65 @@ public class RecipeStepAdapter extends
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(recipeStepView);
         return viewHolder;
+
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecipeStepAdapter.ViewHolder holder, int position) {
+        holder.stepImgView.setTag(position);
+        holder.stepInstruction.setTag(position);
+
         RecipeStepsJson recipeSteps = recipeStepsList.get(position);
 
         TextView textView = holder.recipeStep;
         textView.setText("Step " + String.valueOf(recipeSteps.getStepNumber()));
 
-        holder.stepImgView.setTag(position);
-        holder.stepInstruction.setTag(position);
 
-        if (position < stepImg.size()) {
-            holder.stepImgView.setImageBitmap(stepImg.get(position));
+        if (!recipeSteps.isChanged()) {
+            if (recipeSteps.getMediaFileUrl() != null) {
+                new GetBitmap(holder.stepImgView)
+                        .execute(recipeSteps.getMediaFileUrl());
+                holder.stepInstruction.setText(recipeSteps.getTextInstructions());
+            }
+
+            recipeSteps.setChanged(true);
         }
 
-        new DownloadImageTask(holder.stepImgView)
-                .execute(recipeSteps.getMediaFileUrl());
-        holder.stepInstruction.setText(recipeSteps.getTextInstructions());
+        holder.stepImgView.setImageBitmap(stepImg.get(position));
+    }
 
+
+
+    private class GetBitmap extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public GetBitmap(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            //  return the bitmap by doInBackground and store in result
+            result = bitmap;
+            stepImg.set(imgPos, result);
+            bmImage.setImageBitmap(result);
+            imgPos -= 1;
+        }
     }
 
     @Override

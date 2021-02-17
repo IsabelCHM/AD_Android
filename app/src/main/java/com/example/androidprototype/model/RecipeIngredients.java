@@ -17,11 +17,11 @@ public class RecipeIngredients {
     @Expose
     private String ingredient;
 
-    @SerializedName("Quantity")
+    @SerializedName("quantity")
     @Expose
     private double quantity;
 
-    @SerializedName("UnitOfMeasurement")
+    @SerializedName("unitOfMeasurement")
     @Expose
     private String unitOfMeasurement;
 

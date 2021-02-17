@@ -7,6 +7,7 @@ import com.example.androidprototype.model.RecipeIngredients;
 import com.example.androidprototype.model.RecipeIngredientsJson;
 import com.example.androidprototype.model.RecipeJson;
 import com.example.androidprototype.model.RecipeList;
+import com.example.androidprototype.model.RecipePlusTags;
 import com.example.androidprototype.model.RecipeTagList;
 import com.example.androidprototype.model.SavedRecipe;
 import com.example.androidprototype.model.SavedRecipeJson;
@@ -45,6 +46,9 @@ public interface APIService {
     @POST("api/mRecipe/")
     //Call<Recipe> saveRecipe(@Body Recipe recipe);
     Call<ResponseBody> saveRecipe(@Body RecipeJson recipeJson);
+
+    @POST("api/mRecipe/create")
+    Call<ResponseBody> createRecipe(@Body RecipePlusTags recipePlusTags);
 
     @DELETE("api/mRecipe/delete/{id}")
     Call<booleanJson> deleteRecipe(@Path("id") int recipeId);
