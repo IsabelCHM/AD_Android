@@ -26,7 +26,7 @@
             android:layout_weight="3"
             android:layout_height="100dp"
             android:orientation="vertical"
-            android:background="#F8F0E5">
+            android:background="#e8e8e8">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,10 +59,12 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/joinGroup"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/joinGroup"
         android:text="Join Group"
+        android:background="#734B5E"
         app:layout_constraintTop_toBottomOf="@id/groupDetails"></Button>
 
     <TextView
@@ -81,40 +83,54 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/joinGroup"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:paddingBottom="?attr/actionBarSize"/>
+        android:paddingBottom="80dp"
+        />
 
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F8F0E5"
+        android:background="#734B5E"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/bottomNav">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="home"
+        <ImageButton
             android:id="@+id/refreshHome"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"></Button>
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/home"
+            ></ImageButton>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test"
-            android:id="@+id/test"></Button>
+        <!--<Button
+            android:id="@+id/test"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="test"></Button>-->
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="groups"
-            android:id="@+id/groups"></Button>
+        <ImageButton
+            android:id="@+id/groups"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/groups"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/myProfile"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/myprofile"></ImageButton>
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -26,6 +27,9 @@ public class CreateRecipeZ extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe_z);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
 
         final EditText titleET = (EditText) findViewById(R.id.recipeTitle);
         final EditText desET = (EditText) findViewById(R.id.description);

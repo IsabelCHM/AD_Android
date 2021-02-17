@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -37,6 +38,9 @@ public class EditRecipeZ extends AppCompatActivity
         setContentView(R.layout.activity_edit_recipe_z);
 
         RecipeId = getIntent().getIntExtra("recipeId", 0);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
 
         apiService = RetrofitClient.getRetrofitInstance().create(APIService.class);
         // hard coded recipe Id, need to change later

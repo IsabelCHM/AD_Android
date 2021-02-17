@@ -1,5 +1,6 @@
 package com.example.androidprototype;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -20,6 +21,9 @@ public class ViewUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
 
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<User> call = service.getUser(1);
