@@ -236,6 +236,18 @@ public class CreateRecipe extends AppCompatActivity
                     caloriesET.setText(Integer.toString(recipe.getCalories()));
                     servingSizeET.setText(Integer.toString(recipe.getServingSize()));
 
+                    List<RecipeTag> recipeTagList = recipe.getRecipeTags().getRecipeTags();
+                    String recipeTags = "";
+                    if (!recipeTagList.isEmpty() && recipeTagList != null) {
+                        for (RecipeTag recipeTag : recipeTagList) {
+                            if (!recipeTag.getAllergenTag()) {
+                                recipeTags = recipeTags + "#" + recipeTag.getTagXXId().getTagName() + " ";
+                            }
+                        }
+                    }
+
+                    tagET.setText(recipeTags);
+
                     setAdapter();
 
                 }
