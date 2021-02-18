@@ -51,12 +51,13 @@ public class ListGroupActivity extends AppCompatActivity
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
+        pref = getSharedPreferences("user_info", MODE_PRIVATE);
+
         // for user to view groups that other users have joined
         userId = getIntent().getIntExtra("userId", 0);
 
         // display the groups that the logged in user has joined
         if (userId == 0) {
-            pref = getSharedPreferences("user_info", MODE_PRIVATE);
             userId = pref.getInt("UserId", 0);
         }
 
