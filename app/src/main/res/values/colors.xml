@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="purple_test">#B78EC6</color>
     <color name="checked">#ed6464</color>
+    <color name="theme_color">#734B5E</color>
 </resources>
