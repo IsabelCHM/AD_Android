@@ -66,6 +66,9 @@ public class ViewUserProfile extends AppCompatActivity {
         }
         if (userId != 0) {
             display(userId);
+            if (getIntent().getIntExtra("userId", 0) != 0) {
+                btnlogout.setVisibility(View.GONE);
+            }
         }
 
         tvNoOfGroup.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +115,14 @@ public class ViewUserProfile extends AppCompatActivity {
         myProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (pref.getInt("UserId", 0) == 0) {
+                    Intent intent = new Intent(getApplicationContext(), Login.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
+                    startActivity(intent);
+                }
             }
         });
     }
