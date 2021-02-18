@@ -44,7 +44,9 @@ public class ViewUserProfile extends AppCompatActivity {
     TextView tvNoOfGroup;
     int userId;
     SharedPreferences pref;
+
     User loggedinu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,32 @@ public class ViewUserProfile extends AppCompatActivity {
 
         pref = getSharedPreferences("user_info", MODE_PRIVATE);
         userId = getIntent().getIntExtra("userId", 0);
+        int userIdd = pref.getInt("UserId",0);
+
+        //apiService = RetrofitClient.getRetrofitInstance().create(APIService.class);
+
+        /*Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+
+        thread.start();*/
+
+        //Call<User> call = apiService.getUser(pref.getInt("UserId", 0));
+        //call.enqueue(new Callback<User>() {
+        //    @Override
+        //    public void onResponse(Call<User> call, Response<User> response) {
+        //        user = response.body();
+        //    }
+
+       //     @Override
+       //     public void onFailure(Call<User> call, Throwable t) {
+
+      //      }
+       // });
+
 
         int userIdAcc = pref.getInt("UserId", 0);
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
@@ -179,7 +207,9 @@ public class ViewUserProfile extends AppCompatActivity {
 
     public void displayRecipe(ArrayList<Recipe> recipeList) {
 
+
         HomeAdapter homeAdapter = new HomeAdapter(recipeList, ViewUserProfile.this, loggedinu);
+
 
         //RecipeUserProfileAdaptor adaptor = new RecipeUserProfileAdaptor(ViewUserProfile.this, 0);
         //adaptor.setData(recipeList);
