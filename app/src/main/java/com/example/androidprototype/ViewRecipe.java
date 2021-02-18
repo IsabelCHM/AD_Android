@@ -124,7 +124,7 @@ public class ViewRecipe extends AppCompatActivity
                         duration.setText("> 60mins");
                         break;
                     default:
-                        duration.setText(Integer.toString(durationFlag));
+                        duration.setText(Integer.toString(durationFlag) + "mins");
                 }
 
                 new DownloadImageTask((ImageView) findViewById(R.id.recipeImage))

@@ -128,9 +128,9 @@ public class ViewUserProfile extends AppCompatActivity {
                     String userName = response.body().getUsername();
                     int noOfRecipes = response.body().getRecipes().getRecipelist().size();
                     int noOfGroup = response.body().getGroups().getUsergrouplist().size();
-                    tvUserProfileHeader.setText(userName);
-                    tvNoOfRecipe.setText("Recipes created: " + Integer.toString(noOfRecipes));
-                    tvNoOfGroup.setText("Groups Joined: " + Integer.toString(noOfGroup));
+                    tvUserProfileHeader.setText(userName + "'s profile");
+                    tvNoOfRecipe.setText("Recipes: " + Integer.toString(noOfRecipes));
+                    tvNoOfGroup.setText("Groups: " + Integer.toString(noOfGroup));
 
                     ArrayList<Recipe> recipeList = response.body().getRecipes().getRecipelist();
 

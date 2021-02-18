@@ -16,7 +16,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="7dp">
 
         <TextView
             android:layout_width="0dp"
@@ -37,6 +38,15 @@
                 android:id="@+id/createGroup"
                 android:text="Create Group"
                 android:layout_marginRight="10dp"
+                android:background="@drawable/login_button"
+                android:layout_marginTop="5dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:textSize="15dp"
+                android:textAllCaps="false"
+                android:minHeight="0dp"
+                android:height="35dp"
+
                 ></Button>
 
         </LinearLayout>
@@ -80,13 +90,23 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btnShowAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Show all groups"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@drawable/login_button"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="15dp"
+            android:textAllCaps="false"
+            android:minHeight="0dp"
+            android:height="35dp"/>
+
     </LinearLayout>
 
     <LinearLayout
