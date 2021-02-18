@@ -60,6 +60,9 @@ public class ViewGroupActivity extends AppCompatActivity
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
+        jG = findViewById(R.id.joinGroup);
+        jG.setOnClickListener(this);
+
         pref = getSharedPreferences("user_info", MODE_PRIVATE);
         int userId = pref.getInt("UserId", 0);
 
@@ -92,8 +95,7 @@ public class ViewGroupActivity extends AppCompatActivity
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         Call<Group> call = service.getGroup(ug);
 
-        jG = findViewById(R.id.joinGroup);
-        jG.setOnClickListener(this);
+
 
         call.enqueue(new Callback<Group>() {
             @Override
