@@ -65,6 +65,7 @@ public class CreateGroupActivity extends AppCompatActivity
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class CreateGroupActivity extends AppCompatActivity
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
+        pref = getSharedPreferences("user_info", MODE_PRIVATE);
         //titleET = (EditText) findViewById(R.id.recipeTitle);
 
         // Retrofit Service
@@ -125,8 +127,20 @@ public class CreateGroupActivity extends AppCompatActivity
 
         if (id == R.id.groups) {
             Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.putExtra("userId", pref.getInt("UserId", 0));
             intent.setAction("view");
             startActivity(intent);
+        }
+
+        if (id == R.id.myProfile) {
+            if (pref.getInt("UserId", 0) == 0) {
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this, ViewUserProfile.class);
+                startActivity(intent);
+            }
         }
 
         if (id == R.id.cGrpSubmit) {
@@ -151,7 +165,6 @@ public class CreateGroupActivity extends AppCompatActivity
 
         String tags = tagsET.getText().toString();
 
-        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
         int userId = pref.getInt("UserId", 0);
 
         User u = new User();
