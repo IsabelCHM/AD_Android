@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity
     private ArrayList<Recipe> recipeList;
     private User user;
     private int userId;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,8 @@ public class HomeActivity extends AppCompatActivity
 
         APIService service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
-        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
-        int userId = pref.getInt("UserId", 0);
+        pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        userId = pref.getInt("UserId", 0);
 
         if (userId != 0) {
             Call<User> call1 = service.getUser(userId);
@@ -95,7 +96,7 @@ public class HomeActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         String search = intent.getAction();
-        if (search.equals("SEARCH"))
+        if (search != null && search.equals("SEARCH"))
         {
             //do something
             String query = intent.getStringExtra("query");
@@ -221,10 +222,20 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.groups) {
             Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.putExtra("userId", pref.getInt("UserId", 0));
             intent.setAction("view");
             startActivity(intent);
         }
 
-
+        if (id == R.id.myProfile) {
+            if (pref.getInt("UserId", 0) == 0) {
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this, ViewUserProfile.class);
+                startActivity(intent);
+            }
+        }
     }
 }

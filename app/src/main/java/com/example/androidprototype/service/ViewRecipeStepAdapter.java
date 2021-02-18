@@ -21,6 +21,7 @@ public class ViewRecipeStepAdapter extends ArrayAdapter {
 
     private final Context context;
     private List<RecipeSteps> steps;
+    private ImageView stepmedia;
 
     public ViewRecipeStepAdapter(@NonNull Context context, int resource) {
         super(context, resource);
@@ -45,11 +46,21 @@ public class ViewRecipeStepAdapter extends ArrayAdapter {
         }
 
         TextView textView = view.findViewById(R.id.steptxt);
+        ImageView imageView = view.findViewById(R.id.stepmedia);
         textView.setText("Step " + Integer.toString(steps.get(pos).getStepNumber()) + ": "
                         + steps.get(pos).getTextInstructions());
 
-        new DownloadImageTask((ImageView) view.findViewById(R.id.stepmedia))
-                .execute(steps.get(pos).getMediaFileUrl());
+
+        String image_url = steps.get(pos).getMediaFileUrl();
+        if (image_url != null) {
+            new DownloadImageTask((ImageView) view.findViewById(R.id.stepmedia))
+                    .execute(steps.get(pos).getMediaFileUrl());
+        }
+        else {
+            ImageView iv = view.findViewById(R.id.stepmedia);
+            iv.setImageResource(R.drawable.placeholder);
+        }
+
 
         return view;
     }
