@@ -404,7 +404,7 @@ public class CreateRecipe extends AppCompatActivity
                             {
                                 if (r.getAllergenTag())
                                 {
-                                    warnings += r.getTagXXId().getWarning();
+                                    warnings += r.getTagXXId().getWarning() + " ";
                                 }
                             }
                             if (!warnings.isEmpty())
