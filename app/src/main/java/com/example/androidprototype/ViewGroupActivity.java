@@ -198,5 +198,16 @@ public class ViewGroupActivity extends AppCompatActivity
             intent.setAction("view");
             startActivity(intent);
         }
+
+        if (id == R.id.myProfile) {
+            if (pref.getInt("UserId", 0) == 0) {
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this, ViewUserProfile.class);
+                startActivity(intent);
+            }
+        }
     }
 }

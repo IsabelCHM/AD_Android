@@ -392,6 +392,8 @@ public class CreateRecipe extends AppCompatActivity
                             }
 
                             System.out.println("Reached back");
+
+                            combineAllergens();
                         }
                     }
 
@@ -433,6 +435,23 @@ public class CreateRecipe extends AppCompatActivity
         //recipe.setRecipeTags(recipeTagsList);
     }
 
+    private void combineAllergens()
+    {
+        if (tags != null)
+        {
+            for (RecipeTag rt : tags)
+            {
+                TagJson tj = new TagJson();
+                tj.setTagName(rt.getTagXXId().getTagName());
+                tj.setWarning(rt.getTagXXId().getWarning());
+
+                RecipeTagJson rtj = new RecipeTagJson();
+                rtj.setTagXXId(tj);
+                rtj.setAllergenTag(true);
+                recipeTagsList.add(rtj);
+            }
+        }
+    }
     private void selectCoverImg() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, SELECT_COVER_PHOTO);
