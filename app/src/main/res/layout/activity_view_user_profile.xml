@@ -6,53 +6,94 @@
     android:layout_height="match_parent"
     tools:context=".ViewUserProfile">
 
-
-
-
-
     <TextView
         android:id="@+id/tvUserProfileHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:gravity="center"
+        android:gravity="center_vertical"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnlogout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="20dp"/>
 
     <Button
         android:id="@+id/btnlogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="logout"
-        app:layout_constraintTop_toBottomOf="@id/tvUserProfileHeader"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_button"
+        android:minHeight="0dp"
+        android:height="35dp"
+        android:textAllCaps="false"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/btnlogout"
+        app:layout_constraintTop_toBottomOf="@id/tvUserProfileHeader"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp">
 
-        <TextView
-            android:id="@+id/tvNoOfRecipes"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:gravity="center"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center">
 
-        <TextView
-            android:id="@+id/tvNoOfGroup"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_recipe"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tvNoOfRecipes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:gravity="center"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center|center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_group"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tvNoOfGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"/>
+
+        </LinearLayout>
+
+
+
 
     </LinearLayout>
 
