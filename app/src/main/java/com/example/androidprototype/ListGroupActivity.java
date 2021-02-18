@@ -42,6 +42,9 @@ public class ListGroupActivity extends AppCompatActivity
     private int userId; // get from intent when coming in from userprofile
     private APIService service;
     private SharedPreferences pref;
+    private Button btnShowAll;
+    private String username;
+    private TextView tvMg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,10 @@ public class ListGroupActivity extends AppCompatActivity
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
+        service = RetrofitClient.getRetrofitInstance().create(APIService.class);
         pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        btnShowAll = findViewById(R.id.btnShowAll);
+        tvMg = findViewById(R.id.mG);
 
         // for user to view groups that other users have joined
         userId = getIntent().getIntExtra("userId", 0);
@@ -60,8 +66,6 @@ public class ListGroupActivity extends AppCompatActivity
         if (userId == 0) {
             userId = pref.getInt("UserId", 0);
         }
-
-        service = RetrofitClient.getRetrofitInstance().create(APIService.class);
 
         SearchView simpleSearchView = (SearchView) findViewById(R.id.simpleSearchView);
         simpleSearchView.setIconifiedByDefault(true);
@@ -96,8 +100,9 @@ public class ListGroupActivity extends AppCompatActivity
 
                 Call<GroupList> call = service.searchGroups(query);
 
-                TextView mG = findViewById(R.id.mG);
-                mG.setText("Results");
+                if (tvMg != null) {
+                    tvMg.setText("Results");
+                }
 
                 call.enqueue(new Callback<GroupList>() {
 
@@ -131,6 +136,10 @@ public class ListGroupActivity extends AppCompatActivity
             }
         }
 
+        else if (getIntent().getAction() == "showAll") {
+            getGroups();
+        }
+
         else if (userId != 0) {
             getUserGroup(userId);
         }
@@ -152,6 +161,8 @@ public class ListGroupActivity extends AppCompatActivity
 
         Button cG = findViewById(R.id.createGroup);
         cG.setOnClickListener(this);
+
+        btnShowAll.setOnClickListener(this);
     }
 
     @Override
@@ -201,33 +212,44 @@ public class ListGroupActivity extends AppCompatActivity
             }
         }
 
+        if (id == R.id.btnShowAll) {
+            Intent intent = new Intent(this, ListGroupActivity.class);
+            intent.setAction("showAll");
+            startActivity(intent);
+        }
+
     }
 
     public void getUserGroup(int userId) {
         Call<User> call = service.getUser(userId);
-
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                User user = response.body();
+                if (response.isSuccessful()) {
+                    User user = response.body();
+                    username = user.getUsername();
 
-                List<UserGroup> ug = user.getGroups().getUsergrouplist();
-                if (ug.size() > 0) {
-                    myGroups = new ArrayList<>();
+                    List<UserGroup> ug = user.getGroups().getUsergrouplist();
+                    if (ug.size() > 0) {
+                        myGroups = new ArrayList<>();
 
-                    for (UserGroup u : ug) {
-                        myGroups.add(u.getGroup());
+                        for (UserGroup u : ug) {
+                            myGroups.add(u.getGroup());
+                        }
+
+                        // binding adpater and layout manager with steps recyclerview
+                        rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
+                        groupAdapter = new GroupAdapter(myGroups, ListGroupActivity.this);
+
+                        rvGroup.setAdapter(groupAdapter);
+                        LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
+                        lym_rs.setStackFromEnd(false);
+                        rvGroup.setLayoutManager(lym_rs);
+                        rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
                     }
-
-                    // binding adpater and layout manager with steps recyclerview
-                    rvGroup = (RecyclerView) findViewById(R.id.GroupRecycler);
-                    groupAdapter = new GroupAdapter(myGroups, ListGroupActivity.this);
-
-                    rvGroup.setAdapter(groupAdapter);
-                    LinearLayoutManager lym_rs = new LinearLayoutManager(ListGroupActivity.this);
-                    lym_rs.setStackFromEnd(false);
-                    rvGroup.setLayoutManager(lym_rs);
-                    rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
+                   if (tvMg != null) {
+                       tvMg.setText(username + "'s Groups");
+                   }
                 }
             }
 
@@ -237,6 +259,7 @@ public class ListGroupActivity extends AppCompatActivity
                 Toast.makeText(ListGroupActivity.this, "No groups to show", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     public void getGroups() {
@@ -257,6 +280,14 @@ public class ListGroupActivity extends AppCompatActivity
                         lym_rs.setStackFromEnd(false);
                         rvGroup.setLayoutManager(lym_rs);
                         rvGroup.addItemDecoration(new DividerItemDecoration(ListGroupActivity.this, DividerItemDecoration.VERTICAL));
+
+                        if (btnShowAll != null) {
+                            btnShowAll.setVisibility(View.GONE);
+                        }
+
+                        if (tvMg != null ) {
+                            tvMg.setText("All Groups");
+                        }
                     }
                 }
                 else {
