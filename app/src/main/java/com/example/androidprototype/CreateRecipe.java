@@ -101,6 +101,7 @@ public class CreateRecipe extends AppCompatActivity
     private EditText caloriesET;
     private EditText tagET;
     private TextView allergenWarnings;
+    private TextView coverText;
 
     private APIService service;
     private ImgService imgService;
@@ -139,6 +140,7 @@ public class CreateRecipe extends AppCompatActivity
         durationET = (EditText) findViewById(R.id.duration);
         tagET = (EditText) findViewById(R.id.recipeTag);
         allergenWarnings = (TextView) findViewById(R.id.allergens);
+        coverText = (TextView) findViewById(R.id.coverText);
 
         mins15 = (Button) findViewById(R.id.mins15);
         mins15_30 = (Button) findViewById(R.id.mins15_30);
@@ -480,6 +482,7 @@ public class CreateRecipe extends AppCompatActivity
             if (requestCode == SELECT_COVER_PHOTO) {
                 //thumbnail = getResizedBitmap(thumbnail, 400);
                 recipeCover.setImageBitmap(thumbnail);
+                coverText.setText(" ");
                 //String encodedImg = BitMapToString(thumbnail);
                 if (imgToUpload != null) {
                     Thread bkgdThread = new Thread(new Runnable() {
@@ -579,19 +582,19 @@ public class CreateRecipe extends AppCompatActivity
         switch (durationFlag) {
             case R.id.mins15:
                 //mins15.setBackgroundColor(R.color.purple_test);
-                mins15.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins15.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
             case R.id.mins15_30:
                 //mins15_30.setBackgroundColor(R.color.purple_test);
-                mins15_30.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins15_30.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
             case R.id.mins30_60:
                 //mins30_60.setBackgroundColor(R.color.purple_test);
-                mins30_60.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins30_60.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
             case R.id.mins60plus:
                 //mins60Plus.setBackgroundColor(R.color.purple_test);
-                mins60Plus.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins60Plus.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
         }
     }

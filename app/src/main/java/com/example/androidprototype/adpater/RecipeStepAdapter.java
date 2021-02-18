@@ -25,6 +25,8 @@ import com.example.androidprototype.model.RecipeStepsJson;
 import com.example.androidprototype.service.DownloadImageTask;
 import com.example.androidprototype.service.ListItemClickListener;
 
+import org.w3c.dom.Text;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +68,14 @@ public class RecipeStepAdapter extends
         public TextView recipeStep;
         public ImageView stepImgView;
         public EditText stepInstruction;
+        public TextView stepText;
 
         public ViewHolder(View itemView) {
             super(itemView);
             recipeStep = (TextView) itemView.findViewById(R.id.recipeStep);
             stepImgView = (ImageView) itemView.findViewById(R.id.stepImg);
             stepInstruction = (EditText) itemView.findViewById(R.id.stepInstruction);
+            stepText = (TextView) itemView.findViewById(R.id.stepText);
 
             InstructionTextWatcher instructionTextWatcher = new InstructionTextWatcher(stepInstruction);
             stepInstruction.addTextChangedListener(instructionTextWatcher);
@@ -83,6 +87,7 @@ public class RecipeStepAdapter extends
         public void onClick(View v) {
             selectedPos = getAdapterPosition();
             mOnClickListener.onListItemClick(selectedPos);
+            stepText.setText(" ");
         }
     }
 
@@ -193,6 +198,7 @@ public class RecipeStepAdapter extends
 
     public void setStepImgUrl(String imgUrl, int position) {
         recipeStepsList.get(position).setMediaFileUrl(imgUrl);
+
     }
 
     public List<RecipeStepsJson> getRecipeStepsList() { return recipeStepsList; }
