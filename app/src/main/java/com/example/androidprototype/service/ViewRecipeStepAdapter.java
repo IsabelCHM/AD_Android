@@ -48,8 +48,15 @@ public class ViewRecipeStepAdapter extends ArrayAdapter {
         textView.setText("Step " + Integer.toString(steps.get(pos).getStepNumber()) + ": "
                         + steps.get(pos).getTextInstructions());
 
-        new DownloadImageTask((ImageView) view.findViewById(R.id.stepmedia))
-                .execute(steps.get(pos).getMediaFileUrl());
+        String image_url = steps.get(pos).getMediaFileUrl();
+        if (image_url != null) {
+            new DownloadImageTask((ImageView) view.findViewById(R.id.stepmedia))
+                    .execute(steps.get(pos).getMediaFileUrl());
+        }
+        else {
+            ImageView iv = view.findViewById(R.id.stepmedia);
+            iv.setImageResource(R.drawable.placeholder);
+        }
 
         return view;
     }

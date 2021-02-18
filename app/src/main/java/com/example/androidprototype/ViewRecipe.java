@@ -2,6 +2,9 @@ package com.example.androidprototype;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androidprototype.adpater.GroupAdapter;
+import com.example.androidprototype.adpater.StepsAdapter;
 import com.example.androidprototype.model.Recipe;
 import com.example.androidprototype.model.booleanJson;
 import com.example.androidprototype.service.APIService;
@@ -39,6 +44,7 @@ public class ViewRecipe extends AppCompatActivity
     private Recipe recipe;
     private APIService service;
     private int userId;
+    private RecyclerView rvSteps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +66,9 @@ public class ViewRecipe extends AppCompatActivity
         Call<Recipe> call = service.getRecipe(recipeId);
 
         /*Button back = findViewById(R.id.back);*/
-        Button edit = findViewById(R.id.edit);
+        ImageButton edit = findViewById(R.id.edit);
         Button postToGrp = findViewById(R.id.post2Grp);
-        Button delete = findViewById(R.id.btnDeleteRecipe);
+        ImageButton delete = findViewById(R.id.btnDeleteRecipe);
 
         /*back.setOnClickListener(this);*/
         edit.setOnClickListener(this);
@@ -167,7 +173,7 @@ public class ViewRecipe extends AppCompatActivity
 
                 if (steps != null)
                 {
-                    ViewRecipeStepAdapter adapter1 = new ViewRecipeStepAdapter(ViewRecipe.this, 0);
+                    /*ViewRecipeStepAdapter adapter1 = new ViewRecipeStepAdapter(ViewRecipe.this, 0);
                     adapter1.setData(steps);
 
                     ListView steplist = findViewById(R.id.stepList);
@@ -175,7 +181,16 @@ public class ViewRecipe extends AppCompatActivity
                     {
                         steplist.setAdapter(adapter1);
                         setListViewHeightBasedOnChildren(steplist);
-                    }
+                    }*/
+
+                    rvSteps = (RecyclerView) findViewById(R.id.stepList);
+                    StepsAdapter SA = new StepsAdapter(steps, ViewRecipe.this);
+
+                    rvSteps.setAdapter(SA);
+                    LinearLayoutManager lym_rs = new LinearLayoutManager(ViewRecipe.this);
+                    lym_rs.setStackFromEnd(false);
+                    rvSteps.setLayoutManager(lym_rs);
+                    rvSteps.addItemDecoration(new DividerItemDecoration(ViewRecipe.this, DividerItemDecoration.VERTICAL));
                 }
 
                 if (userId != recipe.getUserId()) {
@@ -256,6 +271,7 @@ public class ViewRecipe extends AppCompatActivity
             totalHeight += view.getMeasuredHeight();
 
         }
+
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + ((listView.getDividerHeight()) * (listAdapter.getCount()));
