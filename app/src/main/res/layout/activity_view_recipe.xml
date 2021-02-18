@@ -120,7 +120,7 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/ingredientList"/>
 
         <TextView
@@ -135,8 +135,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:id="@+id/stepList"
             />
+
 
         <TextView
             android:id="@+id/recipeTags"

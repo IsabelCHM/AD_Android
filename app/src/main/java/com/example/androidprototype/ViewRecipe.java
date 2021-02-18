@@ -45,6 +45,7 @@ public class ViewRecipe extends AppCompatActivity
     private APIService service;
     private int userId;
     private RecyclerView rvSteps;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ViewRecipe extends AppCompatActivity
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
         // Need to change after user login is done
-        SharedPreferences pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        pref = getSharedPreferences("user_info", MODE_PRIVATE);
         userId = pref.getInt("UserId", 0);
 
         Intent intent = getIntent();
@@ -246,6 +247,17 @@ public class ViewRecipe extends AppCompatActivity
             Intent intent = new Intent(this, ListGroupActivity.class);
             intent.setAction("view");
             startActivity(intent);
+        }
+
+        if (id == R.id.myProfile) {
+            if (pref.getInt("UserId", 0) == 0) {
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+            else {
+                Intent intent = new Intent(this, ViewUserProfile.class);
+                startActivity(intent);
+            }
         }
     }
 

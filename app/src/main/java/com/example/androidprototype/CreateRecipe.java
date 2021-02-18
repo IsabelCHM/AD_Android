@@ -306,11 +306,9 @@ public class CreateRecipe extends AppCompatActivity
             case R.id.createRecipe:
                 RecipeJson newRecipe = new RecipeJson();
                 setRecipe(newRecipe);
-                String recipeTags = tagET.getText().toString();
 
                 Gson gson = new Gson();
                 String tagJson = gson.toJson(recipeTagsList);
-
 
                 Call<ResponseBody> call_create = service.createRecipe(new RecipePlusTags(newRecipe, tagJson));
                 call_create.enqueue(new Callback<ResponseBody>() {
@@ -349,7 +347,10 @@ public class CreateRecipe extends AppCompatActivity
                 RecipeJson recipeToEdit = new RecipeJson();
                 setRecipe(recipeToEdit);
 
-                Call<booleanJson> callToEdit = service.updateRecipe(recipeToEdit, recipeId);
+                Gson gson2 = new Gson();
+                String tagJsonToEdit = gson2.toJson(recipeTagsList);
+
+                Call<booleanJson> callToEdit = service.updateRecipe(new RecipePlusTags(recipeToEdit, tagJsonToEdit), recipeId);
                 callToEdit.enqueue(new Callback<booleanJson>() {
                     @Override
                     public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
@@ -422,7 +423,7 @@ public class CreateRecipe extends AppCompatActivity
         }
 
 
-        recipe.setUserId(String.valueOf(userId));
+        recipe.setUserId(userId);
         recipe.setMainMediaUrl(coverImgUrl);
         recipe.setTitle(titleET.getText().toString());
         recipe.setDescription(desET.getText().toString());

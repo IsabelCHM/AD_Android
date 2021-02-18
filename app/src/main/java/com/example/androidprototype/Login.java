@@ -6,9 +6,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.androidprototype.model.User;
@@ -44,6 +46,9 @@ public class Login extends AppCompatActivity {
                 if (detailsEntered()) {
                     validateUser();
                 }
+                else {
+                    Toast.makeText(getApplicationContext(), "Please enter email and password", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -55,7 +60,7 @@ public class Login extends AppCompatActivity {
         email = etEmail.getText().toString().trim();
         password = etPassword.getText().toString().trim();
 
-        if (email != null && password != null) {
+        if (!email.isEmpty() && !password.isEmpty()) {
             return true;
         }
         else { return false; }
@@ -83,17 +88,21 @@ public class Login extends AppCompatActivity {
                         editor.putInt("UserId", response.body().getId());
                         editor.commit();
 
-                        finish();
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG);
+                        Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_LONG).show();
                     }
+                }
+                if (response.body() == null) {
+                    Toast.makeText(getApplicationContext(), "email or password does not match", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(), "Please login again", Toast.LENGTH_LONG).show();
             }
         });
     }

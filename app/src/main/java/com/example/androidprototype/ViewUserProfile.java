@@ -2,8 +2,12 @@ package com.example.androidprototype;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androidprototype.adpater.HomeAdapter;
 import com.example.androidprototype.service.APIService;
 import com.example.androidprototype.adpater.RecipeUserProfileAdaptor;
 import com.example.androidprototype.model.Recipe;
@@ -33,12 +38,12 @@ import retrofit2.Response;
 
 public class ViewUserProfile extends AppCompatActivity {
 
-    EditText etUserId;
-    Button btGetUserProfile;
+    Button btnlogout;
     TextView tvUserProfileHeader;
     TextView tvNoOfRecipe;
     TextView tvNoOfGroup;
     int userId;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,32 +53,37 @@ public class ViewUserProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
-        etUserId = findViewById(R.id.etGetUserProfileId);
-        btGetUserProfile = findViewById(R.id.btnGetUserProfile);
+        pref = getSharedPreferences("user_info", MODE_PRIVATE);
+        userId = getIntent().getIntExtra("userId", 0);
+
         tvUserProfileHeader = findViewById(R.id.tvUserProfileHeader);
         tvNoOfRecipe = findViewById(R.id.tvNoOfRecipes);
         tvNoOfGroup = findViewById(R.id.tvNoOfGroup);
+        btnlogout = findViewById(R.id.btnlogout);
 
-        userId = getIntent().getIntExtra("userId", 0);
+        if (userId == 0) {
+            userId = pref.getInt("UserId", 0);
+        }
         if (userId != 0) {
             display(userId);
-            etUserId.setVisibility(View.GONE);
-            btGetUserProfile.setVisibility(View.GONE);
         }
-
-        btGetUserProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userId = Integer.parseInt(etUserId.getText().toString());
-                display(userId);
-            }
-        });
 
         tvNoOfGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ListGroupActivity.class);
                 intent.putExtra("userId", userId);
+                startActivity(intent);
+            }
+        });
+
+        btnlogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.clear();
+                editor.commit();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -122,7 +132,7 @@ public class ViewUserProfile extends AppCompatActivity {
                     tvNoOfRecipe.setText("Recipes created: " + Integer.toString(noOfRecipes));
                     tvNoOfGroup.setText("Groups Joined: " + Integer.toString(noOfGroup));
 
-                    List<Recipe> recipeList = response.body().getRecipes().getRecipelist();
+                    ArrayList<Recipe> recipeList = response.body().getRecipes().getRecipelist();
 
                     if (recipeList != null) {
                         displayRecipe(recipeList);
@@ -137,15 +147,24 @@ public class ViewUserProfile extends AppCompatActivity {
         });
     }
 
-    public void displayRecipe(List<Recipe> recipeList) {
-        RecipeUserProfileAdaptor adaptor = new RecipeUserProfileAdaptor(ViewUserProfile.this, 0);
-        adaptor.setData(recipeList);
+    public void displayRecipe(ArrayList<Recipe> recipeList) {
 
-        ListView listview = findViewById(R.id.lvRecipes);
+        HomeAdapter homeAdapter = new HomeAdapter(recipeList, ViewUserProfile.this);
 
-        if (listview != null) {
-            listview.setAdapter(adaptor);
-            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //RecipeUserProfileAdaptor adaptor = new RecipeUserProfileAdaptor(ViewUserProfile.this, 0);
+        //adaptor.setData(recipeList);
+
+        //ListView listview = findViewById(R.id.lvRecipes);
+
+        RecyclerView recyclerView = findViewById(R.id.lvRecipes);
+
+        if (recyclerView != null) {
+            recyclerView.setAdapter(homeAdapter);
+            LinearLayoutManager lym_rs = new LinearLayoutManager(ViewUserProfile.this);
+            lym_rs.setStackFromEnd(false);
+            recyclerView.setLayoutManager(lym_rs);
+            recyclerView.addItemDecoration(new DividerItemDecoration(ViewUserProfile.this, DividerItemDecoration.VERTICAL));
+            /*recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     int recipeId = recipeList.get(i).getId();
@@ -153,8 +172,7 @@ public class ViewUserProfile extends AppCompatActivity {
                     intent.putExtra("RecipeId", recipeId);
                     startActivity(intent);
                 }
-            });
+            });*/
         }
     }
-
 }

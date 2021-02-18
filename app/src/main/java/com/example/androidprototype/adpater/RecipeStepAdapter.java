@@ -42,6 +42,7 @@ public class RecipeStepAdapter extends
 
     private ArrayList<RecipeStepsJson> recipeStepsList;
     private ArrayList<Bitmap> stepImg;
+    private ArrayList<String> instructions;
 
     private Bitmap result;
     private int imgPos;
@@ -50,7 +51,14 @@ public class RecipeStepAdapter extends
         mRecentlyDeletedItem = recipeStepsList.get(position);
         mRecentlyDeletedItemPos = position;
         recipeStepsList.remove(position);
+        stepImg.remove(mRecentlyDeletedItemPos);
+        instructions.remove(mRecentlyDeletedItemPos);
         notifyItemRemoved(position);
+
+        for (int i = 0; i < recipeStepsList.size(); i++) {
+            recipeStepsList.get(i).setStepNumber(i+1);
+            notifyItemChanged(i);
+        }
     }
 
 
@@ -84,9 +92,11 @@ public class RecipeStepAdapter extends
         this.recipeStepsList = recipeStepsList;
         this.mOnClickListener = onClickListener;
         this.stepImg = new ArrayList<>();
+        this.instructions = new ArrayList<>();
 
         for (int i = 0; i < recipeStepsList.size(); i++) {
             stepImg.add(null);
+            instructions.add(" ");
         }
 
         imgPos = recipeStepsList.size()-1;
@@ -123,12 +133,12 @@ public class RecipeStepAdapter extends
             if (recipeSteps.getMediaFileUrl() != null) {
                 new GetBitmap(holder.stepImgView)
                         .execute(recipeSteps.getMediaFileUrl());
-                holder.stepInstruction.setText(recipeSteps.getTextInstructions());
             }
 
             recipeSteps.setChanged(true);
         }
 
+        holder.stepInstruction.setText(recipeSteps.getTextInstructions());
         holder.stepImgView.setImageBitmap(stepImg.get(position));
     }
 
@@ -173,6 +183,7 @@ public class RecipeStepAdapter extends
     public void addStep(RecipeStepsJson newRecipeStep) {
         recipeStepsList.add(newRecipeStep);
         stepImg.add(null);
+        instructions.add(" ");
         notifyItemInserted(recipeStepsList.size()-1);
     }
 
@@ -203,6 +214,7 @@ public class RecipeStepAdapter extends
             int position = (int) editText.getTag();
             if (!s.toString().trim().equals("")) {
                 recipeStepsList.get(position).setTextInstructions(s.toString());
+                instructions.set(position, s.toString());
             }
 
         }
