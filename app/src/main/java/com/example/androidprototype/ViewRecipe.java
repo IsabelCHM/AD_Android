@@ -1,11 +1,13 @@
 package com.example.androidprototype;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -124,7 +126,7 @@ public class ViewRecipe extends AppCompatActivity
                         duration.setText("> 60mins");
                         break;
                     default:
-                        duration.setText(Integer.toString(durationFlag));
+                        duration.setText(Integer.toString(durationFlag) + "mins");
                 }
 
                 new DownloadImageTask((ImageView) findViewById(R.id.recipeImage))
@@ -233,9 +235,31 @@ public class ViewRecipe extends AppCompatActivity
         if (id == R.id.btnDeleteRecipe) {
             int recipeId = recipe.getId();
             int recipeCreatedByUserId = recipe.getUserId();
-            if (userId == recipeCreatedByUserId) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Are you sure you want to delete this recipe?");
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (userId == recipeCreatedByUserId) {
+                        deleteRecipe(recipeId);
+                    }
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
+            /*if (userId == recipeCreatedByUserId) {
                 deleteRecipe(recipeId);
-            }
+            }*/
         }
         if (id == R.id.refreshHome) {
             Intent intent = new Intent(this, HomeActivity.class);

@@ -81,6 +81,7 @@ public class CreateRecipe extends AppCompatActivity
     //private Button deleteIngredientBtn;
     private int durationFlag;
     private boolean isClicked;
+    private boolean recipeFlag;
     private String coverImgUrl;
     private String stepImgUrl;
 
@@ -101,6 +102,7 @@ public class CreateRecipe extends AppCompatActivity
     private EditText caloriesET;
     private EditText tagET;
     private TextView allergenWarnings;
+    private TextView coverText;
 
     private APIService service;
     private ImgService imgService;
@@ -126,6 +128,7 @@ public class CreateRecipe extends AppCompatActivity
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.action_bar);
 
+        recipeFlag = true;
 
         // Retrofit Service
         service = RetrofitClient.getRetrofitInstance().create(APIService.class);
@@ -139,6 +142,7 @@ public class CreateRecipe extends AppCompatActivity
         durationET = (EditText) findViewById(R.id.duration);
         tagET = (EditText) findViewById(R.id.recipeTag);
         allergenWarnings = (TextView) findViewById(R.id.allergens);
+        coverText = (TextView) findViewById(R.id.coverText);
 
         mins15 = (Button) findViewById(R.id.mins15);
         mins15_30 = (Button) findViewById(R.id.mins15_30);
@@ -232,6 +236,18 @@ public class CreateRecipe extends AppCompatActivity
                     caloriesET.setText(Integer.toString(recipe.getCalories()));
                     servingSizeET.setText(Integer.toString(recipe.getServingSize()));
 
+                    List<RecipeTag> recipeTagList = recipe.getRecipeTags().getRecipeTags();
+                    String recipeTags = "";
+                    if (!recipeTagList.isEmpty() && recipeTagList != null) {
+                        for (RecipeTag recipeTag : recipeTagList) {
+                            if (!recipeTag.getAllergenTag()) {
+                                recipeTags = recipeTags + "#" + recipeTag.getTagXXId().getTagName() + " ";
+                            }
+                        }
+                    }
+
+                    tagET.setText(recipeTags);
+
                     setAdapter();
 
                 }
@@ -305,27 +321,31 @@ public class CreateRecipe extends AppCompatActivity
                 break;
             case R.id.createRecipe:
                 RecipeJson newRecipe = new RecipeJson();
+                recipeFlag = true;
                 setRecipe(newRecipe);
 
                 Gson gson = new Gson();
                 String tagJson = gson.toJson(recipeTagsList);
 
-                Call<ResponseBody> call_create = service.createRecipe(new RecipePlusTags(newRecipe, tagJson));
-                call_create.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            Intent intent = new Intent(getApplicationContext(), SuccessPage.class);
-                            startActivity(intent);
+                    Call<ResponseBody> call_create = service.createRecipe(new RecipePlusTags(newRecipe, tagJson));
+                    call_create.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Recipe has been created successfully!", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
+                                startActivity(intent);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(CreateRecipe.this, "Unable to save recipe", Toast.LENGTH_SHORT).show();
 
-                    }
-                });
+                        }
+                    });
+
+
 
                 /*Call<ResponseBody> call = service.saveRecipe(newRecipe);
                 call.enqueue(new Callback<ResponseBody>() {
@@ -345,28 +365,32 @@ public class CreateRecipe extends AppCompatActivity
                 break;
             case R.id.editRecipe:
                 RecipeJson recipeToEdit = new RecipeJson();
+                recipeFlag = true;
                 setRecipe(recipeToEdit);
 
                 Gson gson2 = new Gson();
                 String tagJsonToEdit = gson2.toJson(recipeTagsList);
 
-                Call<booleanJson> callToEdit = service.updateRecipe(new RecipePlusTags(recipeToEdit, tagJsonToEdit), recipeId);
-                callToEdit.enqueue(new Callback<booleanJson>() {
-                    @Override
-                    public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
-                        if (response.isSuccessful()) {
-                            if (response.body().getFlag() == true){
-                                Toast.makeText(getApplicationContext(), "Recipe has been updated successfully!", Toast.LENGTH_LONG).show();
+                    Call<booleanJson> callToEdit = service.updateRecipe(new RecipePlusTags(recipeToEdit, tagJsonToEdit), recipeId);
+                    callToEdit.enqueue(new Callback<booleanJson>() {
+                        @Override
+                        public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getFlag() == true){
+                                    Toast.makeText(getApplicationContext(), "Recipe has been updated successfully!", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
+                                    startActivity(intent);
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<booleanJson> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "Unable to save recipe", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<booleanJson> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Unable to save recipe", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
+                    break;
 
             case R.id.generateATags:
                 Call<RecipeTagList> call1 = service.generateATags(riAdapter.getRecipeIngredientList());
@@ -422,17 +446,58 @@ public class CreateRecipe extends AppCompatActivity
             }
         }
 
+        recipeValidation();
 
-        recipe.setUserId(userId);
-        recipe.setMainMediaUrl(coverImgUrl);
-        recipe.setTitle(titleET.getText().toString());
-        recipe.setDescription(desET.getText().toString());
-        recipe.setCalories(Integer.parseInt(caloriesET.getText().toString()));
-        recipe.setRecipeIngredientsList(riAdapter.getRecipeIngredientList());
-        recipe.setRecipeStepsList(rsAdapter.getRecipeStepsList());
-        recipe.setServingSize(Integer.parseInt(servingSizeET.getText().toString()));
-        recipe.setDurationInMins(getDuration(durationFlag));
+        if (recipeFlag) {
+            recipe.setUserId(userId);
+            recipe.setMainMediaUrl(coverImgUrl);
+            recipe.setTitle(titleET.getText().toString());
+            recipe.setDescription(desET.getText().toString());
+            recipe.setCalories(Integer.parseInt(caloriesET.getText().toString()));
+            recipe.setRecipeIngredientsList(riAdapter.getRecipeIngredientList());
+            recipe.setRecipeStepsList(rsAdapter.getRecipeStepsList());
+            recipe.setServingSize(Integer.parseInt(servingSizeET.getText().toString()));
+            recipe.setDurationInMins(getDuration(durationFlag));
+        }
+
+
+
         //recipe.setRecipeTags(recipeTagsList);
+    }
+
+    private void recipeValidation() {
+        if (coverImgUrl == null) {
+            Toast.makeText(getApplicationContext(), "Please upload cover photo", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
+        else if (titleET.getText().toString().trim().isEmpty() || titleET.getText().toString() == null) {
+            Toast.makeText(getApplicationContext(), "Please fill in the title", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
+        else if (desET.getText().toString().trim().isEmpty() || desET.getText().toString() == null) {
+            Toast.makeText(getApplicationContext(), "Please fill in description", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
+        else if (servingSizeET.getText().toString().trim().isEmpty() || servingSizeET.getText().toString() == null) {
+            Toast.makeText(getApplicationContext(), "Please fill in serving size", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
+        else if (caloriesET.getText().toString().trim().isEmpty() || caloriesET.getText().toString() == null) {
+            Toast.makeText(getApplicationContext(), "Please add calories estimation", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
+        else if (riAdapter.getRecipeIngredientList().size() < 1) {
+            Toast.makeText(getApplicationContext(), "Please add at least one ingredient", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
+        else if (rsAdapter.getRecipeStepsList().size() < 1) {
+            Toast.makeText(getApplicationContext(), "Please add at least one step", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
+        else if (getDuration(durationFlag) == 0) {
+            Toast.makeText(getApplicationContext(), "Please indicate duration", Toast.LENGTH_LONG).show();
+            recipeFlag = false;
+        }
     }
 
     private void combineAllergens()
@@ -480,6 +545,7 @@ public class CreateRecipe extends AppCompatActivity
             if (requestCode == SELECT_COVER_PHOTO) {
                 //thumbnail = getResizedBitmap(thumbnail, 400);
                 recipeCover.setImageBitmap(thumbnail);
+                coverText.setText(" ");
                 //String encodedImg = BitMapToString(thumbnail);
                 if (imgToUpload != null) {
                     Thread bkgdThread = new Thread(new Runnable() {
@@ -579,19 +645,19 @@ public class CreateRecipe extends AppCompatActivity
         switch (durationFlag) {
             case R.id.mins15:
                 //mins15.setBackgroundColor(R.color.purple_test);
-                mins15.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins15.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
             case R.id.mins15_30:
                 //mins15_30.setBackgroundColor(R.color.purple_test);
-                mins15_30.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins15_30.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
             case R.id.mins30_60:
                 //mins30_60.setBackgroundColor(R.color.purple_test);
-                mins30_60.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins30_60.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
             case R.id.mins60plus:
                 //mins60Plus.setBackgroundColor(R.color.purple_test);
-                mins60Plus.setBackgroundColor(getResources().getColor(R.color.purple_test));
+                mins60Plus.setBackgroundColor(getResources().getColor(R.color.theme_color));
                 break;
         }
     }
