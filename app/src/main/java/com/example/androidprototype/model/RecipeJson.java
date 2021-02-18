@@ -16,7 +16,7 @@ public class RecipeJson {
 
     @SerializedName("userId")
     @Expose
-    private String userId;
+    private int userId;
 
     @SerializedName("title")
     @Expose
@@ -73,11 +73,11 @@ public class RecipeJson {
         super();
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

@@ -306,11 +306,9 @@ public class CreateRecipe extends AppCompatActivity
             case R.id.createRecipe:
                 RecipeJson newRecipe = new RecipeJson();
                 setRecipe(newRecipe);
-                String recipeTags = tagET.getText().toString();
 
                 Gson gson = new Gson();
                 String tagJson = gson.toJson(recipeTagsList);
-
 
                 Call<ResponseBody> call_create = service.createRecipe(new RecipePlusTags(newRecipe, tagJson));
                 call_create.enqueue(new Callback<ResponseBody>() {
@@ -349,7 +347,10 @@ public class CreateRecipe extends AppCompatActivity
                 RecipeJson recipeToEdit = new RecipeJson();
                 setRecipe(recipeToEdit);
 
-                Call<booleanJson> callToEdit = service.updateRecipe(recipeToEdit, recipeId);
+                Gson gson2 = new Gson();
+                String tagJsonToEdit = gson2.toJson(recipeTagsList);
+
+                Call<booleanJson> callToEdit = service.updateRecipe(new RecipePlusTags(recipeToEdit, tagJsonToEdit), recipeId);
                 callToEdit.enqueue(new Callback<booleanJson>() {
                     @Override
                     public void onResponse(Call<booleanJson> call, Response<booleanJson> response) {
@@ -391,6 +392,8 @@ public class CreateRecipe extends AppCompatActivity
                             }
 
                             System.out.println("Reached back");
+
+                            combineAllergens();
                         }
                     }
 
@@ -420,7 +423,7 @@ public class CreateRecipe extends AppCompatActivity
         }
 
 
-        recipe.setUserId(String.valueOf(userId));
+        recipe.setUserId(userId);
         recipe.setMainMediaUrl(coverImgUrl);
         recipe.setTitle(titleET.getText().toString());
         recipe.setDescription(desET.getText().toString());
@@ -432,6 +435,23 @@ public class CreateRecipe extends AppCompatActivity
         //recipe.setRecipeTags(recipeTagsList);
     }
 
+    private void combineAllergens()
+    {
+        if (tags != null)
+        {
+            for (RecipeTag rt : tags)
+            {
+                TagJson tj = new TagJson();
+                tj.setTagName(rt.getTagXXId().getTagName());
+                tj.setWarning(rt.getTagXXId().getWarning());
+
+                RecipeTagJson rtj = new RecipeTagJson();
+                rtj.setTagXXId(tj);
+                rtj.setAllergenTag(true);
+                recipeTagsList.add(rtj);
+            }
+        }
+    }
     private void selectCoverImg() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, SELECT_COVER_PHOTO);
