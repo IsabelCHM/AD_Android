@@ -230,10 +230,12 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.myProfile) {
             if (pref.getInt("UserId", 0) == 0) {
                 Intent intent = new Intent(this, Login.class);
+
                 startActivity(intent);
             }
             else {
                 Intent intent = new Intent(this, ViewUserProfile.class);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         }

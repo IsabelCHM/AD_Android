@@ -44,6 +44,8 @@ public class ViewUserProfile extends AppCompatActivity {
     TextView tvNoOfGroup;
     int userId;
     SharedPreferences pref;
+    APIService apiService;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,32 @@ public class ViewUserProfile extends AppCompatActivity {
 
         pref = getSharedPreferences("user_info", MODE_PRIVATE);
         userId = getIntent().getIntExtra("userId", 0);
+        int userIdd = pref.getInt("UserId",0);
+
+        apiService = RetrofitClient.getRetrofitInstance().create(APIService.class);
+
+        /*Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+
+        thread.start();*/
+
+        Call<User> call = apiService.getUser(pref.getInt("UserId", 0));
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                user = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+
 
         tvUserProfileHeader = findViewById(R.id.tvUserProfileHeader);
         tvNoOfRecipe = findViewById(R.id.tvNoOfRecipes);
@@ -66,7 +94,7 @@ public class ViewUserProfile extends AppCompatActivity {
         }
         if (userId != 0) {
             display(userId);
-            if (getIntent().getIntExtra("userId", 0) != 0) {
+            if (getIntent().getIntExtra("userId", 0) != pref.getInt("UserId", 0)) {
                 btnlogout.setVisibility(View.GONE);
             }
         }
@@ -121,6 +149,7 @@ public class ViewUserProfile extends AppCompatActivity {
                 }
                 else {
                     Intent intent = new Intent(getApplicationContext(), ViewUserProfile.class);
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
                 }
             }
@@ -159,7 +188,8 @@ public class ViewUserProfile extends AppCompatActivity {
 
     public void displayRecipe(ArrayList<Recipe> recipeList) {
 
-        HomeAdapter homeAdapter = new HomeAdapter(recipeList, ViewUserProfile.this);
+        HomeAdapter homeAdapter = new HomeAdapter(recipeList, ViewUserProfile.this, user);
+        //HomeAdapter homeAdapter = new HomeAdapter(recipeList, ViewUserProfile.this);
 
         //RecipeUserProfileAdaptor adaptor = new RecipeUserProfileAdaptor(ViewUserProfile.this, 0);
         //adaptor.setData(recipeList);
