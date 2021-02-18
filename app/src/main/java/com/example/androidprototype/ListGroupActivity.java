@@ -184,7 +184,7 @@ public class ListGroupActivity extends AppCompatActivity
         if (id == R.id.groups) {
             Intent intent = new Intent(this, ListGroupActivity.class);
             intent.putExtra("userId", userId);
-            intent.setAction("view");
+            intent.setAction("showAll");
             startActivity(intent);
         }
 
@@ -250,6 +250,9 @@ public class ListGroupActivity extends AppCompatActivity
                    if (tvMg != null) {
                        tvMg.setText(username + "'s Groups");
                    }
+                    if (btnShowAll != null) {
+                        btnShowAll.setVisibility(View.GONE);
+                    }
                 }
             }
 
