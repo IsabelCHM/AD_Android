@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +54,8 @@ public class HomeAdapter extends
         public TextView calories;
         public TextView tags;
         public Recipe recipe;
-        public Button saveRecipe;
+        public ImageView saveRecipe;
+        public LinearLayout allergenContainer;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -65,8 +67,9 @@ public class HomeAdapter extends
             calories = itemView.findViewById(R.id.recipecalorieshome);
             tags = itemView.findViewById(R.id.recipehometags);
             saveRecipe = itemView.findViewById(R.id.btnSaveRecipe);
+            allergenContainer = itemView.findViewById(R.id.allergyContainer);
 
-            itemView.findViewById(R.id.viewRecipe).setOnClickListener(new View.OnClickListener() {
+            itemView.findViewById(R.id.recipepichome).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, ViewRecipe.class);
@@ -134,22 +137,24 @@ public class HomeAdapter extends
             return tags;
         }
 
-        public Button getSaveRecipe() {
+        public ImageView getSaveRecipe() {
             return saveRecipe;
         }
 
         public void saveButtonswitcher() {
-            new Thread(new Runnable() {
+            /*new Thread(new Runnable() {
                 @Override
-                public void run() {
-                    if (saveRecipe.getText().toString().equalsIgnoreCase("save")) {
-                        saveRecipe.setText("saved");
+                public void run() {*/
+                    if (saveRecipe.getTag().toString().equalsIgnoreCase("unsaved")) {
+                        saveRecipe.setImageDrawable(context.getDrawable(R.drawable.ic_saved));
+                        saveRecipe.setTag("saved");
                     }
                     else {
-                        saveRecipe.setText("save");
+                        saveRecipe.setTag("unsaved");
+                        saveRecipe.setImageDrawable(context.getDrawable(R.drawable.ic_unsaved));
                     }
-                }
-            }).start();
+            /*    }
+            }).start();*/
         }
 
         public void saveSelectedRecipe(SavedRecipeJson savedRecipeJson) {
@@ -204,6 +209,7 @@ public class HomeAdapter extends
     public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
 
         holder.getTitle().setText(recipeList.get(position).getTitle());
+        holder.allergenContainer.setVisibility(View.GONE);
 
         if (user != null) {
             String loggedInUsername = user.getUsername();
@@ -218,7 +224,7 @@ public class HomeAdapter extends
             }
             int currentRecipeId = recipeList.get(position).getId();
             if (userSavedRecipeId.contains(currentRecipeId)) {
-                holder.getSaveRecipe().setText("Saved");
+                holder.getSaveRecipe().setTag("saved");
             }
         }
         holder.getAuthor().setText("By " + recipeList.get(position).getUser().getUsername());
@@ -256,6 +262,7 @@ public class HomeAdapter extends
             for (RecipeTag r : retag)
             {
                 if (r.getTagXXId() != null) {
+
                     tags += "#" + r.getTagXXId().getTagName() + "\t";
 
                     if (r.getAllergenTag())
@@ -268,6 +275,7 @@ public class HomeAdapter extends
 
             if (!warnings.isEmpty())
             {
+                holder.allergenContainer.setVisibility(View.VISIBLE);
                 holder.getAllergens().setText("May cause " + warnings);
             }
             else {

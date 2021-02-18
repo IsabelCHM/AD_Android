@@ -33,7 +33,6 @@
         <activity android:name=".UserAllergenAct" />
         <activity android:name=".ViewUserGroup" />
         <activity android:name=".DeleteRecipe" />
-        <activity android:name=".EditRecipeZ" />
         <activity android:name=".SuccessPage" />
         <activity android:name=".ViewUser" />
         <activity android:name=".CreateRecipeZ" />

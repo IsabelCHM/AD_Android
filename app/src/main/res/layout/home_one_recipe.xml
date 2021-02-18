@@ -1,97 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_margin="15dp"
     >
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/recipePicContainer"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.137">
+
+            <ImageView
+                android:id="@+id/recipepichome"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder"></ImageView>
+
+            <TextView
+                android:id="@+id/recipetitlehome"
+                style="@style/HeaderTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="328dp"
+                android:layout_marginLeft="0dp"
+                android:gravity="center"
+                android:background="#33000000"
+                android:text="title"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold"></TextView>
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/recipeownerhome"
+            style="@style/NormalTextStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/recipetitlehome"
-            style="@style/HeaderTextStyle"
-            android:text="title"
-            android:textSize="25sp"
-            android:layout_weight="3.5"
-            android:layout_marginTop="20dp"></TextView>
+            android:layout_marginTop="8dp"
+            android:background="@drawable/home_user_border"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="By someone"
+            app:layout_constraintTop_toBottomOf="@+id/recipePicContainer"
+            tools:layout_editor_absoluteX="4dp"
+            android:backgroundTint="#734B5E"
+            android:textColor="@color/white"></TextView>
 
-        <Button
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipePicContainer">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_duration"
+                android:layout_marginRight="7dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recipedurationhome"
+                android:text="30mins"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"></TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_calories"
+                android:layout_marginRight="7dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/recipecalorieshome"
+                android:text="500kcal"
+                android:gravity="center"
+                android:layout_gravity="center"></TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/allergyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipeownerhome">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_warning"
+                android:layout_marginRight="7dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recipeallergyhome"
+                android:text="Contains nuts"
+                android:layout_gravity="center"
+                android:textStyle="italic"
+                ></TextView>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recipehometags"
+            style="@style/NormalTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="tags"
+            app:layout_constraintTop_toBottomOf="@id/allergyContainer"
+            tools:layout_editor_absoluteX="4dp"></TextView>
+
+        <ImageView
             android:id="@+id/btnSaveRecipe"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:text="Save"
-            ></Button>
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_unsaved"
+            android:tag="unsaved"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/allergyContainer"
+            ></ImageView>
 
-    </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/recipeownerhome"
-        style="@style/NormalTextStyle"
-        android:text="By someone"></TextView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/recipepichome"
-        android:src="@drawable/placeholder"></ImageView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/recipedurationhome"
-            android:text="30mins"
-            android:gravity="center"></TextView>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/recipeallergyhome"
-            android:text="Contains nuts"
-            android:gravity="center"></TextView>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/recipecalorieshome"
-            android:text="500kcal"
-            android:gravity="center"></TextView>
-
-    </LinearLayout>
-
-    <Button
+    <!--<Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="See Recipe"
-        android:id="@+id/viewRecipe"></Button>
+        android:id="@+id/viewRecipe"></Button>-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recipehometags"
-        android:text="tags"
-        style="@style/NormalTextStyle"
-        android:layout_marginBottom="20dp">
-    </TextView>
+
 
 </LinearLayout>

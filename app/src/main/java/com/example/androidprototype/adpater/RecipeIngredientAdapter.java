@@ -25,11 +25,17 @@ public class RecipeIngredientAdapter extends
     RecipeIngredientsJson mRecentlyDeletedItem;
     int mRecentlyDeletedItemPos;
 
+    private ArrayList<String> ingredients;
+    private ArrayList<Double> qtys;
+    private ArrayList<String> units;
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public EditText material;
         public EditText qty;
         public EditText unit;
+
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -52,6 +58,15 @@ public class RecipeIngredientAdapter extends
 
     public RecipeIngredientAdapter(ArrayList<RecipeIngredientsJson> recipeIngredientList) {
         this.recipeIngredientList = recipeIngredientList;
+        this.ingredients = new ArrayList<>();
+        this.qtys = new ArrayList<>();
+        this.units = new ArrayList<>();
+
+        for (int i = 0; i < recipeIngredientList.size(); i++) {
+            ingredients.add(" ");
+            qtys.add(0d);
+            units.add(" ");
+        }
     }
 
     @NonNull
@@ -80,6 +95,9 @@ public class RecipeIngredientAdapter extends
         if (recipeIngredientList.get(position).getQuantity() != 0) {
             holder.qty.setText(Double.toString(recipeIngredientList.get(position).getQuantity()));
         }
+        else {
+            holder.qty.setText(Double.toString(0));
+        }
     }
 
     @Override
@@ -89,6 +107,9 @@ public class RecipeIngredientAdapter extends
 
     public void addStep(RecipeIngredientsJson newRecipeIngredientJson) {
         recipeIngredientList.add(newRecipeIngredientJson);
+        ingredients.add(" ");
+        qtys.add(0d);
+        units.add(" ");
         notifyItemInserted(recipeIngredientList.size()-1);
     }
 
@@ -96,8 +117,14 @@ public class RecipeIngredientAdapter extends
         mRecentlyDeletedItem = recipeIngredientList.get(position);
         mRecentlyDeletedItemPos = position;
         recipeIngredientList.remove(position);
+        ingredients.remove(mRecentlyDeletedItemPos);
+        qtys.remove(mRecentlyDeletedItemPos);
+        units.remove(mRecentlyDeletedItemPos);
+
         notifyItemRemoved(position);
         //showUndoSnackbar();
+
+        notifyItemChanged(position);
     }
 
     /*private void showUndoSnackbar() {
@@ -135,6 +162,7 @@ public class RecipeIngredientAdapter extends
             int position = (int) editText.getTag();
             if(!s.toString().trim().equals("")) {
                 recipeIngredientList.get(position).setIngredient(s.toString());
+                ingredients.set(position, s.toString());
             }
         }
     }
@@ -156,6 +184,7 @@ public class RecipeIngredientAdapter extends
             int position = (int) editText.getTag();
             if (!s.toString().trim().equals("")) {
                 recipeIngredientList.get(position).setQuantity(Double.parseDouble(s.toString()));
+                qtys.set(position, Double.parseDouble(s.toString()));
             }
         }
     }
@@ -179,6 +208,7 @@ public class RecipeIngredientAdapter extends
             int position = (int) editText.getTag();
             if (!s.toString().trim().equals("")) {
                 recipeIngredientList.get(position).setUnitOfMeasurement(s.toString());
+                units.set(position, s.toString());
             }
 
         }
