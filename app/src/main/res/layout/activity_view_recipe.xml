@@ -8,8 +8,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        app:layout_constrainedHeight="true"
+        android:paddingBottom="50dp"
         android:orientation="vertical">
 
     <LinearLayout
@@ -71,6 +73,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Description"
+            style="@style/NormalTextStyle"/>
+
+        <TextView
+            android:id="@+id/recipeTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="tags"
+            android:textColor="#A5A5A5"
+            android:textStyle="italic"
+            android:layout_marginTop="10dp"
             style="@style/NormalTextStyle"/>
 
         <TextView
@@ -140,15 +152,7 @@
             />
 
 
-        <TextView
-            android:id="@+id/recipeTags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="tags"
-            android:textColor="#A5A5A5"
-            android:textStyle="italic"
-            android:layout_marginTop="10dp"
-            style="@style/NormalTextStyle"/>
+
 
         <!--<Button
             android:id="@+id/back"
